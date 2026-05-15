@@ -141,7 +141,7 @@ function renderInvitePage(returnTo: string): string {
     <main>
       <div>
         <h1>输入邀请码</h1>
-        <p>验证通过后可以继续使用演示文稿生成器。</p>
+        <p>验证通过后可以继续使用文稿生成器。</p>
       </div>
       <form method="post" action="/api/invite/session">
         <input type="hidden" name="returnTo" value="${safeReturnTo}">

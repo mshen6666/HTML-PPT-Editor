@@ -450,7 +450,7 @@ describe('App', () => {
     expect(screen.getByTitle(/第 1 页/i)).toBeInTheDocument()
     expect(screen.getByTitle(/第 2 页/i)).toBeInTheDocument()
     expect(screen.getByText('智能体演示编辑')).toBeInTheDocument()
-    expect(screen.getByRole('heading', { name: '数智兵设演示文稿生成器' })).toBeInTheDocument()
+    expect(screen.getByRole('heading', { name: '文稿生成器' })).toBeInTheDocument()
     expect(screen.queryByRole('button', { name: '保存' })).toBeNull()
     expect(screen.queryByRole('button', { name: /撤销/i })).toBeNull()
     expect(screen.queryByRole('button', { name: /重做/i })).toBeNull()

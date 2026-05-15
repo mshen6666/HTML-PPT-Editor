@@ -1,8 +1,12 @@
 # HTML PPT Editor
 
-HTML PPT Editor is a React and Node.js application for creating, editing, previewing, and exporting HTML-based slide decks. It treats editable deck HTML as the source of truth, provides a visual editor around that contract, and includes an optional AI agent workflow for generating or refining presentations.
+HTML PPT Editor is a React and Node.js document generation app for creating, editing, previewing, and exporting HTML-based slide decks. It treats editable deck HTML as the source of truth, provides a visual editor around that contract, and includes an optional AI agent workflow for generating or refining presentations.
 
-HTML PPT Editor 是一个基于 React 和 Node.js 的 HTML 演示稿编辑器。项目以可编辑 HTML deck 作为核心数据源，提供可视化编辑、预览、导出，以及可选的 AI Agent 生成工作流。
+HTML PPT Editor 是一个基于 React 和 Node.js 的文稿生成器。项目以可编辑 HTML deck 作为核心数据源，提供可视化编辑、预览、导出，以及可选的 AI Agent 生成工作流。
+
+![文稿生成器主页](image/zhuye1.png)
+
+![文稿生成器编辑界面](image/zhuye2.png)
 
 ## Features / 功能
 
@@ -10,13 +14,53 @@ HTML PPT Editor 是一个基于 React 和 Node.js 的 HTML 演示稿编辑器。
 - Import and normalize HTML slide decks through a controlled deck contract.
 - Export decks to HTML, PDF, and rasterized PPTX.
 - Use the embedded `html-ppt` template and theme bundle for AI-assisted deck generation.
+- Browse the HTML PPT guide for themes, templates, layouts, animations, prompt examples, and usage principles.
 - Run as a local Vite app during development or as a single Express service in production.
 
 - 在浏览器中编辑文字、图片、布局、图层、动效元数据和页面结构。
-- 通过受控 deck contract 导入并规范化 HTML 演示稿。
+- 通过受控 deck contract 导入并规范化 HTML 文稿。
 - 支持导出 HTML、PDF 和基于截图栅格化的 PPTX。
-- 内置 `html-ppt` 模板与主题资源，可用于 AI 辅助生成演示稿。
+- 内置 `html-ppt` 模板与主题资源，可用于 AI 辅助生成文稿。
+- 通过 HTML PPT 指南查看主题、模板、布局、动效、提示词示例和使用原则。
 - 开发环境使用 Vite，生产环境可作为单体 Express 服务运行。
+
+## HTML PPT Guide / HTML PPT 指南
+
+The guide turns the embedded `html-ppt` resources into a browsable reference, so users can choose a visual direction before generating or editing a deck.
+
+指南会把内置 `html-ppt` 资源整理成可浏览资料库，方便在生成或编辑文稿前先确定视觉方向。
+
+### Themes / 主题
+
+Theme previews help choose the overall tone, including light, dark, editorial, technical, and expressive styles.
+
+主题预览用于选择整体视觉气质，包括浅色、深色、杂志、技术和更具表现力的风格。
+
+![HTML PPT 主题指南](image/zhuti.png)
+
+### Templates / 模板
+
+Full-deck templates provide complete starting structures for scenarios such as pitch decks, product launches, technical sharing, weekly reports, courses, and Xiaohongshu-style posts.
+
+整套模板提供完整起稿结构，覆盖 pitch deck、产品发布、技术分享、周报、课程和小红书图文等场景。
+
+![HTML PPT 模板指南](image/moban.png)
+
+### Layouts / 布局
+
+Single-page layouts cover common slide patterns such as cover, table of contents, comparison, timeline, KPI grid, code, charts, architecture diagrams, and thank-you pages.
+
+单页布局覆盖封面、目录、对比、时间线、KPI 网格、代码、图表、架构图和结束页等常见页面模式。
+
+![HTML PPT 布局指南](image/buju.png)
+
+### Animations / 动效
+
+Animation previews show the available CSS animations and canvas effects, making it easier to choose restrained motion for presentation and export.
+
+动效预览展示可用的 CSS 动画和 canvas 效果，便于为展示和导出选择克制、合适的运动效果。
+
+![HTML PPT 动效指南](image/dongxiao.png)
 
 ## Tech Stack / 技术栈
 
@@ -86,6 +130,7 @@ npm run test:watch   # Run Vitest in watch mode
 ## Project Structure / 项目结构
 
 ```text
+image/              README screenshots
 src/app/            React editor UI and routes
 src/app/editor/     Focused editor helpers and controls
 src/deck-contract/  Editable HTML deck parsing, patching, and serialization

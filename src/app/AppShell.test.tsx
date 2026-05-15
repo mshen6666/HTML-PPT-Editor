@@ -26,7 +26,7 @@ describe('App routing shell', () => {
   it('redirects the root route to the editor without homepage actions', async () => {
     renderWithRoute('/')
 
-    expect(await screen.findByRole('heading', { name: '数智兵设演示文稿生成器' })).toBeInTheDocument()
+    expect(await screen.findByRole('heading', { name: '文稿生成器' })).toBeInTheDocument()
     expect(screen.getByRole('button', { name: '导入 HTML' })).toBeInTheDocument()
     expect(screen.queryByRole('link', { name: '从空白开始' })).toBeNull()
     expect(screen.queryByRole('button', { name: '从文档创建' })).toBeNull()
@@ -40,7 +40,7 @@ describe('App routing shell', () => {
     const user = userEvent.setup()
     renderWithRoute('/')
 
-    expect(await screen.findByRole('heading', { name: '数智兵设演示文稿生成器' })).toBeInTheDocument()
+    expect(await screen.findByRole('heading', { name: '文稿生成器' })).toBeInTheDocument()
     expect(screen.queryByRole('link', { name: '返回首页' })).toBeNull()
 
     await user.click(screen.getByRole('link', { name: 'HTML PPT 指南' }))
@@ -50,13 +50,13 @@ describe('App routing shell', () => {
 
     await user.click(screen.getByRole('link', { name: '返回编辑器' }))
 
-    expect(screen.getByRole('heading', { name: '数智兵设演示文稿生成器' })).toBeInTheDocument()
+    expect(screen.getByRole('heading', { name: '文稿生成器' })).toBeInTheDocument()
   })
 
   it('redirects unknown routes to the editor', async () => {
     renderWithRoute('/missing-page')
 
-    expect(await screen.findByRole('heading', { name: '数智兵设演示文稿生成器' })).toBeInTheDocument()
+    expect(await screen.findByRole('heading', { name: '文稿生成器' })).toBeInTheDocument()
     expect(screen.getByRole('button', { name: '导入 HTML' })).toBeInTheDocument()
     expect(screen.queryByRole('link', { name: '返回首页' })).toBeNull()
   })
@@ -101,7 +101,7 @@ describe('App routing shell', () => {
       </MemoryRouter>,
     )
 
-    expect(await screen.findByRole('heading', { name: '数智兵设演示文稿生成器' })).toBeInTheDocument()
+    expect(await screen.findByRole('heading', { name: '文稿生成器' })).toBeInTheDocument()
 
     await waitFor(() => {
       expect(screen.getByRole('tab', { name: '智能体' })).toHaveAttribute('aria-selected', 'true')

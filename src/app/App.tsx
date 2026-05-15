@@ -1889,7 +1889,7 @@ export function App({
       <header className="topbar">
         <div>
           <p className="eyebrow">智能体演示编辑</p>
-          <h1>数智兵设演示文稿生成器</h1>
+          <h1>文稿生成器</h1>
         </div>
         <div className="toolbar">
           {isInRouter ? (
