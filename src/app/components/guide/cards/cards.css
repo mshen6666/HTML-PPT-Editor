@@ -1,0 +1,203 @@
+/* Guide Card Styles */
+
+.guide-card {
+  position: relative;
+  padding: 20px;
+  border: 1px solid rgba(32, 23, 21, 0.12);
+  border-radius: 24px;
+  background: rgba(255, 250, 241, 0.82);
+  box-shadow: 0 16px 48px rgba(68, 46, 31, 0.08);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: grid;
+  gap: 12px;
+}
+
+.guide-card:hover {
+  transform: translateY(-2px);
+  border-color: rgba(217, 93, 57, 0.42);
+  box-shadow: 0 24px 64px rgba(68, 46, 31, 0.12);
+}
+
+.guide-card:focus {
+  outline: none;
+  border-color: rgba(217, 93, 57, 0.5);
+  box-shadow: 0 0 0 3px rgba(217, 93, 57, 0.1);
+}
+
+.guide-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: start;
+  gap: 12px;
+}
+
+.guide-card-title {
+  margin: 0;
+  font-family: "Clash Display", sans-serif;
+  font-size: 1.15rem;
+  font-weight: 600;
+  color: #201715;
+  letter-spacing: -0.02em;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.guide-card-subtitle {
+  font-size: 0.75rem;
+  font-weight: 400;
+  color: rgba(32, 23, 21, 0.5);
+  letter-spacing: 0;
+}
+
+.guide-card-badge {
+  display: inline-flex;
+  padding: 4px 10px;
+  border-radius: 999px;
+  background: rgba(217, 93, 57, 0.12);
+  color: #9a4326;
+  font-size: 0.8rem;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.guide-card-tone,
+.guide-card-keywords,
+.guide-card-tag-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.guide-card-tag {
+  display: inline-flex;
+  padding: 4px 10px;
+  border-radius: 999px;
+  background: rgba(217, 93, 57, 0.08);
+  color: rgba(32, 23, 21, 0.7);
+  font-size: 0.85rem;
+}
+
+.guide-card-desc,
+.guide-card-scenario,
+.guide-card-info-type,
+.guide-card-effect,
+.guide-card-goal,
+.guide-card-why,
+.guide-card-fit,
+.guide-card-advice,
+.guide-card-best-for {
+  margin: 0;
+  color: rgba(32, 23, 21, 0.7);
+  font-size: 0.95rem;
+  line-height: 1.5;
+}
+
+.guide-card-hint,
+.guide-card-template,
+.guide-card-tip,
+.guide-card-use {
+  margin: 0;
+  padding: 10px 12px;
+  border-radius: 12px;
+  background: rgba(255, 242, 235, 0.88);
+  color: rgba(132, 43, 21, 0.94);
+  font-size: 0.9rem;
+  line-height: 1.5;
+}
+
+/* Card Thumbnail */
+.guide-card-thumb {
+  width: 100%;
+  aspect-ratio: 3 / 2;
+  overflow: hidden;
+  border-radius: 12px;
+  border: 1px solid rgba(32, 23, 21, 0.1);
+  background: rgba(255, 250, 241, 0.92);
+}
+
+.guide-card-thumb-iframe {
+  width: 300%;
+  height: 300%;
+  border: 0;
+  display: block;
+  transform: scale(0.3333);
+  transform-origin: top left;
+  pointer-events: none;
+}
+
+.guide-card-thumb-loading {
+  display: grid;
+  place-items: center;
+  height: 100%;
+  color: rgba(32, 23, 21, 0.4);
+  font-size: 0.8rem;
+}
+
+/* List View */
+.guide-card.is-list {
+  grid-template-columns: 180px 1fr;
+  grid-template-rows: auto;
+  align-items: start;
+  gap: 16px;
+}
+
+.guide-card.is-list .guide-card-thumb {
+  width: 180px;
+  aspect-ratio: 3 / 2;
+  border-radius: 10px;
+  grid-row: 1 / -1;
+}
+
+.guide-card.is-list .guide-card-header {
+  flex: 1;
+}
+
+.guide-card.is-list .guide-card-tone,
+.guide-card.is-list .guide-card-keywords {
+  margin-top: 4px;
+}
+
+.guide-card.is-list .guide-card-hint,
+.guide-card.is-list .guide-card-template,
+.guide-card.is-list .guide-card-tip {
+  grid-column: 2 / -1;
+}
+
+/* Copy Prompt Button */
+.guide-card-copy-btn {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  z-index: 2;
+  padding: 6px;
+  border: none;
+  border-radius: 6px;
+  background: rgba(255, 250, 241, 0.85);
+  color: rgba(32, 23, 21, 0.6);
+  cursor: pointer;
+  opacity: 0;
+  transition: all 0.2s ease;
+  backdrop-filter: blur(4px);
+}
+
+.guide-card:hover .guide-card-copy-btn,
+.guide-card-copy-btn:focus-visible {
+  opacity: 1;
+}
+
+.guide-card-copy-btn:hover {
+  background: rgba(255, 250, 241, 0.95);
+  color: #201715;
+}
+
+.guide-card-copy-btn.is-copied {
+  color: #16a34a;
+}
+
+.guide-card-copy-btn svg {
+  width: 16px;
+  height: 16px;
+  display: block;
+}

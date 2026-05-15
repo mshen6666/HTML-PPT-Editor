@@ -1,0 +1,647 @@
+// @vitest-environment node
+
+import { mkdir, mkdtemp, readFile, rm, writeFile } from 'node:fs/promises'
+import os from 'node:os'
+import path from 'node:path'
+
+import { describe, expect, it } from 'vitest'
+
+import { blankDeckHtml } from '../src/blankDeck'
+import { createAiServer } from './createAiServer'
+import { createSandboxedClaudeCodeDeckAgent, type ClaudeCodeQueryFactory } from './claudeCodeHtmlPptAgent'
+
+const defaultHtmlPptBrief = {
+  audience: 'engineers',
+  format: 'live',
+  themeName: 'tokyo-night',
+  fullDeckName: 'tech-sharing',
+  includeNotes: true,
+  preserveRuntime: true,
+  slideCountHint: 5,
+} as const
+
+describe('createSandboxedClaudeCodeDeckAgent', () => {
+  it('runs Claude Code with html-ppt context and returns the generated presentation artifact', async () => {
+    const tempDir = await mkdtemp(path.join(os.tmpdir(), 'ppt-claude-agent-'))
+    const artifactSaves: Array<{ buffer: Buffer; fileName: string }> = []
+    let capturedPrompt = ''
+    let capturedOptions: Parameters<ClaudeCodeQueryFactory>[0]['options'] | undefined
+    const originalAnthropicApiKey = process.env.ANTHROPIC_API_KEY
+    const originalAnthropicAuthToken = process.env.ANTHROPIC_AUTH_TOKEN
+    delete process.env.ANTHROPIC_API_KEY
+    process.env.ANTHROPIC_AUTH_TOKEN = 'test-auth-token'
+
+    const queryFactory: ClaudeCodeQueryFactory = ({ prompt, options }) => {
+      capturedPrompt = prompt
+      capturedOptions = options
+
+      return (async function* () {
+        await writeFile(
+          path.join(tempDir, 'presentation.html'),
+          '<!doctype html><html><head><title>Claude Deck</title></head><body><section class="slide"><h1>Claude Deck</h1></section></body></html>',
+          'utf8',
+        )
+        yield {
+          type: 'assistant',
+          message: {
+            content: [{ type: 'text', text: 'HTML 已写入 presentation.html。' }],
+          },
+        }
+        yield {
+          type: 'result',
+          subtype: 'success',
+          session_id: 'claude-session-1',
+          result: 'ok',
+        }
+      })()
+    }
+
+    const agent = createSandboxedClaudeCodeDeckAgent({
+      runtimeConfig: createRuntimeConfigFixture(),
+      sandboxManager: {
+        async create() {
+          await writeFile(path.join(tempDir, 'current-deck.html'), blankDeckHtml, 'utf8')
+          await writeFile(path.join(tempDir, 'presentation.html'), '', 'utf8')
+          return createSandboxHandleFixture(tempDir)
+        },
+        async destroy() {},
+      },
+      artifactStore: {
+        async save(args) {
+          artifactSaves.push({
+            buffer: args.buffer,
+            fileName: args.fileName,
+          })
+          return {
+            artifactId: 'artifact-claude',
+            tenantId: args.tenantId,
+            userId: args.userId,
+            sessionId: args.sessionId,
+            jobId: args.jobId,
+            fileName: args.fileName,
+            contentType: args.contentType,
+            sizeBytes: args.buffer.byteLength,
+            relativePath: 'artifacts/presentation.html',
+            absolutePath: path.join(tempDir, 'artifact.html'),
+            createdAt: Date.now(),
+          }
+        },
+      },
+      uploadStore: {
+        async save() {
+          throw new Error('not used')
+        },
+        async materialize() {
+          return []
+        },
+      },
+      queryFactory,
+    })
+
+    const events = []
+    try {
+      for await (const event of agent.runTurn({
+        ...createSandboxedTurnRequest(),
+        sessionSnapshot: {
+          htmlPptState: {
+            uploadedAssets: [
+              {
+                assetId: 'asset-brief',
+                fileName: 'brief.md',
+                path: path.join(tempDir, 'brief.md'),
+                contentType: 'text/markdown',
+                ext: '.md',
+                sizeBytes: 61,
+                usability: 'usable',
+                referenceText: {
+                  status: 'extracted',
+                  excerpt: 'Use the Safety AI positioning and cite the 42% pilot lift.',
+                  charCount: 58,
+                  truncated: false,
+                },
+              },
+            ],
+          },
+        },
+      })) {
+        events.push(event)
+      }
+    } finally {
+      if (originalAnthropicApiKey === undefined) {
+        delete process.env.ANTHROPIC_API_KEY
+      } else {
+        process.env.ANTHROPIC_API_KEY = originalAnthropicApiKey
+      }
+      if (originalAnthropicAuthToken === undefined) {
+        delete process.env.ANTHROPIC_AUTH_TOKEN
+      } else {
+        process.env.ANTHROPIC_AUTH_TOKEN = originalAnthropicAuthToken
+      }
+    }
+
+    expect(capturedOptions).toEqual(expect.objectContaining({
+      cwd: tempDir,
+      tools: ['Read', 'Write', 'Edit', 'Glob', 'Grep', 'Bash'],
+      allowedTools: ['Read', 'Write', 'Edit', 'Glob', 'Grep', 'Bash'],
+      pathToClaudeCodeExecutable: expect.stringContaining('claude-agent-sdk-'),
+      permissionMode: 'bypassPermissions',
+      allowDangerouslySkipPermissions: true,
+      persistSession: false,
+      settingSources: [],
+    }))
+    expect(capturedOptions?.env).toEqual(expect.objectContaining({
+      ANTHROPIC_API_KEY: 'test-auth-token',
+      ANTHROPIC_AUTH_TOKEN: 'test-auth-token',
+      CLAUDE_CODE_DISABLE_NONESSENTIAL_TRAFFIC: '1',
+    }))
+    expect(capturedPrompt).toContain('### HTML PPT Skill')
+    expect(capturedPrompt).toContain('### Style Presets Reference')
+    expect(capturedPrompt).toContain('Do not invoke the Skill tool or attempt to load any locally installed skill.')
+    expect(capturedPrompt).toContain('When the user mentions a theme, layout, animation, or full-deck template name, resolve it inside the embedded html-ppt references and templates.')
+    expect(capturedPrompt).toContain('Examples such as course-module, tech-sharing, pitch-deck, xhs-post, tokyo-night, and editorial-serif are html-ppt resources, not separate skills.')
+    expect(capturedPrompt).toContain('Interact with the user in Chinese.')
+    expect(capturedPrompt).toContain(`Write the final standalone presentation HTML to: ${path.join(tempDir, 'presentation.html')}`)
+    expect(capturedPrompt).toContain('For uploaded .docx files, the original file has been pre-processed')
+    expect(capturedPrompt).toContain('Always read the extracted .txt companion file')
+    expect(capturedPrompt).toContain('Use the Safety AI positioning and cite the 42% pilot lift.')
+    expect(events).toEqual(expect.arrayContaining([
+      expect.objectContaining({
+        type: 'html_candidate_ready',
+        summary: 'HTML 已写入 presentation.html。',
+        previewMeta: expect.objectContaining({
+          title: 'Claude Deck',
+        }),
+        artifactRefs: expect.objectContaining({
+          html: expect.objectContaining({
+            artifactId: 'artifact-claude',
+            fileName: 'presentation.html',
+          }),
+        }),
+        runMeta: expect.objectContaining({
+          model: expect.stringContaining('claude-code:'),
+          conversationId: 'claude-session-1',
+          isFallback: false,
+        }),
+      }),
+    ]))
+    expect(artifactSaves).toHaveLength(1)
+    expect(artifactSaves[0].fileName).toBe('presentation.html')
+    expect(await readFile(path.join(tempDir, 'presentation.html'), 'utf8')).toContain('Claude Deck')
+
+    await rm(tempDir, { recursive: true, force: true })
+  })
+
+  it('passes selected elements and message image assets to Claude Code and inlines generated asset references', async () => {
+    const tempDir = await mkdtemp(path.join(os.tmpdir(), 'ppt-claude-agent-assets-'))
+    let capturedPrompt = ''
+
+    const queryFactory: ClaudeCodeQueryFactory = ({ prompt }) => {
+      capturedPrompt = prompt
+
+      return (async function* () {
+        await writeFile(
+          path.join(tempDir, 'presentation.html'),
+          '<!doctype html><html><head><title>Asset Deck</title></head><body><section class="slide"><img src="assets/logo.png" alt="Logo"></section></body></html>',
+          'utf8',
+        )
+        yield {
+          type: 'assistant',
+          message: {
+            content: [{ type: 'text', text: '已基于选中元素和图片完成修改。' }],
+          },
+        }
+        yield {
+          type: 'result',
+          subtype: 'success',
+          session_id: 'claude-session-assets',
+          result: 'ok',
+        }
+      })()
+    }
+
+    const agent = createSandboxedClaudeCodeDeckAgent({
+      runtimeConfig: createRuntimeConfigFixture(),
+      sandboxManager: {
+        async create() {
+          await mkdir(path.join(tempDir, 'assets'), { recursive: true })
+          await writeFile(path.join(tempDir, 'current-deck.html'), blankDeckHtml, 'utf8')
+          await writeFile(path.join(tempDir, 'presentation.html'), '', 'utf8')
+          return createSandboxHandleFixture(tempDir)
+        },
+        async destroy() {},
+      },
+      artifactStore: {
+        async save(args) {
+          return {
+            artifactId: 'artifact-assets',
+            tenantId: args.tenantId,
+            userId: args.userId,
+            sessionId: args.sessionId,
+            jobId: args.jobId,
+            fileName: args.fileName,
+            contentType: args.contentType,
+            sizeBytes: args.buffer.byteLength,
+            relativePath: 'artifacts/presentation.html',
+            absolutePath: path.join(tempDir, 'artifact.html'),
+            createdAt: Date.now(),
+          }
+        },
+      },
+      uploadStore: {
+        async save() {
+          throw new Error('not used')
+        },
+        async materialize(_assets, targetDir) {
+          await mkdir(targetDir, { recursive: true })
+          await writeFile(path.join(targetDir, 'logo.png'), Buffer.from([0x89, 0x50, 0x4e, 0x47]))
+          return []
+        },
+      },
+      queryFactory,
+    })
+
+    const events = []
+    try {
+      for await (const event of agent.runTurn({
+        ...createSandboxedTurnRequest(),
+        message: '把选中元素换成更强的标题，并使用上传图片',
+        generationMode: 'from-current',
+        selectedElement: {
+          slideId: 'slide-1',
+          selector: 'section.slide[data-slide-id="slide-1"] [data-node-id="text-hero"]',
+          elementTag: 'h1',
+          elementText: '旧标题',
+        },
+        messageAssetIds: ['asset-logo'],
+        sessionSnapshot: {
+          htmlPptState: {
+            uploadedAssets: [
+              {
+                assetId: 'asset-logo',
+                fileName: 'logo.png',
+                path: path.join(tempDir, 'logo.png'),
+                contentType: 'image/png',
+                ext: '.png',
+                sizeBytes: 4,
+                usability: 'usable',
+              },
+            ],
+          },
+        },
+      })) {
+        events.push(event)
+      }
+    } finally {
+      await rm(tempDir, { recursive: true, force: true })
+    }
+
+    expect(capturedPrompt).toContain('Selected element context')
+    expect(capturedPrompt).toContain('section.slide[data-slide-id="slide-1"] [data-node-id="text-hero"]')
+    expect(capturedPrompt).toContain('本次消息指定图片素材')
+    expect(capturedPrompt).toContain('assets/logo.png')
+    expect(events).toEqual(expect.arrayContaining([
+      expect.objectContaining({
+        type: 'html_candidate_ready',
+        html: expect.stringContaining('data:image/png;base64'),
+      }),
+    ]))
+  })
+
+  it('uses generic agent copy for Claude Code status and fallback summary shown to users', async () => {
+    const tempDir = await mkdtemp(path.join(os.tmpdir(), 'ppt-claude-copy-'))
+    const agent = createSandboxedClaudeCodeDeckAgent({
+      runtimeConfig: createRuntimeConfigFixture(),
+      sandboxManager: {
+        async create() {
+          await writeFile(path.join(tempDir, 'current-deck.html'), blankDeckHtml, 'utf8')
+          await writeFile(path.join(tempDir, 'presentation.html'), '', 'utf8')
+          return createSandboxHandleFixture(tempDir)
+        },
+        async destroy() {},
+      },
+      artifactStore: {
+        async save(args) {
+          return {
+            artifactId: 'artifact-agent-copy',
+            tenantId: args.tenantId,
+            userId: args.userId,
+            sessionId: args.sessionId,
+            jobId: args.jobId,
+            fileName: args.fileName,
+            contentType: args.contentType,
+            sizeBytes: args.buffer.byteLength,
+            relativePath: 'artifacts/presentation.html',
+            absolutePath: path.join(tempDir, 'artifact.html'),
+            createdAt: Date.now(),
+          }
+        },
+      },
+      uploadStore: {
+        async save() {
+          throw new Error('not used')
+        },
+        async materialize() {
+          return []
+        },
+      },
+      queryFactory: () => (async function* () {
+        await writeFile(
+          path.join(tempDir, 'presentation.html'),
+          '<!doctype html><html><head><title>Agent Deck</title></head><body><section class="slide"><h1>Agent Deck</h1></section></body></html>',
+          'utf8',
+        )
+        yield {
+          type: 'result',
+          subtype: 'success',
+          session_id: 'agent-copy-session',
+          result: 'ok',
+        }
+      })(),
+    })
+
+    const events = []
+    for await (const event of agent.runTurn(createSandboxedTurnRequest())) {
+      events.push(event)
+    }
+
+    expect(events).toEqual(expect.arrayContaining([
+      expect.objectContaining({
+        type: 'status',
+        phase: 'drafting',
+        label: '正在调用 agent 生成 HTML',
+      }),
+      expect.objectContaining({
+        type: 'html_candidate_ready',
+        summary: 'agent 已生成 HTML 候选。',
+      }),
+    ]))
+    expect(JSON.stringify(events)).not.toContain('Claude Code')
+
+    await rm(tempDir, { recursive: true, force: true })
+  })
+
+  it('normalizes Claude Code mentions in assistant transcript text before streaming to users', async () => {
+    const tempDir = await mkdtemp(path.join(os.tmpdir(), 'ppt-claude-transcript-'))
+    const agent = createSandboxedClaudeCodeDeckAgent({
+      runtimeConfig: createRuntimeConfigFixture(),
+      sandboxManager: {
+        async create() {
+          await writeFile(path.join(tempDir, 'current-deck.html'), blankDeckHtml, 'utf8')
+          await writeFile(path.join(tempDir, 'presentation.html'), '', 'utf8')
+          return createSandboxHandleFixture(tempDir)
+        },
+        async destroy() {},
+      },
+      artifactStore: {
+        async save(args) {
+          return {
+            artifactId: 'artifact-agent-transcript',
+            tenantId: args.tenantId,
+            userId: args.userId,
+            sessionId: args.sessionId,
+            jobId: args.jobId,
+            fileName: args.fileName,
+            contentType: args.contentType,
+            sizeBytes: args.buffer.byteLength,
+            relativePath: 'artifacts/presentation.html',
+            absolutePath: path.join(tempDir, 'artifact.html'),
+            createdAt: Date.now(),
+          }
+        },
+      },
+      uploadStore: {
+        async save() {
+          throw new Error('not used')
+        },
+        async materialize() {
+          return []
+        },
+      },
+      queryFactory: () => (async function* () {
+        await writeFile(
+          path.join(tempDir, 'presentation.html'),
+          '<!doctype html><html><head><title>Agent Deck</title></head><body><section class="slide"><h1>Agent Deck</h1></section></body></html>',
+          'utf8',
+        )
+        yield {
+          type: 'assistant',
+          message: {
+            content: [{ type: 'text', text: 'Claude Code 已写入 presentation.html。' }],
+          },
+        }
+        yield {
+          type: 'result',
+          subtype: 'success',
+          session_id: 'agent-transcript-session',
+          result: 'ok',
+        }
+      })(),
+    })
+
+    const events = []
+    for await (const event of agent.runTurn(createSandboxedTurnRequest())) {
+      events.push(event)
+    }
+
+    expect(events).toEqual(expect.arrayContaining([
+      expect.objectContaining({
+        type: 'assistant_done',
+        text: 'agent 已写入 presentation.html。',
+      }),
+      expect.objectContaining({
+        type: 'html_candidate_ready',
+        summary: 'agent 已写入 presentation.html。',
+      }),
+    ]))
+    expect(JSON.stringify(events)).not.toContain('Claude Code')
+
+    await rm(tempDir, { recursive: true, force: true })
+  })
+
+  it('aborts the Claude Code query when the turn abort signal fires', async () => {
+    const tempDir = await mkdtemp(path.join(os.tmpdir(), 'ppt-claude-abort-'))
+    const abortController = new AbortController()
+    let queryAbortController: AbortController | undefined
+    const agent = createSandboxedClaudeCodeDeckAgent({
+      runtimeConfig: createRuntimeConfigFixture(),
+      sandboxManager: {
+        async create() {
+          await writeFile(path.join(tempDir, 'current-deck.html'), blankDeckHtml, 'utf8')
+          await writeFile(path.join(tempDir, 'presentation.html'), '', 'utf8')
+          return createSandboxHandleFixture(tempDir)
+        },
+        async destroy() {},
+      },
+      artifactStore: {
+        async save() {
+          throw new Error('candidate should not be saved after abort')
+        },
+      },
+      uploadStore: {
+        async save() {
+          throw new Error('not used')
+        },
+        async materialize() {
+          return []
+        },
+      },
+      queryFactory: ({ options }) => {
+        queryAbortController = options.abortController
+        return (async function* () {
+          await new Promise<void>((_resolve, reject) => {
+            options.abortController?.signal.addEventListener('abort', () => {
+              reject(new Error('aborted'))
+            }, { once: true })
+          })
+        })()
+      },
+    })
+
+    const iterator = agent.runTurn({
+      ...createSandboxedTurnRequest(),
+      abortSignal: abortController.signal,
+    })[Symbol.asyncIterator]()
+
+    expect(await iterator.next()).toEqual({
+      done: false,
+      value: expect.objectContaining({
+        type: 'status',
+        phase: 'queued',
+      }),
+    })
+    expect(await iterator.next()).toEqual({
+      done: false,
+      value: expect.objectContaining({
+        type: 'status',
+        phase: 'drafting',
+      }),
+    })
+
+    const pendingNext = iterator.next()
+    await waitForCondition(() => Boolean(queryAbortController))
+    abortController.abort()
+
+    await expect(pendingNext).rejects.toThrow(/aborted/i)
+    expect(queryAbortController?.signal.aborted).toBe(true)
+
+    await rm(tempDir, { recursive: true, force: true })
+  })
+
+  it('streams the existing error event when Claude Code generation fails', async () => {
+    const tempDir = await mkdtemp(path.join(os.tmpdir(), 'ppt-claude-error-'))
+    const agent = createSandboxedClaudeCodeDeckAgent({
+      runtimeConfig: createRuntimeConfigFixture(),
+      sandboxManager: {
+        async create() {
+          await writeFile(path.join(tempDir, 'current-deck.html'), blankDeckHtml, 'utf8')
+          await writeFile(path.join(tempDir, 'presentation.html'), '', 'utf8')
+          return createSandboxHandleFixture(tempDir)
+        },
+        async destroy() {},
+      },
+      artifactStore: {
+        async save() {
+          throw new Error('not used')
+        },
+      },
+      uploadStore: {
+        async save() {
+          throw new Error('not used')
+        },
+        async materialize() {
+          return []
+        },
+      },
+      queryFactory: () => (async function* () {
+        yield {
+          type: 'result',
+          subtype: 'error_during_execution',
+          errors: ['MiniMax stream disconnected'],
+          session_id: 'claude-session-error',
+        }
+      })(),
+    })
+    const server = createAiServer({ agent })
+    const address = await server.listen(0)
+    const response = await fetch(`${address}/api/ai/turns`, {
+      method: 'POST',
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify(createSandboxedTurnRequest()),
+    })
+    const body = await response.text()
+    await server.close()
+
+    expect(body).toContain('"type":"error"')
+    expect(body).toContain('MiniMax stream disconnected')
+
+    await rm(tempDir, { recursive: true, force: true })
+  })
+})
+
+async function waitForCondition(predicate: () => boolean): Promise<void> {
+  const startedAt = Date.now()
+  while (!predicate()) {
+    if (Date.now() - startedAt > 1_000) {
+      throw new Error('Timed out waiting for condition')
+    }
+    await new Promise((resolve) => setTimeout(resolve, 10))
+  }
+}
+
+function createRuntimeConfigFixture() {
+  return {
+    redisUrl: '',
+    sandboxRoot: 'D:/workspace/ppt/.runtime/sandboxes',
+    artifactRoot: 'D:/workspace/ppt/.runtime/artifacts',
+    uploadRoot: 'D:/workspace/ppt/.runtime/uploads',
+    skillBundlePath: 'D:/workspace/ppt/server/embedded-skills/html-ppt',
+    workerCommand: undefined,
+    workerCloseTimeoutMs: 3_000,
+    sandboxJanitorIntervalMs: 120_000,
+    sandboxStaleAfterMs: 60 * 60 * 1000,
+    jobLimits: {
+      timeoutMs: 90_000,
+      maxArtifactBytes: 2_000_000,
+      maxUploadBytes: 10_000_000,
+      maxUploadCount: 12,
+      maxConcurrentJobsPerUser: 2,
+      maxConcurrentJobsPerTenant: 12,
+    },
+  }
+}
+
+function createSandboxedTurnRequest() {
+  return {
+    sessionId: 'session-a',
+    documentId: 'document-1',
+    conversationId: null,
+    message: '生成一份 AI 产品发布演示',
+    skillId: 'html_ppt',
+    currentDeckHtml: blankDeckHtml,
+    currentDeckHash: 'hash-sandboxed',
+    clientContext: {
+      locale: 'zh-CN',
+      timezone: 'Asia/Shanghai',
+      surface: 'editor' as const,
+    },
+    generationMode: 'from-scratch' as const,
+    htmlPpt: defaultHtmlPptBrief,
+    sessionSnapshot: null,
+    sessionOwner: {
+      tenantId: 'tenant-a',
+      userId: 'user-a',
+      sessionId: 'session-a',
+    },
+  }
+}
+
+function createSandboxHandleFixture(rootDir: string) {
+  return {
+    sandboxId: 'sandbox-claude-id',
+    rootDir,
+    currentDeckPath: path.join(rootDir, 'current-deck.html'),
+    outputHtmlPath: path.join(rootDir, 'presentation.html'),
+    assetsDir: path.join(rootDir, 'assets'),
+    skillBundlePath: 'D:/workspace/ppt/server/embedded-skills/html-ppt',
+  }
+}

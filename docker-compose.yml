@@ -1,0 +1,23 @@
+services:
+  ppt-app:
+    build:
+      context: .
+      args:
+        NODE_BUILDER_IMAGE: docker.m.daocloud.io/library/node:22-bullseye
+        NODE_RUNTIME_IMAGE: docker.m.daocloud.io/library/node:22-bullseye-slim
+        NPM_REGISTRY: https://registry.npmmirror.com
+        APT_MIRROR: http://mirrors.tuna.tsinghua.edu.cn/debian
+    container_name: ppt-app
+    restart: always
+    user: '1000:1000'
+    env_file:
+      - .env.production
+    environment:
+      HOME: /home/node
+      npm_config_cache: /tmp/.npm
+    ports:
+      - '127.0.0.1:8787:8787'
+    volumes:
+      - /data/ppt/runtime/sandboxes:/data/ppt/runtime/sandboxes
+      - /data/ppt/runtime/artifacts:/data/ppt/runtime/artifacts
+      - /data/ppt/runtime/uploads:/data/ppt/runtime/uploads

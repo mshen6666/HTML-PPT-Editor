@@ -1,0 +1,50 @@
+{
+  "name": "ppt",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "dev:full": "node scripts/dev-full.mjs",
+    "dev:server": "tsx server/index.ts",
+    "build": "tsc && vite build",
+    "preview": "vite preview",
+    "start": "tsx server/index.ts",
+    "check:claude-code": "node scripts/check-claude-code.mjs",
+    "test": "vitest run",
+    "test:watch": "vitest"
+  },
+  "devDependencies": {
+    "@testing-library/jest-dom": "^6.9.1",
+    "@testing-library/react": "^16.3.2",
+    "@testing-library/user-event": "^14.6.1",
+    "@types/express": "^5.0.3",
+    "@types/react": "^19.2.14",
+    "@types/react-dom": "^19.2.3",
+    "@vitejs/plugin-react": "^6.0.1",
+    "typescript": "~6.0.2",
+    "vite": "^8.0.4",
+    "vitest": "^4.1.4"
+  },
+  "dependencies": {
+    "@anthropic-ai/claude-agent-sdk": "^0.2.119",
+    "@tiptap/extension-color": "^3.23.1",
+    "@tiptap/extension-text-style": "^3.23.1",
+    "@tiptap/pm": "^3.23.1",
+    "@tiptap/react": "^3.23.1",
+    "@tiptap/starter-kit": "^3.23.1",
+    "express": "^5.1.0",
+    "html-to-image": "^1.11.13",
+    "ioredis": "^5.8.1",
+    "jsdom": "^29.0.2",
+    "jszip": "^3.10.1",
+    "pptxgenjs": "^4.0.1",
+    "react": "^19.2.5",
+    "react-dom": "^19.2.5",
+    "react-icons": "^5.5.0",
+    "react-router-dom": "^7.14.1",
+    "sharp": "^0.34.5",
+    "tsx": "^4.20.6",
+    "zod": "^4.1.12"
+  }
+}

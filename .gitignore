@@ -1,0 +1,56 @@
+# Dependencies
+node_modules/
+
+# Build output
+dist/
+dist-ssr/
+coverage/
+
+# Runtime and local agent state
+.runtime/
+.playwright-mcp/
+.claude/
+.superpowers/
+outputs/
+test-results/
+playwright-report/
+
+# Local agent instructions and planning notes
+AGENTS.md
+CLAUDE.md
+.impeccable.md
+docs/superpowers/
+docs/open-slide-editor-upgrade*.md
+
+# Environment files
+.env
+.env.*
+!.env.example
+!.env.*.example
+
+# Logs and debug artifacts
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+debug-request*.json
+before-network.txt
+.tmp-*
+preview-bug.png
+overflow-preview.png
+slide-preview-area.png
+
+# Editor and OS files
+.vscode/*
+!.vscode/extensions.json
+.idea/
+.DS_Store
+Thumbs.db
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?

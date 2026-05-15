@@ -1,0 +1,321 @@
+/* Guide Browser - Main Styles */
+
+.guide-browser {
+  min-height: 100vh;
+  padding: 32px;
+  background: linear-gradient(180deg, #faf6ef 0%, #f2ede5 100%);
+}
+
+.guide-browser-header {
+  text-align: center;
+  margin-bottom: 32px;
+}
+
+.guide-browser-title {
+  font-family: "Clash Display", sans-serif;
+  font-size: clamp(2rem, 4vw, 3rem);
+  font-weight: 600;
+  letter-spacing: -0.03em;
+  margin: 0 0 8px;
+  color: #201715;
+}
+
+.guide-browser-subtitle {
+  color: rgba(32, 23, 21, 0.6);
+  margin: 0;
+  font-size: 1rem;
+}
+
+/* Tabs */
+.guide-tabs {
+  display: flex;
+  gap: 8px;
+  padding: 16px 0;
+  border-bottom: 1px solid rgba(32, 23, 21, 0.1);
+  margin-bottom: 24px;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+.guide-tabs::-webkit-scrollbar {
+  display: none;
+}
+
+.guide-tab {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 18px;
+  border: 1px solid rgba(32, 23, 21, 0.12);
+  border-radius: 999px;
+  background: rgba(255, 250, 241, 0.78);
+  color: inherit;
+  font: inherit;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+}
+
+.guide-tab:hover {
+  border-color: rgba(217, 93, 57, 0.42);
+  transform: translateY(-1px);
+}
+
+.guide-tab.is-active {
+  background: #201715;
+  color: #fffaf1;
+  border-color: #201715;
+}
+
+.guide-tab-label {
+  font-weight: 500;
+}
+
+.guide-tab-count {
+  font-size: 0.85rem;
+  opacity: 0.7;
+}
+
+/* Search Bar */
+.guide-search-bar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  align-items: center;
+  margin-bottom: 24px;
+}
+
+.guide-search-input-wrap {
+  position: relative;
+  flex: 1;
+  min-width: 240px;
+}
+
+.guide-search-icon {
+  position: absolute;
+  left: 16px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 20px;
+  height: 20px;
+  color: rgba(32, 23, 21, 0.4);
+  pointer-events: none;
+}
+
+.guide-search-input {
+  width: 100%;
+  padding: 14px 44px;
+  border: 1px solid rgba(32, 23, 21, 0.12);
+  border-radius: 16px;
+  background: rgba(255, 250, 241, 0.82);
+  font: inherit;
+  font-size: 1rem;
+  color: inherit;
+  transition: all 0.2s ease;
+}
+
+.guide-search-input:focus {
+  outline: none;
+  border-color: rgba(217, 93, 57, 0.5);
+  box-shadow: 0 0 0 3px rgba(217, 93, 57, 0.1);
+}
+
+.guide-search-input::placeholder {
+  color: rgba(32, 23, 21, 0.4);
+}
+
+.guide-search-clear {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  padding: 6px;
+  border: none;
+  border-radius: 50%;
+  background: transparent;
+  color: rgba(32, 23, 21, 0.4);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.guide-search-clear:hover {
+  background: rgba(32, 23, 21, 0.1);
+  color: inherit;
+}
+
+.guide-search-clear svg {
+  width: 16px;
+  height: 16px;
+}
+
+/* View Toggle */
+.guide-view-toggle {
+  display: flex;
+  gap: 4px;
+  padding: 4px;
+  border: 1px solid rgba(32, 23, 21, 0.12);
+  border-radius: 12px;
+  background: rgba(255, 250, 241, 0.78);
+}
+
+.guide-view-btn {
+  padding: 8px 10px;
+  border: none;
+  border-radius: 8px;
+  background: transparent;
+  color: rgba(32, 23, 21, 0.5);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.guide-view-btn:hover {
+  color: inherit;
+}
+
+.guide-view-btn.is-active {
+  background: #201715;
+  color: #fffaf1;
+}
+
+.guide-view-btn svg {
+  width: 18px;
+  height: 18px;
+}
+
+/* Filter Chips */
+.guide-filter-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  width: 100%;
+}
+
+.guide-filter-chip {
+  padding: 6px 14px;
+  border: 1px solid rgba(32, 23, 21, 0.12);
+  border-radius: 999px;
+  background: rgba(255, 250, 241, 0.78);
+  font: inherit;
+  font-size: 0.9rem;
+  color: inherit;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.guide-filter-chip:hover {
+  border-color: rgba(217, 93, 57, 0.42);
+}
+
+.guide-filter-chip.is-active {
+  background: #d95d39;
+  color: #fffaf1;
+  border-color: #d95d39;
+}
+
+/* Card Grid */
+.guide-card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 20px;
+}
+
+.guide-card-grid.is-list {
+  grid-template-columns: 1fr;
+}
+
+/* Empty State */
+.guide-empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 80px 20px;
+  text-align: center;
+  color: rgba(32, 23, 21, 0.5);
+}
+
+.guide-empty-state svg {
+  width: 64px;
+  height: 64px;
+  margin-bottom: 16px;
+  opacity: 0.3;
+}
+
+.guide-empty-state p {
+  margin: 0 0 16px;
+  font-size: 1.1rem;
+}
+
+.guide-empty-state button {
+  padding: 10px 20px;
+  border: 1px solid rgba(32, 23, 21, 0.12);
+  border-radius: 999px;
+  background: rgba(255, 250, 241, 0.78);
+  font: inherit;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.guide-empty-state button:hover {
+  border-color: rgba(217, 93, 57, 0.42);
+}
+
+/* Preview Panel */
+.guide-preview-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(32, 23, 21, 0.3);
+  backdrop-filter: blur(4px);
+  z-index: 100;
+  animation: fadeIn 0.2s ease;
+}
+
+.guide-preview-panel {
+  position: fixed;
+  top: 0;
+  right: 0;
+  width: 640px;
+  max-width: 100vw;
+  height: 100vh;
+  background: #fffaf1;
+  box-shadow: -8px 0 32px rgba(68, 46, 31, 0.15);
+  z-index: 101;
+  overflow-y: auto;
+  animation: slideIn 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.guide-preview-close {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  padding: 8px;
+  border: none;
+  border-radius: 50%;
+  background: transparent;
+  color: rgba(32, 23, 21, 0.5);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  z-index: 1;
+}
+
+.guide-preview-close:hover {
+  background: rgba(32, 23, 21, 0.1);
+  color: inherit;
+}
+
+.guide-preview-close svg {
+  width: 24px;
+  height: 24px;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slideIn {
+  from { transform: translateX(100%); }
+  to { transform: translateX(0); }
+}
+
+/* Responsive
