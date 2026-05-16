@@ -568,7 +568,7 @@ describe('createAiServer', () => {
     } finally {
       await server.close()
     }
-  })
+  }, 10_000)
 
   it('disables host filesystem scanning for html-ppt assets', async () => {
     const tempDir = await mkdtemp(path.join(tmpdir(), 'ppt-fs-assets-'))

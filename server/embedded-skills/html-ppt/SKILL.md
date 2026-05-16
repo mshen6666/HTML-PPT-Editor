@@ -113,6 +113,11 @@ Only after those are clear, scaffold the deck and start writing.
   so the deck supports ← → / T / A / F / S / O / hash deep-links.
 - **One `.slide` per logical page.** `runtime.js` makes `.slide.is-active`
   visible; all others are hidden.
+- **Use the editor canvas contract.** Standard decks are fixed 16:9 at
+  `1280×720`; set `data-fs-canvas-width="1280"` and
+  `data-fs-canvas-height="720"` on `<html>`, keep visible content inside
+  roughly `1120×600`, and split dense content instead of using scrollable
+  slide regions. Use `810×1080` only for 小红书 / `xhs` portrait output.
 - **When using beautiful-html-templates, preserve the chosen template visual system but output editor-compatible section.slide pages.** Some source templates use `div.slide` or `<deck-stage>`; rewrite the final deck so every logical page is `<section class="slide" data-slide-id="...">...</section>`.
 - **Supply notes.** Wrap speaker notes in `<div class="notes">…</div>` inside
   each slide. Press S to open the overlay.

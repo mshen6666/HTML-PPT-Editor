@@ -131,6 +131,9 @@ export function createHtmlPptHtmlInstructions(
     'Keep the result polished and presentation-ready with strong visual hierarchy.',
     'Use semantic HTML, responsive CSS, and lightweight inline JavaScript only when needed for navigation or motion.',
     `Set data-fs-canvas-width="${canvas.width}" and data-fs-canvas-height="${canvas.height}" on the root <html> element.`,
+    `Use a fixed ${canvas.width}x${canvas.height} canvas for every slide; do not size slides from 100vw or 100vh.`,
+    'For standard 16:9 decks, keep audience-facing content inside an approximate 1120x600 safe content budget.',
+    'Do not use scrollable slide content; split dense content across more slides instead.',
     'Do not ask follow-up questions in this phase.',
     createHtmlPptBriefPrompt(config),
     skillContext
@@ -246,6 +249,10 @@ export function createHtmlPptFallbackHtml(
         --title-size: clamp(2rem, 6vw, 4.8rem);
         --body-size: clamp(0.95rem, 1.6vw, 1.15rem);
         --padding: clamp(1.2rem, 4vw, 4rem);
+        --canvas-width: ${canvas.width}px;
+        --canvas-height: ${canvas.height}px;
+        --content-width: ${Math.max(canvas.width - 160, 640)}px;
+        --content-height: ${Math.max(canvas.height - 120, 480)}px;
         --accent: ${preset.accent};
         --text: ${preset.text};
         --background: ${preset.background};
@@ -258,9 +265,9 @@ export function createHtmlPptFallbackHtml(
       }
 
       .slide {
-        width: 100vw;
-        height: 100vh;
-        height: 100dvh;
+        width: ${canvas.width}px;
+        height: ${canvas.height}px;
+        max-width: 100%;
         overflow: hidden;
         scroll-snap-align: start;
         display: flex;
@@ -280,8 +287,8 @@ export function createHtmlPptFallbackHtml(
       }
 
       .shell {
-        width: min(92vw, 1120px);
-        max-height: min(84vh, 760px);
+        width: min(var(--content-width), calc(var(--canvas-width) - 96px));
+        max-height: var(--content-height);
         overflow: hidden;
         display: grid;
         gap: clamp(0.8rem, 2vw, 1.6rem);

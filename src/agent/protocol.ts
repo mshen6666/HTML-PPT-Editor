@@ -188,6 +188,14 @@ export const candidateRunMetaSchema = z.object({
   sandboxId: z.string().min(1).optional(),
 })
 
+export const htmlCandidateLayoutWarningSchema = z.object({
+  code: z.string().min(1),
+  severity: z.literal('warning'),
+  slideId: z.string().min(1).optional(),
+  slideIndex: z.number().int().positive().optional(),
+  message: z.string().min(1),
+})
+
 export const deckCandidateSchema = z.object({
   candidateId: z.string().min(1),
   summary: z.string().min(1),
@@ -211,6 +219,7 @@ export const htmlCandidateSchema = z.object({
     generatedSlideCount: z.number().int().positive().optional(),
     targetSlideCount: z.number().int().positive().optional(),
     isPartial: z.boolean().optional(),
+    layoutWarnings: z.array(htmlCandidateLayoutWarningSchema).optional(),
   }),
   sources: z.array(candidateSourceSchema),
   artifactRefs: z.object({
@@ -320,6 +329,7 @@ export type AgentSkillSearchMode = z.infer<typeof agentSkillSearchModeSchema>
 export type AgentSkillWorkflow = z.infer<typeof agentSkillWorkflowSchema>
 export type AgentSessionSnapshot = z.infer<typeof sessionSnapshotSchema>
 export type HtmlPptConfig = z.infer<typeof htmlPptConfigSchema>
+export type HtmlCandidateLayoutWarning = z.infer<typeof htmlCandidateLayoutWarningSchema>
 export type ExtractedAsset = z.infer<typeof extractedAssetSchema>
 export type HtmlPptAsset = z.infer<typeof htmlPptAssetSchema>
 export type HtmlPptState = z.infer<typeof htmlPptStateSchema>

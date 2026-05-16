@@ -340,6 +340,25 @@ button {
   gap: 12px;
 }
 
+.candidate-layout-warnings {
+  display: grid;
+  gap: 8px;
+  padding: 12px;
+  border: 1px solid rgba(217, 93, 57, 0.24);
+  border-radius: 14px;
+  background: rgba(217, 93, 57, 0.08);
+  color: #5c2a1c;
+}
+
+.candidate-layout-warnings ul {
+  margin: 0;
+  padding-left: 18px;
+}
+
+.candidate-layout-warnings li {
+  margin: 0;
+}
+
 .agent-assets-stack {
   justify-items: stretch;
   gap: 10px;

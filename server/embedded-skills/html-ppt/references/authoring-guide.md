@@ -55,6 +55,12 @@ This copies `templates/deck.html` into `examples/my-talk/index.html` with
 paths rewritten. Add/remove `<section class="slide">` blocks to match your
 outline.
 
+The default editor canvas is `1280×720` for all standard 16:9 decks. Keep
+visible content inside an approximate `1120×600` safe budget after slide chrome
+and margins. If a page needs more than 8-9 bullets, a long table, or scrolling,
+split it into additional slides. 小红书 / `xhs` portrait output is the only
+default exception and uses `810×1080`.
+
 ## 5. Author each slide
 
 For each outline item:
@@ -111,8 +117,9 @@ Walk through every slide with ← →. Press:
 ./scripts/render.sh examples/my-talk/index.html 12 out/my-talk-png
 ```
 
-Output is 1920×1080 by default. Change in `render.sh` if the user wants 3:4
-for 小红书图文 (1242×1660).
+Output is `1280×720` by default to match the editor canvas. Change in
+`render.sh` only when intentionally exporting a portrait 小红书图文 deck
+(`810×1080`).
 
 ## 10. What to NOT do
 

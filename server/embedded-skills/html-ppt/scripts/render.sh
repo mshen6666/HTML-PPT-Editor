@@ -53,7 +53,7 @@ render_one() {
     --hide-scrollbars \
     --no-sandbox \
     --virtual-time-budget=4000 \
-    --window-size=1920,1080 \
+    --window-size=1280,720 \
     --screenshot="$target" \
     "$url" >/dev/null 2>&1
   echo "  ✔ $target"

@@ -580,6 +580,16 @@ export function AiPanel({
                     <strong>{candidate.previewMeta.title}</strong>
                     <span>{`${candidate.previewMeta.slideCount} 页 HTML 演示`}</span>
                   </div>
+                  {candidate.previewMeta.layoutWarnings?.length ? (
+                    <div className="candidate-layout-warnings" role="status">
+                      <strong>布局风险</strong>
+                      <ul>
+                        {candidate.previewMeta.layoutWarnings.slice(0, 4).map((warning, index) => (
+                          <li key={`${warning.code}-${warning.slideId ?? 'deck'}-${index}`}>{warning.message}</li>
+                        ))}
+                      </ul>
+                    </div>
+                  ) : null}
                   <p className="candidate-compare-copy">
                     先在这里确认摘要与来源，需要时再进入主工作区对比，不让抽屉被预览占满。
                   </p>

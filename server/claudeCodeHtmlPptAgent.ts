@@ -12,6 +12,10 @@ import {
   extractHtmlPreviewMeta,
   loadEmbeddedHtmlPptSkill,
 } from './frontendSlides'
+import {
+  auditHtmlPptLayout,
+  normalizeHtmlPptLayoutContract,
+} from './htmlPptLayoutAudit'
 import { isContentReferenceAsset } from './referenceExtraction'
 import type { SandboxManager } from './sandboxManager'
 import { FileSystemUploadStore, type UploadedAssetRef, type UploadStore } from './uploadStore'
@@ -243,7 +247,9 @@ export function createSandboxedClaudeCodeDeckAgent(options: SandboxedClaudeCodeD
         }
 
         const rawHtml = await readGeneratedHtml(sandbox.outputHtmlPath)
-        const html = await inlineMaterializedImageAssets(rawHtml, sandbox.assetsDir)
+        const inlinedHtml = await inlineMaterializedImageAssets(rawHtml, sandbox.assetsDir)
+        const layoutWarnings = auditHtmlPptLayout(inlinedHtml)
+        const html = normalizeHtmlPptLayoutContract(inlinedHtml)
         const previewMeta = extractHtmlPreviewMeta(html)
         const artifact = await options.artifactStore.save({
           tenantId: sessionOwner.tenantId,
@@ -258,13 +264,14 @@ export function createSandboxedClaudeCodeDeckAgent(options: SandboxedClaudeCodeD
         yield {
           type: 'html_candidate_ready',
           candidateId: resultSessionId ?? jobId,
-          summary: lastAssistantText || 'agent 已生成 HTML 候选。',
+          summary: summarizeGeneratedCandidate(lastAssistantText, layoutWarnings.length),
           html,
           previewMeta: {
             ...previewMeta,
             generatedSlideCount: previewMeta.slideCount,
             targetSlideCount: previewMeta.slideCount,
             isPartial: false,
+            layoutWarnings: layoutWarnings.length ? layoutWarnings : undefined,
           },
           sources: [],
           artifactRefs: {
@@ -335,6 +342,11 @@ async function buildClaudeCodePrompt(args: {
     'Examples such as course-module, tech-sharing, pitch-deck, xhs-post, tokyo-night, and editorial-serif are html-ppt resources, not separate skills.',
     'beautiful-html-templates resources are embedded under templates/beautiful-html-templates/<slug>/template.html.',
     'When using beautiful-html-templates, preserve the chosen template visual system but output editor-compatible section.slide pages.',
+    'Use the editor canvas contract: standard decks are fixed 16:9 at 1280x720.',
+    'Set data-fs-canvas-width="1280" and data-fs-canvas-height="720" on <html> for standard live/pdf/standalone decks.',
+    'Only use the 810x1080 portrait canvas when the presentation brief format is xhs.',
+    'Keep audience-facing content inside a safe content budget of roughly 1120x600 pixels.',
+    'Avoid scrollable slide content, overlong bullet lists, dense tables, and fixed 1920px/1080px layout values.',
     'Interact with the user in Chinese.',
     'All user-facing questions, status text, summaries, and assistant messages must be in Chinese.',
     'Do not print the final HTML in chat.',
@@ -428,6 +440,15 @@ function extractResultError(message: Extract<ClaudeCodeMessage, { type: 'result'
 
 function isAbortErrorMessage(error: unknown): boolean {
   return error instanceof Error && /aborted/i.test(error.message)
+}
+
+function summarizeGeneratedCandidate(lastAssistantText: string, layoutWarningCount: number): string {
+  const baseSummary = lastAssistantText || 'agent 已生成 HTML 候选。'
+  if (!layoutWarningCount) {
+    return baseSummary
+  }
+
+  return `${baseSummary} 检测到 ${layoutWarningCount} 个布局风险，可能有页面溢出。`
 }
 
 async function readGeneratedHtml(outputPath: string): Promise<string> {

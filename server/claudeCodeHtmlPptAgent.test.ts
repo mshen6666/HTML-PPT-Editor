@@ -161,6 +161,8 @@ describe('createSandboxedClaudeCodeDeckAgent', () => {
     expect(capturedPrompt).toContain('Examples such as course-module, tech-sharing, pitch-deck, xhs-post, tokyo-night, and editorial-serif are html-ppt resources, not separate skills.')
     expect(capturedPrompt).toContain('beautiful-html-templates')
     expect(capturedPrompt).toContain('When using beautiful-html-templates, preserve the chosen template visual system but output editor-compatible section.slide pages.')
+    expect(capturedPrompt).toContain('Use the editor canvas contract: standard decks are fixed 16:9 at 1280x720.')
+    expect(capturedPrompt).toContain('Keep audience-facing content inside a safe content budget of roughly 1120x600 pixels.')
     expect(capturedPrompt).toContain('Interact with the user in Chinese.')
     expect(capturedPrompt).toContain(`Write the final standalone presentation HTML to: ${path.join(tempDir, 'presentation.html')}`)
     expect(capturedPrompt).toContain('For uploaded .docx files, the original file has been pre-processed')
@@ -188,7 +190,95 @@ describe('createSandboxedClaudeCodeDeckAgent', () => {
     ]))
     expect(artifactSaves).toHaveLength(1)
     expect(artifactSaves[0].fileName).toBe('presentation.html')
+    expect(artifactSaves[0].buffer.toString('utf8')).toContain('data-fs-canvas-width="1280"')
+    expect(artifactSaves[0].buffer.toString('utf8')).toContain('data-fs-canvas-height="720"')
     expect(await readFile(path.join(tempDir, 'presentation.html'), 'utf8')).toContain('Claude Deck')
+
+    await rm(tempDir, { recursive: true, force: true })
+  })
+
+  it('returns normalized html with layout warnings when generated pages risk overflow', async () => {
+    const tempDir = await mkdtemp(path.join(os.tmpdir(), 'ppt-claude-agent-layout-'))
+    const longList = Array.from({ length: 11 }, (_, index) => `<li>Item ${index + 1}</li>`).join('')
+
+    const queryFactory: ClaudeCodeQueryFactory = () => {
+      return (async function* () {
+        await writeFile(
+          path.join(tempDir, 'presentation.html'),
+          `<!doctype html><html data-fs-canvas-width="1920" data-fs-canvas-height="1080"><head><title>Risk Deck</title><style>.slide{width:1920px;height:1080px}</style></head><body><section class="slide"><h1>Risk Deck</h1><ul>${longList}</ul></section></body></html>`,
+          'utf8',
+        )
+        yield {
+          type: 'assistant',
+          message: {
+            content: [{ type: 'text', text: 'agent 已生成 HTML 候选。' }],
+          },
+        }
+        yield {
+          type: 'result',
+          subtype: 'success',
+          session_id: 'claude-session-layout',
+          result: 'ok',
+        }
+      })()
+    }
+
+    const agent = createSandboxedClaudeCodeDeckAgent({
+      runtimeConfig: createRuntimeConfigFixture(),
+      sandboxManager: {
+        async create() {
+          await writeFile(path.join(tempDir, 'current-deck.html'), blankDeckHtml, 'utf8')
+          await writeFile(path.join(tempDir, 'presentation.html'), '', 'utf8')
+          return createSandboxHandleFixture(tempDir)
+        },
+        async destroy() {},
+      },
+      artifactStore: {
+        async save(args) {
+          return {
+            artifactId: 'artifact-layout',
+            tenantId: args.tenantId,
+            userId: args.userId,
+            sessionId: args.sessionId,
+            jobId: args.jobId,
+            fileName: args.fileName,
+            contentType: args.contentType,
+            sizeBytes: args.buffer.byteLength,
+            relativePath: 'artifacts/presentation.html',
+            absolutePath: path.join(tempDir, 'artifact.html'),
+            createdAt: Date.now(),
+          }
+        },
+      },
+      uploadStore: {
+        async save() {
+          throw new Error('not used')
+        },
+        async materialize() {
+          return []
+        },
+      },
+      queryFactory,
+    })
+
+    const events = []
+    for await (const event of agent.runTurn(createSandboxedTurnRequest())) {
+      events.push(event)
+    }
+
+    const candidate = events.find((event) => event.type === 'html_candidate_ready')
+    expect(candidate).toEqual(expect.objectContaining({
+      type: 'html_candidate_ready',
+      html: expect.stringContaining('data-fs-canvas-width="1280"'),
+      summary: expect.stringContaining('可能有页面溢出'),
+      previewMeta: expect.objectContaining({
+        layoutWarnings: expect.arrayContaining([
+          expect.objectContaining({ code: 'canvas-size-mismatch' }),
+          expect.objectContaining({ code: 'legacy-fixed-canvas' }),
+          expect.objectContaining({ code: 'long-list', slideId: 'slide-1', slideIndex: 1 }),
+        ]),
+      }),
+    }))
 
     await rm(tempDir, { recursive: true, force: true })
   })
