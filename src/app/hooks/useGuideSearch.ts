@@ -67,7 +67,16 @@ function getSearchText(item: GuideItem): string {
     case 'theme':
       return `${item.data.name} ${item.data.category} ${item.data.tone.join(' ')} ${item.data.useCases}`
     case 'template':
-      return `${item.data.name} ${item.data.scenario} ${item.data.visualKeywords.join(' ')}`
+      return [
+        item.data.name,
+        item.data.displayName,
+        item.data.scenario,
+        item.data.visualKeywords.join(' '),
+        item.data.tone?.join(' '),
+        item.data.mood?.join(' '),
+        item.data.occasion?.join(' '),
+        item.data.bestFor,
+      ].filter(Boolean).join(' ')
     case 'layout':
       return `${item.data.name} ${item.data.category} ${item.data.informationType}`
     case 'animation':

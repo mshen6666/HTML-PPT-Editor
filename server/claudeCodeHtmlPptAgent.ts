@@ -333,6 +333,8 @@ async function buildClaudeCodePrompt(args: {
     'Do not read skill files from user/global directories such as ~/.claude or ~/.agents.',
     'When the user mentions a theme, layout, animation, or full-deck template name, resolve it inside the embedded html-ppt references and templates. Do not treat resource names as standalone skill names.',
     'Examples such as course-module, tech-sharing, pitch-deck, xhs-post, tokyo-night, and editorial-serif are html-ppt resources, not separate skills.',
+    'beautiful-html-templates resources are embedded under templates/beautiful-html-templates/<slug>/template.html.',
+    'When using beautiful-html-templates, preserve the chosen template visual system but output editor-compatible section.slide pages.',
     'Interact with the user in Chinese.',
     'All user-facing questions, status text, summaries, and assistant messages must be in Chinese.',
     'Do not print the final HTML in chat.',

@@ -9,11 +9,12 @@ interface TemplatePreviewProps {
 export function TemplatePreview({ template }: TemplatePreviewProps) {
   const { previewMap, loading } = useTemplatePreviews()
   const srcdoc = previewMap?.[template.name]
+  const title = template.displayName || template.name
 
   return (
     <div className="preview-content preview-content--template">
       <div className="preview-header">
-        <h2 className="preview-title">{template.name}</h2>
+        <h2 className="preview-title">{title}</h2>
       </div>
 
       <div className="theme-slide-preview-shell">
@@ -39,6 +40,18 @@ export function TemplatePreview({ template }: TemplatePreviewProps) {
           ))}
         </div>
       </div>
+
+      {template.source === 'beautiful-html-templates' && (
+        <div className="preview-section">
+          <h4>模板属性</h4>
+          <p>{[
+            template.scheme ? `配色：${template.scheme}` : null,
+            template.density ? `密度：${template.density}` : null,
+            template.formality ? `正式度：${template.formality}` : null,
+            template.slideCount ? `页数：${template.slideCount}` : null,
+          ].filter(Boolean).join(' / ')}</p>
+        </div>
+      )}
 
       <div className="preview-section">
         <h4>适用场景</h4>

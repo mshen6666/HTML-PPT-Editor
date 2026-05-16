@@ -159,6 +159,8 @@ describe('createSandboxedClaudeCodeDeckAgent', () => {
     expect(capturedPrompt).toContain('Do not invoke the Skill tool or attempt to load any locally installed skill.')
     expect(capturedPrompt).toContain('When the user mentions a theme, layout, animation, or full-deck template name, resolve it inside the embedded html-ppt references and templates.')
     expect(capturedPrompt).toContain('Examples such as course-module, tech-sharing, pitch-deck, xhs-post, tokyo-night, and editorial-serif are html-ppt resources, not separate skills.')
+    expect(capturedPrompt).toContain('beautiful-html-templates')
+    expect(capturedPrompt).toContain('When using beautiful-html-templates, preserve the chosen template visual system but output editor-compatible section.slide pages.')
     expect(capturedPrompt).toContain('Interact with the user in Chinese.')
     expect(capturedPrompt).toContain(`Write the final standalone presentation HTML to: ${path.join(tempDir, 'presentation.html')}`)
     expect(capturedPrompt).toContain('For uploaded .docx files, the original file has been pre-processed')

@@ -30,6 +30,7 @@ import { FileSystemUploadStore, type UploadStore } from './uploadStore'
 import { createWorkerRuntimeConfig, type WorkerRuntimeConfig } from './workerRuntimeConfig'
 import { FileSystemArtifactStore, type ArtifactStore } from './artifactStore'
 import type { InviteGate } from './inviteGate'
+import { loadBeautifulTemplatePreviewMap } from './beautifulHtmlTemplates'
 
 export type DeckAgentTurnRequest = AiTurnRequest & {
   conversationId: string | null
@@ -142,15 +143,17 @@ export function createAiServer(options: CreateAiServerOptions) {
     const serverDir = path.dirname(fileURLToPath(import.meta.url))
     const skillDir = path.join(serverDir, 'embedded-skills', 'html-ppt')
     const templatesDir = path.join(skillDir, 'templates', 'full-decks')
+    const beautifulTemplatesDir = path.join(skillDir, 'templates', 'beautiful-html-templates')
 
     try {
-      const [baseCSS, fontsCSS, templateDirs] = await Promise.all([
+      const [baseCSS, fontsCSS, templateDirs, beautifulPreviewMap] = await Promise.all([
         fs.readFile(path.join(skillDir, 'assets', 'base.css'), 'utf-8'),
         fs.readFile(path.join(skillDir, 'assets', 'fonts.css'), 'utf-8'),
         fs.readdir(templatesDir),
+        loadBeautifulTemplatePreviewMap(beautifulTemplatesDir).catch(() => ({})),
       ])
 
-      const previewMap: Record<string, string> = {}
+      const previewMap: Record<string, string> = { ...beautifulPreviewMap }
 
       await Promise.all(
         templateDirs.map(async (dir) => {

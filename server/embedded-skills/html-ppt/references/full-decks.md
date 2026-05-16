@@ -93,3 +93,13 @@ Each folder: `index.html`, scoped `style.css` (prefixed `.tpl-<name>`), `README.
 - Swap demo content, but keep the structural classes — they are what gives each template its identity.
 - The shared runtime (`assets/runtime.js`) provides keyboard nav, fullscreen, overview grid, theme cycling — you don't need to add any JS.
 - Charts are hand-rolled SVG (no CDN dependency). Feel free to replace with chart.js / echarts if you need interactive data.
+
+---
+
+## beautiful-html-templates extension
+
+The embedded bundle also vendors 34 MIT-licensed templates from `beautiful-html-templates` under `templates/beautiful-html-templates/<slug>/template.html`. Use these as tone-first full-deck starting points when their `mood`, `tone`, `occasion`, `formality`, `density`, `scheme`, `best_for`, and `avoid_for` metadata match the user's taste better than the 14 native full-decks.
+
+When using beautiful-html-templates, preserve the chosen template visual system but output editor-compatible section.slide pages. Keep the selected template's fonts, palette, decorative vocabulary, layout rhythm, and component grammar, but rewrite the final deck into the editor contract: one logical page per `<section class="slide" data-slide-id="...">...</section>`, audience-facing slide text only, speaker-only guidance inside `.notes`, and keyboard navigation preserved.
+
+The current vendored slugs are: `8-bit-orbit`, `biennale-yellow`, `block-frame`, `blue-professional`, `bold-poster`, `broadside`, `capsule`, `cartesian`, `cobalt-grid`, `coral`, `creative-mode`, `daisy-days`, `editorial-forest`, `editorial-tri-tone`, `emerald-editorial`, `grove`, `long-table`, `mat`, `monochrome`, `neo-grid-bold`, `peoples-platform`, `pin-and-paper`, `pink-script`, `playful`, `raw-grid`, `retro-windows`, `retro-zine`, `sakura-chroma`, `scatterbrain`, `signal`, `soft-editorial`, `stencil-tablet`, `studio`, and `vellum`.

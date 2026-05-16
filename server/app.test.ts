@@ -544,6 +544,32 @@ describe('createAiServer', () => {
     }
   })
 
+  it('returns embedded and beautiful html-ppt template previews from the dedicated endpoint', async () => {
+    const server = createAiServer({
+      store: new InMemorySessionStore(),
+      agent: {
+        async *runTurn() {
+          yield createAssistantDoneEvent('unused')
+          yield createCandidateEvent('candidate-unused')
+        },
+      },
+    })
+
+    const address = await server.listen(0)
+
+    try {
+      const response = await fetch(`${address}/api/agent/html-ppt/template-previews`)
+
+      expect(response.status).toBe(200)
+      const data = await response.json() as { previewMap: Record<string, string> }
+      expect(data.previewMap['pitch-deck']).toContain('pitch-deck Preview')
+      expect(data.previewMap['soft-editorial']).toContain('soft-editorial Preview')
+      expect(data.previewMap['blue-professional']).toContain('blue-professional Preview')
+    } finally {
+      await server.close()
+    }
+  })
+
   it('disables host filesystem scanning for html-ppt assets', async () => {
     const tempDir = await mkdtemp(path.join(tmpdir(), 'ppt-fs-assets-'))
     const server = createAiServer({

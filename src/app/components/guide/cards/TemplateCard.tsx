@@ -12,7 +12,7 @@ interface TemplateCardProps {
 }
 
 export function TemplateCard({ template, viewMode, onClick }: TemplateCardProps) {
-  const chineseName = fullDeckNameLabels[template.name] || template.name
+  const chineseName = fullDeckNameLabels[template.name] || template.displayName || template.name
   const { previewMap, loading } = useTemplatePreviews()
   const srcdoc = previewMap?.[template.name]
   const { copied, copy } = useCopyToClipboard()
@@ -56,6 +56,9 @@ export function TemplateCard({ template, viewMode, onClick }: TemplateCardProps)
         ))}
       </div>
       <p className="guide-card-fit">{template.fit}</p>
+      {template.source === 'beautiful-html-templates' && (
+        <p className="guide-card-fit">来源：beautiful-html-templates · {template.slideCount ?? '?'} slides</p>
+      )}
     </article>
   )
 }

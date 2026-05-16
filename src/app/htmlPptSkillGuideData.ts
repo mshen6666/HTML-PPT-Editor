@@ -1,3 +1,5 @@
+import { beautifulHtmlTemplates } from './beautifulHtmlTemplateCatalog'
+
 export type GuideSectionId =
   | 'quick-start'
   | 'platform-usage'
@@ -19,10 +21,22 @@ export type GuideTheme = {
 
 export type GuideFullDeck = {
   name: string
+  displayName?: string
+  source?: 'html-ppt' | 'beautiful-html-templates'
   scenario: string
   visualKeywords: string[]
   fit: string
   promptStarter: string
+  tagline?: string
+  mood?: string[]
+  tone?: string[]
+  occasion?: string[]
+  formality?: string
+  density?: string
+  scheme?: string
+  bestFor?: string
+  avoidFor?: string
+  slideCount?: number
 }
 
 export type GuideLayoutCategory =
@@ -413,7 +427,7 @@ const themes: GuideTheme[] = [
   { name: 'engineering-whiteprint', category: 'tech', tone: ['工程', '白底蓝线', '可读'], useCases: '技术白皮书、系统说明。', promptHint: '适合写“Engineering Whiteprint、工程白皮书、蓝线图解”。' },
 ]
 
-const fullDecks: GuideFullDeck[] = [
+const embeddedFullDecks: GuideFullDeck[] = [
   { name: 'course-module', scenario: '课程与教学模块', visualKeywords: ['分段教学', '讲义感', '结构清楚'], fit: '适合课程单元、培训讲义、入门教学。', promptStarter: '请基于 course-module 模板，做一套面向初学者的课程模块型 HTML 演示。' },
   { name: 'dir-key-nav-minimal', scenario: '极简导航型 deck', visualKeywords: ['极简', '键盘导航', '低装饰'], fit: '适合演讲现场、快速说明、导航层级少的 deck。', promptStarter: '请基于 dir-key-nav-minimal 模板，做一套极简键盘导航风格的技术分享。' },
   { name: 'graphify-dark-graph', scenario: '图谱 / 数据关系', visualKeywords: ['深色', '图网络', '数据关系'], fit: '适合知识图谱、关系网络、数据连接型内容。', promptStarter: '请基于 graphify-dark-graph 模板，做一套强调图谱关系和连接结构的演示。' },
@@ -428,6 +442,14 @@ const fullDecks: GuideFullDeck[] = [
   { name: 'xhs-pastel-card', scenario: '小红书柔和彩卡', visualKeywords: ['粉彩卡片', '轻内容', '社区感'], fit: '适合社媒图文、博主风案例、轻教育内容。', promptStarter: '请基于 xhs-pastel-card 模板，做一套小红书柔和彩卡风图文 deck。' },
   { name: 'xhs-post', scenario: '3:4 小红书图文', visualKeywords: ['竖版', '内容平台', '图文页'], fit: '适合竖版内容传播和社交平台发布。', promptStarter: '请基于 xhs-post 模板，做一套适合小红书发布的 3:4 图文内容。' },
   { name: 'xhs-white-editorial', scenario: '小红书白底 editorial', visualKeywords: ['白底', '博主', '编辑感'], fit: '适合轻精致品牌、生活方式、内容分享。', promptStarter: '请基于 xhs-white-editorial 模板，做一套白底 editorial 风的小红书图文演示。' },
+]
+
+const fullDecks: GuideFullDeck[] = [
+  ...embeddedFullDecks,
+  ...beautifulHtmlTemplates.map((template): GuideFullDeck => ({
+    ...template,
+    source: 'beautiful-html-templates',
+  })),
 ]
 
 const layouts: GuideLayout[] = [
