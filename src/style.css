@@ -1,9 +1,53 @@
 :root {
-  color: #201715;
+  --color-canvas: #faf9f5;
+  --color-surface-soft: #f5f0e8;
+  --color-surface-card: #efe9de;
+  --color-surface-cream-strong: #e8e0d2;
+  --color-surface-dark: #181715;
+  --color-surface-dark-elevated: #252320;
+  --color-surface-dark-soft: #1f1e1b;
+  --color-primary: #cc785c;
+  --color-primary-active: #a9583e;
+  --color-primary-disabled: #e6dfd8;
+  --color-accent-teal: #5db8a6;
+  --color-accent-amber: #e8a55a;
+  --color-ink: #141413;
+  --color-body-strong: #252523;
+  --color-body: #3d3d3a;
+  --color-muted: #6c6a64;
+  --color-muted-soft: #8e8b82;
+  --color-on-primary: #fffaf1;
+  --color-on-dark: #faf9f5;
+  --color-on-dark-soft: #a09d96;
+  --color-hairline: #e6dfd8;
+  --color-hairline-soft: #ebe6df;
+  --color-success: #5db872;
+  --color-warning: #d4a017;
+  --color-error: #c64545;
+  --space-xxs: 4px;
+  --space-xs: 8px;
+  --space-sm: 12px;
+  --space-md: 16px;
+  --space-lg: 24px;
+  --space-xl: 32px;
+  --space-xxl: 48px;
+  --space-section: 96px;
+  --radius-xs: 4px;
+  --radius-sm: 6px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  --radius-xl: 16px;
+  --radius-pill: 9999px;
+  --shadow-soft: 0 1px 3px rgba(20, 20, 19, 0.08);
+  --shadow-panel: 0 18px 56px rgba(20, 20, 19, 0.08);
+  --font-display: "Cormorant Garamond", "EB Garamond", Garamond, "Times New Roman", serif;
+  --font-sans: Inter, Satoshi, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-mono: "JetBrains Mono", "SFMono-Regular", Consolas, "Liberation Mono", monospace;
+  color: var(--color-ink);
   background:
-    radial-gradient(circle at top left, rgba(217, 93, 57, 0.12), transparent 24%),
-    linear-gradient(180deg, #faf6ef 0%, #f2ede5 100%);
-  font-family: 'Satoshi', sans-serif;
+    radial-gradient(circle at top left, color-mix(in srgb, var(--color-primary) 10%, transparent), transparent 26%),
+    linear-gradient(180deg, var(--color-canvas) 0%, var(--color-surface-soft) 100%);
+  font-family: var(--font-sans);
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
@@ -1700,5 +1744,420 @@ button {
 
   .agent-mode-options {
     grid-template-columns: 1fr;
+  }
+}
+
+/* Project UI refactor: design.md token application */
+body {
+  background: var(--color-canvas);
+  color: var(--color-ink);
+  font-family: var(--font-sans);
+}
+
+.editor-shell {
+  background:
+    radial-gradient(circle at 0% 0%, color-mix(in srgb, var(--color-primary) 9%, transparent), transparent 24%),
+    linear-gradient(180deg, var(--color-canvas), var(--color-surface-soft));
+}
+
+.topbar {
+  align-items: end;
+  gap: var(--space-xl);
+  padding: var(--space-xl) var(--space-xl) var(--space-lg);
+  border-bottom-color: var(--color-hairline);
+  background: color-mix(in srgb, var(--color-canvas) 92%, transparent);
+}
+
+.topbar h1,
+.panel-header h2,
+.inspector-section h3,
+.candidate-compare-panel h2,
+.agent-summary-card h3,
+.ai-transcript-header h3,
+.smart-export-drawer-header h2,
+.smart-export-result h3,
+.smart-export-error h3,
+.smart-export-log-header h3 {
+  font-family: var(--font-display);
+  font-weight: 500;
+  letter-spacing: -0.02em;
+  color: var(--color-ink);
+}
+
+.topbar h1 {
+  font-size: clamp(2.1rem, 3.4vw, 3.8rem);
+  line-height: 1;
+}
+
+.topbar > div:first-child {
+  flex: 0 0 auto;
+}
+
+.topbar h1 {
+  max-width: none;
+  font-family: var(--font-sans);
+  font-size: clamp(2rem, 3vw, 3.15rem);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  white-space: nowrap;
+}
+
+.eyebrow,
+.agent-mode-legend,
+.agent-progress-kicker {
+  color: var(--color-primary);
+  font-weight: 500;
+  letter-spacing: 0.14em;
+}
+
+.workspace {
+  gap: var(--space-lg);
+  padding: var(--space-lg);
+}
+
+.panel,
+.stage,
+.candidate-compare-panel,
+.smart-export-drawer {
+  border-color: var(--color-hairline);
+  border-radius: var(--radius-lg);
+  background: var(--color-canvas);
+  box-shadow: var(--shadow-panel);
+}
+
+.panel,
+.stage,
+.candidate-compare-panel {
+  padding: var(--space-lg);
+  gap: var(--space-lg);
+}
+
+.pages-panel {
+  background:
+    linear-gradient(180deg, var(--color-canvas), var(--color-surface-soft));
+}
+
+.left-panel-tabs,
+.agent-drawer-tabs,
+.guide-view-toggle,
+.fit-mode-toggle {
+  gap: var(--space-xxs);
+  padding: var(--space-xxs);
+  border-color: var(--color-hairline);
+  border-radius: var(--radius-lg);
+  background: var(--color-surface-card);
+}
+
+.toolbar button,
+.toolbar a,
+.page-actions button,
+.page-button,
+.node-button,
+.secondary-action,
+.agent-tab,
+.left-panel-tab,
+.agent-panel .secondary-action,
+.toolbar-actions button,
+.guide-back-btn {
+  min-height: 40px;
+  border-color: var(--color-hairline);
+  border-radius: var(--radius-md);
+  background: var(--color-canvas);
+  color: var(--color-ink);
+  box-shadow: none;
+  font-size: 0.875rem;
+  font-weight: 500;
+}
+
+.toolbar button:hover,
+.toolbar a:hover,
+.page-actions button:hover,
+.page-button:hover,
+.node-button:hover,
+.secondary-action:hover,
+.agent-tab:hover,
+.left-panel-tab:hover,
+.agent-panel .secondary-action:hover,
+.toolbar-actions button:hover,
+.guide-back-btn:hover {
+  border-color: color-mix(in srgb, var(--color-primary) 48%, var(--color-hairline));
+  background: var(--color-surface-soft);
+  transform: none;
+}
+
+.left-panel-tab.is-active,
+.agent-tab.is-active,
+.node-button.is-active,
+.fit-mode-toggle .secondary-action.is-active,
+.agent-mode-option.is-active {
+  border-color: var(--color-surface-dark);
+  background: var(--color-surface-dark);
+  color: var(--color-on-dark);
+}
+
+.ai-composer button:not(.secondary-action),
+.candidate-actions button:not(.secondary-action),
+.agent-optimize-actions button:not(.secondary-action),
+.smart-export-result button,
+.smart-export-error button {
+  min-height: 40px;
+  border: 1px solid var(--color-primary);
+  border-radius: var(--radius-md);
+  background: var(--color-primary);
+  color: var(--color-on-primary);
+  font-size: 0.875rem;
+  font-weight: 500;
+}
+
+.ai-composer button:not(.secondary-action):hover,
+.candidate-actions button:not(.secondary-action):hover,
+.agent-optimize-actions button:not(.secondary-action):hover,
+.smart-export-result button:hover,
+.smart-export-error button:hover {
+  border-color: var(--color-primary-active);
+  background: var(--color-primary-active);
+}
+
+.toolbar button:disabled,
+.page-actions button:disabled,
+.ai-composer button:disabled,
+.smart-export-result button:disabled {
+  border-color: var(--color-primary-disabled);
+  background: var(--color-primary-disabled);
+  color: var(--color-muted-soft);
+  opacity: 1;
+}
+
+.panel-header span,
+.stage-header span,
+.node-kind,
+.empty-state p,
+.candidate-run-meta,
+.agent-summary-card p,
+.candidate-compare-copy,
+.canvas-meta,
+.agent-mode-option small,
+.agent-asset-chip span,
+.source-link span,
+.candidate-preview-caption span,
+.candidate-source-more,
+.object-geometry-hint,
+.geometry-field span,
+.agent-optimize-explanation {
+  color: var(--color-muted);
+}
+
+.agent-workbench,
+.agent-compose-card,
+.text-style-toolbar,
+.object-geometry-panel,
+.pages-panel .inspector-section,
+.transcript-entry,
+.candidate-card,
+.candidate-slide,
+.agent-inline-candidate,
+.agent-reference-preview,
+.compatibility-note,
+.smart-export-entry,
+.smart-export-empty,
+.smart-export-file {
+  border-color: var(--color-hairline-soft);
+  border-radius: var(--radius-lg);
+  background: var(--color-surface-card);
+  box-shadow: none;
+}
+
+.agent-workbench,
+.agent-compose-card,
+.text-style-toolbar {
+  background:
+    linear-gradient(180deg, var(--color-canvas), var(--color-surface-card));
+}
+
+.agent-mode-option {
+  min-height: 88px;
+  border-color: var(--color-hairline-soft);
+  border-radius: var(--radius-lg);
+  background: var(--color-canvas);
+}
+
+.agent-mode-option:hover {
+  border-color: color-mix(in srgb, var(--color-primary) 42%, var(--color-hairline));
+  transform: none;
+}
+
+.agent-mode-option-label,
+.agent-asset-chip strong,
+.source-link strong,
+.candidate-card h3,
+.transcript-entry p,
+.agent-compose-heading span,
+.agent-compose-heading label {
+  color: var(--color-body-strong);
+}
+
+.agent-mode-option.is-active .agent-mode-option-label,
+.agent-mode-option.is-active small {
+  color: var(--color-on-dark);
+}
+
+.agent-drawer-status-chip,
+.agent-asset-chip,
+.candidate-layout-warnings,
+.agent-optimize-card,
+.smart-export-warning,
+.smart-export-result,
+.smart-export-error {
+  border-color: color-mix(in srgb, var(--color-primary) 26%, var(--color-hairline));
+  border-radius: var(--radius-lg);
+  background: color-mix(in srgb, var(--color-primary) 9%, var(--color-canvas));
+  color: color-mix(in srgb, var(--color-primary-active) 76%, var(--color-ink));
+}
+
+.agent-asset-chip.is-active,
+.toolbar-actions button[aria-pressed='true'],
+.rich-text-mini-toolbar button[aria-pressed='true'] {
+  border-color: color-mix(in srgb, var(--color-primary) 52%, var(--color-hairline));
+  background: color-mix(in srgb, var(--color-primary) 14%, var(--color-canvas));
+}
+
+.agent-reference-button.is-active,
+.agent-selected-element {
+  border-color: color-mix(in srgb, var(--color-accent-teal) 46%, var(--color-hairline));
+  background: color-mix(in srgb, var(--color-accent-teal) 14%, var(--color-canvas));
+  color: color-mix(in srgb, var(--color-accent-teal) 54%, var(--color-ink));
+}
+
+.field input,
+.field textarea,
+.field select,
+.rich-text-editor,
+.agent-optimize-card textarea {
+  min-height: 40px;
+  border-color: var(--color-hairline);
+  border-radius: var(--radius-md);
+  background: var(--color-canvas);
+  color: var(--color-ink);
+}
+
+.field input:focus,
+.field textarea:focus,
+.field select:focus,
+.rich-text-editor:focus,
+.agent-optimize-card textarea:focus {
+  outline: none;
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--color-primary) 15%, transparent);
+}
+
+.rich-text-mini-toolbar button,
+.icon-action,
+.selected-image-resize-handle {
+  border-radius: var(--radius-md);
+}
+
+.page-thumb {
+  border-radius: var(--radius-md);
+}
+
+.page-thumb:hover {
+  border-color: var(--color-hairline);
+  background: var(--color-surface-soft);
+}
+
+.page-thumb.is-active {
+  border-color: var(--color-surface-dark);
+  background: color-mix(in srgb, var(--color-surface-dark) 6%, var(--color-canvas));
+}
+
+.page-thumb-shell,
+.candidate-thumbnail-shell,
+.compare-preview-shell,
+.html-candidate-preview-shell,
+.slide-preview-viewport {
+  border-color: var(--color-hairline);
+  border-radius: var(--radius-lg);
+  background: var(--color-canvas);
+}
+
+.slide-preview-viewport {
+  background:
+    linear-gradient(180deg, var(--color-canvas), var(--color-surface-card));
+  box-shadow: 0 18px 48px rgba(20, 20, 19, 0.1);
+}
+
+.slide-preview-iframe,
+.candidate-thumbnail-preview,
+.html-candidate-preview,
+.page-thumb-preview {
+  background: var(--color-canvas);
+}
+
+.agent-progress-overlay {
+  border-color: color-mix(in srgb, var(--color-primary) 28%, var(--color-hairline));
+  border-radius: var(--radius-lg);
+  background: color-mix(in srgb, var(--color-canvas) 96%, transparent);
+  box-shadow: var(--shadow-panel);
+}
+
+.agent-progress-track {
+  background: color-mix(in srgb, var(--color-surface-dark) 10%, var(--color-canvas));
+}
+
+.agent-progress-track span,
+.selected-image-resize-handle {
+  background: var(--color-primary);
+}
+
+.selected-image-controls {
+  border-color: var(--color-primary);
+}
+
+.selected-image-drag-surface {
+  background: color-mix(in srgb, var(--color-primary) 10%, transparent);
+}
+
+.smart-export-drawer {
+  background: var(--color-canvas);
+}
+
+.smart-export-step {
+  border-color: var(--color-hairline);
+  background: var(--color-surface-card);
+  color: var(--color-muted);
+}
+
+.smart-export-step.is-active {
+  border-color: color-mix(in srgb, var(--color-primary) 56%, var(--color-hairline));
+  background: color-mix(in srgb, var(--color-primary) 14%, var(--color-canvas));
+  color: var(--color-primary-active);
+}
+
+.smart-export-step.is-complete {
+  border-color: color-mix(in srgb, var(--color-success) 40%, var(--color-hairline));
+  background: color-mix(in srgb, var(--color-success) 12%, var(--color-canvas));
+  color: color-mix(in srgb, var(--color-success) 68%, var(--color-ink));
+}
+
+.smart-export-step.is-error {
+  border-color: color-mix(in srgb, var(--color-error) 44%, var(--color-hairline));
+  background: color-mix(in srgb, var(--color-error) 12%, var(--color-canvas));
+  color: var(--color-error);
+}
+
+.smart-export-entry.is-assistant,
+.transcript-entry.is-assistant,
+.candidate-actions-sticky {
+  background: color-mix(in srgb, var(--color-primary) 8%, var(--color-canvas));
+}
+
+@media (max-width: 720px) {
+  .workspace,
+  .workspace.is-comparing {
+    padding: var(--space-md);
+  }
+
+  .smart-export-drawer {
+    border-radius: var(--radius-lg);
   }
 }

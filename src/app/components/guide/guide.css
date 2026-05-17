@@ -318,4 +318,114 @@
   to { transform: translateX(0); }
 }
 
-/* Responsive
+/* Responsive */
+
+/* Project UI refactor: guide browser */
+.guide-browser {
+  background:
+    radial-gradient(circle at 0% 0%, color-mix(in srgb, var(--color-primary) 8%, transparent), transparent 24%),
+    linear-gradient(180deg, var(--color-canvas), var(--color-surface-soft));
+  color: var(--color-ink);
+  font-family: var(--font-sans);
+}
+
+.guide-browser-title {
+  font-family: var(--font-display);
+  font-weight: 500;
+  letter-spacing: -0.02em;
+  color: var(--color-ink);
+}
+
+.guide-browser-subtitle {
+  color: var(--color-muted);
+}
+
+.guide-tabs {
+  border-bottom-color: var(--color-hairline);
+  gap: var(--space-xs);
+}
+
+.guide-tab,
+.guide-filter-chip,
+.guide-empty-state button {
+  min-height: 40px;
+  border-color: var(--color-hairline);
+  border-radius: var(--radius-md);
+  background: var(--color-canvas);
+  color: var(--color-ink);
+  font-weight: 500;
+}
+
+.guide-tab:hover,
+.guide-filter-chip:hover,
+.guide-empty-state button:hover {
+  border-color: color-mix(in srgb, var(--color-primary) 44%, var(--color-hairline));
+  background: var(--color-surface-soft);
+  transform: none;
+}
+
+.guide-tab.is-active {
+  border-color: var(--color-surface-dark);
+  background: var(--color-surface-dark);
+  color: var(--color-on-dark);
+}
+
+.guide-filter-chip.is-active {
+  border-color: var(--color-primary);
+  background: var(--color-primary);
+  color: var(--color-on-primary);
+}
+
+.guide-search-input {
+  min-height: 40px;
+  border-color: var(--color-hairline);
+  border-radius: var(--radius-md);
+  background: var(--color-canvas);
+  color: var(--color-ink);
+}
+
+.guide-search-input:focus {
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--color-primary) 15%, transparent);
+}
+
+.guide-search-icon,
+.guide-search-clear,
+.guide-search-input::placeholder,
+.guide-empty-state {
+  color: var(--color-muted);
+}
+
+.guide-view-toggle {
+  border-color: var(--color-hairline);
+  border-radius: var(--radius-lg);
+  background: var(--color-surface-card);
+}
+
+.guide-view-btn {
+  border-radius: var(--radius-md);
+  color: var(--color-muted);
+}
+
+.guide-view-btn.is-active {
+  background: var(--color-surface-dark);
+  color: var(--color-on-dark);
+}
+
+.guide-preview-overlay {
+  background: color-mix(in srgb, var(--color-surface-dark) 34%, transparent);
+}
+
+.guide-preview-panel {
+  background: var(--color-canvas);
+  box-shadow: -16px 0 48px rgba(20, 20, 19, 0.14);
+}
+
+.guide-preview-close {
+  color: var(--color-muted);
+}
+
+.guide-preview-close:hover {
+  background: var(--color-surface-card);
+  color: var(--color-ink);
+}

@@ -495,3 +495,89 @@
     padding: 18px;
   }
 }
+
+/* Project UI refactor: guide narrative views */
+.overview-view,
+.quickstart-view,
+.platform-usage-view {
+  color: var(--color-ink);
+}
+
+.overview-hero,
+.overview-audience,
+.overview-stat-card,
+.overview-docs,
+.quickstart-step-content,
+.platform-usage-order,
+.platform-module-card,
+.platform-feature-item,
+.platform-module-tip {
+  border-color: var(--color-hairline);
+  border-radius: var(--radius-lg);
+  background: var(--color-surface-card);
+  box-shadow: none;
+}
+
+.overview-hero-title,
+.overview-stat-value,
+.quickstart-title,
+.quickstart-step-number,
+.quickstart-step-title,
+.platform-usage-title,
+.platform-section-heading h3,
+.platform-module-intro h3,
+.platform-feature-item dt {
+  font-family: var(--font-display);
+  font-weight: 500;
+  letter-spacing: -0.01em;
+  color: var(--color-ink);
+}
+
+.overview-section-label {
+  font-family: var(--font-sans);
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  color: var(--color-primary);
+}
+
+.overview-hero-lead,
+.overview-stat-sublabel,
+.quickstart-subtitle,
+.quickstart-step-desc,
+.platform-usage-lead,
+.platform-section-heading p,
+.platform-feature-item dd,
+.platform-module-tip {
+  color: var(--color-muted);
+}
+
+.overview-audience-bullet,
+.quickstart-step-marker {
+  background: var(--color-primary);
+}
+
+.overview-stat-value {
+  color: var(--color-primary);
+}
+
+.quickstart-step:not(:last-child)::after {
+  background: linear-gradient(
+    to bottom,
+    color-mix(in srgb, var(--color-primary) 42%, transparent),
+    color-mix(in srgb, var(--color-primary) 12%, transparent)
+  );
+}
+
+.overview-doc-link {
+  border-color: var(--color-hairline);
+  border-radius: var(--radius-md);
+  background: var(--color-canvas);
+  color: var(--color-ink);
+}
+
+.overview-doc-link:hover {
+  border-color: var(--color-surface-dark);
+  background: var(--color-surface-dark);
+  color: var(--color-on-dark);
+  transform: none;
+}

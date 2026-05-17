@@ -1266,3 +1266,106 @@
     grid-template-columns: 1fr;
   }
 }
+
+/* Project UI refactor: guide preview drawer */
+.preview-content {
+  color: var(--color-ink);
+  font-family: var(--font-sans);
+}
+
+.preview-title {
+  font-family: var(--font-display);
+  font-weight: 500;
+  letter-spacing: -0.01em;
+  color: var(--color-ink);
+}
+
+.preview-badge,
+.preview-tag,
+.scene-theme-chip {
+  border-radius: var(--radius-pill);
+  background: color-mix(in srgb, var(--color-primary) 12%, var(--color-canvas));
+  color: var(--color-primary-active);
+}
+
+.preview-section h4,
+.preview-section p,
+.theme-slide-preview-loading,
+.layout-diagram-svg {
+  color: var(--color-muted);
+}
+
+.preview-hint,
+.preview-tip-box,
+.preview-caution {
+  border-radius: var(--radius-lg);
+  background: color-mix(in srgb, var(--color-primary) 9%, var(--color-canvas));
+  color: color-mix(in srgb, var(--color-primary-active) 76%, var(--color-ink));
+}
+
+.theme-slide-preview-shell,
+.preview-layout-diagram,
+.preview-demo-shell,
+.preview-animation-demo {
+  border-color: var(--color-hairline);
+  border-radius: var(--radius-lg);
+  background: var(--color-surface-card);
+  box-shadow: none;
+}
+
+.theme-slide-preview-iframe {
+  background: var(--color-canvas);
+}
+
+.preview-demo-label {
+  border-radius: var(--radius-pill);
+  background: color-mix(in srgb, var(--color-surface-dark) 8%, var(--color-canvas));
+  color: var(--color-muted);
+}
+
+.preview-demo-replay,
+.preview-copy-btn {
+  border-radius: var(--radius-md);
+  background: var(--color-primary);
+  color: var(--color-on-primary);
+}
+
+.preview-demo-replay:hover,
+.preview-copy-btn:hover {
+  background: var(--color-primary-active);
+  transform: none;
+}
+
+.preview-code-block {
+  border-radius: var(--radius-lg);
+  background: var(--color-surface-dark);
+  color: var(--color-on-dark);
+  font-family: var(--font-mono);
+}
+
+.scene-display,
+.scene-split-panel strong,
+.scene-template-sidebar strong,
+.scene-metric-value {
+  font-family: var(--font-display);
+}
+
+.animation-demo-scene {
+  --demo-accent: var(--color-primary);
+  --demo-ink: var(--color-ink);
+  border-color: var(--color-hairline);
+  border-radius: var(--radius-lg);
+  background:
+    radial-gradient(circle at top left, color-mix(in srgb, var(--color-primary) 20%, transparent), transparent 34%),
+    linear-gradient(180deg, var(--color-canvas), var(--color-surface-soft));
+}
+
+.animation-demo-scene--headline,
+.animation-demo-scene--ambient,
+.animation-demo-scene--terminal,
+.animation-demo-scene--fx-stage {
+  background:
+    radial-gradient(circle at top left, color-mix(in srgb, var(--color-primary) 20%, transparent), transparent 32%),
+    linear-gradient(180deg, var(--color-surface-dark), var(--color-surface-dark-soft));
+  color: var(--color-on-dark);
+}

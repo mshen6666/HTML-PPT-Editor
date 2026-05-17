@@ -201,3 +201,84 @@
   height: 16px;
   display: block;
 }
+
+/* Project UI refactor: guide cards */
+.guide-card {
+  border-color: var(--color-hairline);
+  border-radius: var(--radius-lg);
+  background: var(--color-surface-card);
+  box-shadow: none;
+  color: var(--color-ink);
+}
+
+.guide-card:hover {
+  border-color: color-mix(in srgb, var(--color-primary) 44%, var(--color-hairline));
+  box-shadow: var(--shadow-soft);
+  transform: none;
+}
+
+.guide-card:focus {
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--color-primary) 15%, transparent);
+}
+
+.guide-card-title {
+  font-family: var(--font-display);
+  font-weight: 500;
+  letter-spacing: -0.01em;
+  color: var(--color-ink);
+}
+
+.guide-card-subtitle,
+.guide-card-desc,
+.guide-card-scenario,
+.guide-card-info-type,
+.guide-card-effect,
+.guide-card-goal,
+.guide-card-why,
+.guide-card-fit,
+.guide-card-advice,
+.guide-card-best-for {
+  color: var(--color-muted);
+}
+
+.guide-card-badge,
+.guide-card-tag {
+  border-radius: var(--radius-pill);
+  background: color-mix(in srgb, var(--color-primary) 12%, var(--color-canvas));
+  color: var(--color-primary-active);
+}
+
+.guide-card-hint,
+.guide-card-template,
+.guide-card-tip,
+.guide-card-use {
+  border-radius: var(--radius-lg);
+  background: color-mix(in srgb, var(--color-primary) 9%, var(--color-canvas));
+  color: color-mix(in srgb, var(--color-primary-active) 76%, var(--color-ink));
+}
+
+.guide-card-thumb {
+  border-color: var(--color-hairline);
+  border-radius: var(--radius-lg);
+  background: var(--color-canvas);
+}
+
+.guide-card-thumb-loading {
+  color: var(--color-muted);
+}
+
+.guide-card-copy-btn {
+  border-radius: var(--radius-md);
+  background: color-mix(in srgb, var(--color-canvas) 88%, transparent);
+  color: var(--color-muted);
+}
+
+.guide-card-copy-btn:hover {
+  background: var(--color-canvas);
+  color: var(--color-ink);
+}
+
+.guide-card-copy-btn.is-copied {
+  color: var(--color-success);
+}

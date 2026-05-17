@@ -321,3 +321,97 @@
     grid-template-columns: 1fr;
   }
 }
+
+/* Project UI refactor: guide page shell */
+.guide-page-shell {
+  background:
+    radial-gradient(circle at 0% 0%, color-mix(in srgb, var(--color-primary) 10%, transparent), transparent 24%),
+    linear-gradient(180deg, var(--color-canvas), var(--color-surface-soft));
+  color: var(--color-ink);
+  font-family: var(--font-sans);
+}
+
+.guide-hero-copy,
+.guide-summary-card,
+.guide-stat-card,
+.guide-index-card,
+.guide-card {
+  border-color: var(--color-hairline);
+  border-radius: var(--radius-lg);
+  background: var(--color-surface-card);
+  box-shadow: none;
+}
+
+.guide-hero-copy h1,
+.guide-section-heading h2,
+.guide-card h3 {
+  font-family: var(--font-display);
+  font-weight: 500;
+  letter-spacing: -0.02em;
+  color: var(--color-ink);
+}
+
+.guide-lead,
+.guide-section-heading p,
+.guide-card p,
+.guide-home-route,
+.guide-stat-card span,
+.guide-index-card span {
+  color: var(--color-muted);
+}
+
+.guide-primary-link,
+.guide-primary-btn,
+.guide-copy-button,
+.guide-filter-button.is-active {
+  border-color: var(--color-primary);
+  border-radius: var(--radius-md);
+  background: var(--color-primary);
+  color: var(--color-on-primary);
+}
+
+.guide-secondary-link,
+.guide-filter-button,
+.guide-back-btn {
+  min-height: 40px;
+  border-color: var(--color-hairline);
+  border-radius: var(--radius-md);
+  background: var(--color-canvas);
+  color: var(--color-ink);
+}
+
+.guide-primary-link:hover,
+.guide-primary-btn:hover,
+.guide-copy-button:hover,
+.guide-filter-button.is-active:hover {
+  border-color: var(--color-primary-active);
+  background: var(--color-primary-active);
+}
+
+.guide-secondary-link:hover,
+.guide-filter-button:hover,
+.guide-index-card:hover {
+  border-color: color-mix(in srgb, var(--color-primary) 44%, var(--color-hairline));
+  background: var(--color-surface-soft);
+  transform: none;
+}
+
+.guide-tag,
+.guide-chip,
+.guide-hint {
+  border-radius: var(--radius-pill);
+  background: color-mix(in srgb, var(--color-primary) 12%, var(--color-canvas));
+  color: var(--color-primary-active) !important;
+}
+
+.guide-subtitle,
+.guide-copy-feedback {
+  color: var(--color-primary) !important;
+}
+
+.guide-code-block {
+  border-radius: var(--radius-lg);
+  background: var(--color-surface-dark);
+  color: var(--color-on-dark);
+  font-family: var(--font-mono);
+}
