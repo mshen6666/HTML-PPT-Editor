@@ -57,7 +57,7 @@ export function TemplateCard({ template, viewMode, onClick }: TemplateCardProps)
       </div>
       <p className="guide-card-fit">{template.fit}</p>
       {template.source === 'beautiful-html-templates' && (
-        <p className="guide-card-fit">来源：beautiful-html-templates · {template.slideCount ?? '?'} slides</p>
+        <p className="guide-card-fit">来源：精选模板库 · 约 {template.slideCount ?? '?'} 页</p>
       )}
     </article>
   )

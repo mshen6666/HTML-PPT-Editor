@@ -41,22 +41,48 @@ describe('htmlPptSkillGuideData full deck templates', () => {
     expect(softEditorial).toEqual(expect.objectContaining({
       source: 'beautiful-html-templates',
       name: 'soft-editorial',
-      displayName: 'Soft Editorial',
-      scenario: 'editorial feature / longform brand story / gallery or museum / literary pitch',
-      visualKeywords: expect.arrayContaining(['literary', 'elegant', 'quiet', 'warm-classical']),
-      formality: 'high',
-      density: 'low',
-      scheme: 'light',
+      displayName: '柔和编辑风',
+      scenario: '适合：编辑专题、长篇品牌故事、画廊或博物馆、文学提案。',
+      visualKeywords: expect.arrayContaining(['文学感', '优雅', '安静', '温暖古典']),
+      formality: '高',
+      density: '低',
+      scheme: '浅色',
     }))
-    expect(softEditorial?.promptStarter).toContain('请以 beautiful-html-templates 的 soft-editorial 模板作为起始视觉系统')
-    expect(softEditorial?.fit).toContain('literary, elegant, and unhurried')
+    expect(softEditorial?.promptStarter).toContain('请以「柔和编辑风」模板作为起始视觉系统')
+    expect(softEditorial?.promptStarter).not.toContain('beautiful-html-templates')
+    expect(softEditorial?.fit).toContain('气质：文学感、优雅、安静')
+    expect(softEditorial?.bestFor).toContain('适合：编辑专题')
 
     expect(neoGridBold).toEqual(expect.objectContaining({
       source: 'beautiful-html-templates',
-      displayName: 'Neo-Grid Bold',
-      density: 'high',
-      scheme: 'light',
+      displayName: '新网格粗体',
+      density: '高',
+      scheme: '浅色',
     }))
+  })
+})
+
+describe('htmlPptSkillGuideData creation workflows', () => {
+  it('documents oh-my-ppt inspired workflows as reusable web creation recipes', () => {
+    expect(htmlPptSkillGuideData.creationWorkflows.map((workflow) => workflow.title)).toEqual([
+      '一句话快速生成',
+      '上传资料后生成',
+      '从模板延展新内容',
+      '参考截图提取风格',
+      '补演讲稿与逐步动效',
+    ])
+
+    expect(htmlPptSkillGuideData.creationWorkflows).toEqual(expect.arrayContaining([
+      expect.objectContaining({
+        source: 'oh-my-ppt',
+        title: '上传资料后生成',
+        promptStarter: expect.stringContaining('请先阅读我上传的资料'),
+      }),
+      expect.objectContaining({
+        title: '补演讲稿与逐步动效',
+        bestWhen: expect.stringContaining('现场演讲'),
+      }),
+    ]))
   })
 })
 

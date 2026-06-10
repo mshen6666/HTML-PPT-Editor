@@ -179,7 +179,8 @@
    ========================================================================== */
 
 .quickstart-view {
-  max-width: 800px;
+  max-width: 1000px;
+  min-width: 0;
   margin: 0 auto;
   padding: 8px 0 40px;
 }
@@ -217,6 +218,7 @@
   display: grid;
   grid-template-columns: 56px 1fr;
   gap: 20px;
+  min-width: 0;
   position: relative;
 }
 
@@ -258,6 +260,7 @@
 }
 
 .quickstart-step-content {
+  min-width: 0;
   padding: 12px 0 32px;
 }
 
@@ -279,6 +282,76 @@
   line-height: 1.7;
   color: rgba(32, 23, 21, 0.75);
   margin: 0;
+}
+
+.quickstart-workflows {
+  display: grid;
+  gap: 18px;
+  margin-top: 34px;
+  padding-top: 30px;
+  border-top: 1px solid rgba(32, 23, 21, 0.1);
+}
+
+.quickstart-workflow-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.quickstart-workflow-card {
+  display: grid;
+  align-content: start;
+  gap: 12px;
+  min-width: 0;
+  padding: 18px;
+  border: 1px solid rgba(32, 23, 21, 0.1);
+  border-radius: 18px;
+  background: rgba(255, 250, 241, 0.78);
+}
+
+.quickstart-workflow-card header {
+  display: grid;
+  gap: 5px;
+}
+
+.quickstart-workflow-card header span {
+  color: rgba(217, 93, 57, 0.86);
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.quickstart-workflow-card h4 {
+  margin: 0;
+  color: #201715;
+  font-family: "Clash Display", sans-serif;
+  font-size: 1.08rem;
+  font-weight: 600;
+}
+
+.quickstart-workflow-card p {
+  margin: 0;
+  color: rgba(32, 23, 21, 0.68);
+  font-size: 0.94rem;
+  line-height: 1.6;
+}
+
+.quickstart-workflow-card ol {
+  display: grid;
+  gap: 6px;
+  margin: 0;
+  padding-left: 18px;
+  color: rgba(32, 23, 21, 0.78);
+  font-size: 0.9rem;
+  line-height: 1.5;
+}
+
+.quickstart-workflow-prompt {
+  overflow-wrap: anywhere;
+  padding: 12px;
+  border-radius: 14px;
+  background: rgba(217, 93, 57, 0.08);
 }
 
 /* ==========================================================================
@@ -486,7 +559,8 @@
   }
 
   .platform-order-list,
-  .platform-feature-list {
+  .platform-feature-list,
+  .quickstart-workflow-grid {
     grid-template-columns: 1fr;
   }
 
@@ -508,6 +582,8 @@
 .overview-stat-card,
 .overview-docs,
 .quickstart-step-content,
+.quickstart-workflow-card,
+.quickstart-workflow-prompt,
 .platform-usage-order,
 .platform-module-card,
 .platform-feature-item,
@@ -544,11 +620,28 @@
 .overview-stat-sublabel,
 .quickstart-subtitle,
 .quickstart-step-desc,
+.quickstart-workflow-card p,
+.quickstart-workflow-card ol,
 .platform-usage-lead,
 .platform-section-heading p,
 .platform-feature-item dd,
 .platform-module-tip {
   color: var(--color-muted);
+}
+
+.quickstart-workflows {
+  border-top-color: var(--color-hairline);
+}
+
+.quickstart-workflow-card h4 {
+  color: var(--color-ink);
+  font-family: var(--font-display);
+  font-weight: 500;
+  letter-spacing: -0.01em;
+}
+
+.quickstart-workflow-card header span {
+  color: var(--color-primary);
 }
 
 .overview-audience-bullet,

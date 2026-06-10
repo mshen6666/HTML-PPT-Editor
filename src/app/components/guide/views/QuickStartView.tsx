@@ -24,6 +24,30 @@ export function QuickStartView() {
           </li>
         ))}
       </ol>
+
+      <section className="quickstart-workflows" aria-labelledby="quickstart-workflows-title">
+        <div className="platform-section-heading">
+          <p className="overview-section-label">创作入口</p>
+          <h3 id="quickstart-workflows-title">可直接套用的创作入口</h3>
+        </div>
+        <div className="quickstart-workflow-grid">
+          {htmlPptSkillGuideData.creationWorkflows.map((workflow) => (
+            <article key={workflow.title} className="quickstart-workflow-card">
+              <header>
+                <span>oh-my-ppt 启发</span>
+                <h4>{workflow.title}</h4>
+              </header>
+              <p>{workflow.bestWhen}</p>
+              <ol>
+                {workflow.steps.map((step) => (
+                  <li key={step}>{step}</li>
+                ))}
+              </ol>
+              <p className="quickstart-workflow-prompt">{workflow.promptStarter}</p>
+            </article>
+          ))}
+        </div>
+      </section>
     </div>
   )
 }

@@ -97,6 +97,14 @@ export type PromptPattern = {
   longExample: string
 }
 
+export type CreationWorkflow = {
+  title: string
+  source: 'oh-my-ppt'
+  bestWhen: string
+  steps: string[]
+  promptStarter: string
+}
+
 export type PlatformUsageStep = {
   title: string
   description: string
@@ -118,6 +126,7 @@ export type GuideCatalog = {
   overviewBlurb: string
   audience: string[]
   quickStart: Array<{ title: string; description: string }>
+  creationWorkflows: CreationWorkflow[]
   usageOrder: PlatformUsageStep[]
   platformModules: PlatformModule[]
   sections: Array<{ id: GuideSectionId; title: string; summary: string }>
@@ -210,6 +219,345 @@ export const fullDeckNameLabels: Record<string, string> = {
   'xhs-pastel-card': '小红书彩卡',
   'xhs-post': '小红书图文',
   'xhs-white-editorial': '小红书白底',
+  '8-bit-orbit': '像素轨道',
+  'biennale-yellow': '双年展黄',
+  'block-frame': '块面画框',
+  'blue-professional': '专业蓝',
+  'bold-poster': '粗体海报',
+  broadside: '大字报',
+  capsule: '胶囊模块',
+  cartesian: '笛卡尔',
+  'cobalt-grid': '钴蓝网格',
+  coral: '珊瑚',
+  'creative-mode': '创意模式',
+  'daisy-days': '雏菊日',
+  'editorial-forest': '森林编辑风',
+  'editorial-tri-tone': '三色编辑风',
+  'emerald-editorial': '祖母绿编辑风',
+  grove: '林地',
+  'long-table': '长表格',
+  mat: '席垫',
+  monochrome: '单色',
+  'neo-grid-bold': '新网格粗体',
+  'peoples-platform': '人民平台',
+  'pin-and-paper': '图钉纸张',
+  'pink-script': '粉色手写',
+  playful: '玩趣',
+  'raw-grid': '粗粝网格',
+  'retro-windows': '复古窗口',
+  'retro-zine': '复古小志',
+  'sakura-chroma': '樱花彩度',
+  scatterbrain: '便签脑暴',
+  signal: '信号',
+  'soft-editorial': '柔和编辑风',
+  'stencil-tablet': '模板石板',
+  studio: '设计工作室',
+  vellum: '羊皮纸',
+}
+
+const beautifulCopyLabels: Record<string, string> = {
+  '80s-Japanese-tech': '80 年代日式科技',
+  activist: '行动倡议',
+  approachable: '亲近',
+  archival: '档案感',
+  atmospheric: '氛围感',
+  authoritative: '权威',
+  bold: '大胆',
+  calm: '冷静',
+  cheerful: '明快',
+  classical: '古典',
+  clean: '干净',
+  confident: '自信',
+  'confident-quiet': '安静自信',
+  considered: '克制讲究',
+  contemplative: '沉思',
+  cool: '酷感',
+  crafted: '手作感',
+  creative: '创意',
+  'cultural-institution': '文化机构',
+  cyberpunk: '赛博',
+  dark: '深色',
+  designed: '设计感',
+  'design-led': '设计驱动',
+  'design-research': '设计研究',
+  direct: '直接',
+  dramatic: '戏剧化',
+  earthy: '大地色',
+  editorial: '编辑感',
+  electric: '高电压',
+  elegant: '优雅',
+  energetic: '有能量',
+  established: '稳重成熟',
+  expressive: '有表达力',
+  fresh: '清新',
+  friendly: '友好',
+  fun: '有趣',
+  geeky: '极客',
+  graphic: '图形感',
+  grounded: '踏实',
+  handmade: '手工',
+  'high-contrast': '高对比',
+  honest: '真诚',
+  hospitality: '款待感',
+  human: '有人味',
+  indie: '独立',
+  informal: '非正式',
+  institutional: '机构感',
+  intellectual: '知识感',
+  intelligent: '聪明',
+  intentional: '有意图',
+  intimate: '亲密',
+  'kawaii-tech': '可爱科技',
+  ledger: '账本感',
+  light: '浅色',
+  lighthearted: '轻松',
+  literary: '文学感',
+  'lo-fi': '低保真',
+  loud: '响亮',
+  luxe: '高级',
+  magazine: '杂志感',
+  'magazine-cover': '杂志封面',
+  'magazine-friendly': '杂志友好',
+  medium: '中等',
+  'medium-high': '中高',
+  'medium-low': '中低',
+  'messy-on-purpose': '有意凌乱',
+  'mid-century': '中世纪现代',
+  minimal: '极简',
+  mixed: '混合',
+  modern: '现代',
+  'modern-editorial': '现代编辑风',
+  modernist: '现代主义',
+  monochrome: '单色',
+  moody: '情绪化',
+  natural: '自然',
+  neon: '霓虹',
+  neutral: '中性',
+  newspaper: '报纸感',
+  'no-nonsense': '不绕弯',
+  nocturnal: '夜间',
+  nostalgic: '怀旧',
+  organic: '有机',
+  patient: '从容',
+  playful: '玩趣',
+  polished: '精致',
+  pop: '波普',
+  'poster-like': '海报感',
+  'product-catalogue': '产品目录',
+  professional: '专业',
+  punchy: '有冲击力',
+  quiet: '安静',
+  'quietly-modern': '安静现代',
+  raw: '粗粝',
+  rebellious: '反叛',
+  restrained: '克制',
+  retro: '复古',
+  'retro-tech': '复古科技',
+  scholarly: '学术',
+  'sci-fi': '科幻',
+  scrappy: '草创感',
+  sharp: '锐利',
+  sober: '沉稳',
+  social: '社交',
+  'small-batch': '小批量',
+  soft: '柔和',
+  studious: '书卷气',
+  stylish: '时髦',
+  sultry: '浓烈',
+  sunny: '阳光',
+  tactile: '触感',
+  'tech-print': '科技印刷',
+  thoughtful: '深思熟虑',
+  trustworthy: '可信',
+  underground: '地下文化',
+  upbeat: '轻快',
+  warm: '温暖',
+  'warm-bold': '温暖大胆',
+  'warm-classical': '温暖古典',
+  'warm-minimal': '温暖极简',
+  'warm-modern': '温暖现代',
+  'warm-retro': '温暖复古',
+  weighty: '有分量',
+  welcoming: '欢迎感',
+  wholesome: '健康友好',
+  winking: '俏皮眨眼',
+  workshop: '工作坊',
+}
+
+const beautifulOccasionLabels: Record<string, string> = {
+  'B2B SaaS pitch': 'B2B SaaS 路演',
+  'DTC product launch': 'DTC 产品发布',
+  'F&B brand deck': '餐饮品牌 deck',
+  'Y2K brand': 'Y2K 品牌',
+  'academic / curatorial publication': '学术或策展出版物',
+  'academic deck': '学术 deck',
+  'academic or university deck': '学术或高校演示',
+  'accelerator demo day': '加速器演示日',
+  'ad shop credentials': '广告公司资质介绍',
+  'advisory deliverable': '顾问交付物',
+  'advisory pitch': '顾问提案',
+  'after-hours product (nightlife / dating / spirits)': '夜生活、约会或酒饮产品',
+  'architecture / interior brand': '建筑或室内品牌',
+  'art / architecture brand': '艺术或建筑品牌',
+  'art / culture': '艺术文化',
+  'art direction review': '艺术指导评审',
+  'art or architecture publication': '艺术或建筑出版物',
+  'art-direction review': '艺术指导评审',
+  'arts institution programme': '艺术机构项目',
+  'bilingual EN/CN deck': '中英双语 deck',
+  'board presentation': '董事会汇报',
+  'book / longform pitch': '图书或长文提案',
+  'brainstorm / workshop': '脑暴或工作坊',
+  'brand creative review': '品牌创意评审',
+  'brand deck': '品牌 deck',
+  'brand manifesto': '品牌宣言',
+  'brand redesign': '品牌改版',
+  'brand showcase': '品牌展示',
+  'campaign launch': '活动发布',
+  'campaign pitch': '活动提案',
+  'ceramics or craft brand': '陶艺或手作品牌',
+  'community / civic deck': '社区或公共议题 deck',
+  'community workshop': '社区工作坊',
+  'concept presentation': '概念展示',
+  'conference talk': '大会演讲',
+  'consulting deliverable': '咨询交付物',
+  'consulting findings': '咨询发现汇报',
+  'creative agency': '创意机构',
+  'creative agency capabilities deck': '创意机构能力介绍',
+  'creative agency credentials': '创意机构资质介绍',
+  'creative agency deck': '创意机构 deck',
+  'creative agency pitch': '创意机构提案',
+  'creative studio annual report': '创意工作室年报',
+  'creative studio open house': '创意工作室开放日',
+  'creative-led pitch': '创意主导提案',
+  'creator essay deck': '创作者随笔 deck',
+  'creator personal brand': '创作者个人品牌',
+  'creator portfolio': '创作者作品集',
+  'creator portfolio (90s aesthetic)': '90 年代风作品集',
+  'creator portfolio (craft / illustration)': '手作或插画作品集',
+  'cultural / community deck': '文化或社区 deck',
+  'cultural commentary': '文化评论',
+  'design or typography conference': '设计或字体大会',
+  'design review': '设计评审',
+  'design studio credentials': '设计工作室资质介绍',
+  'design studio deck': '设计工作室 deck',
+  'design talk': '设计演讲',
+  'design trend or research report': '设计趋势或研究报告',
+  'design-thinking session': '设计思维工作坊',
+  'designer portfolio': '设计师作品集',
+  'developer tools': '开发者工具',
+  'education / classroom': '教育课堂',
+  'editorial / magazine pitch': '编辑或杂志提案',
+  'editorial feature': '编辑专题',
+  'event or community gathering': '活动或社区聚会',
+  'executive briefing': '高管简报',
+  'exhibition or biennale': '展览或双年展',
+  'fashion / beauty pitch': '时尚或美妆提案',
+  'fashion / sneaker brand': '时尚或球鞋品牌',
+  'fashion brand deck': '时尚品牌 deck',
+  'fitness brand': '健身品牌',
+  'founder pitch': '创始人路演',
+  'founder reflection': '创始人反思',
+  'founder reflection / vision deck': '创始人反思或愿景 deck',
+  'founder vision': '创始人愿景',
+  'founder vision deck': '创始人愿景 deck',
+  'furniture pitch': '家具品牌提案',
+  'gallery / cultural': '画廊或文化主题',
+  'gallery or museum': '画廊或博物馆',
+  'gaming pitch': '游戏提案',
+  'hackathon demo': '黑客松演示',
+  'heritage / craft brand': '传统或手作品牌',
+  hospitality: '酒店餐饮',
+  'ideation pitch': '创意提案',
+  'indie SaaS launch': '独立 SaaS 发布',
+  'indie hardware or analog studio brand': '独立硬件或模拟工作室品牌',
+  'indie product launch': '独立产品发布',
+  'indie zine / publication': '独立小志或出版物',
+  'internal readout': '内部读数汇报',
+  'internal review': '内部评审',
+  'investment thesis': '投资论点',
+  'investor deck': '投资人 deck',
+  'investor update': '投资人更新',
+  'kids product launch': '儿童产品发布',
+  'leadership presentation': '领导层汇报',
+  'legal / policy brief': '法律或政策简报',
+  'lifestyle brand': '生活方式品牌',
+  'lifestyle launch': '生活方式发布',
+  'lifestyle media': '生活方式媒体',
+  'literary / cultural': '文学或文化',
+  'literary or arts deck': '文学或艺术 deck',
+  'literary or curatorial publication': '文学或策展出版物',
+  'literary or editorial pitch': '文学或编辑提案',
+  'literary pitch': '文学提案',
+  'longform brand story': '长篇品牌故事',
+  'longform report': '长篇报告',
+  'longform research': '长篇研究',
+  'luxury launch': '奢侈品发布',
+  'magazine / cultural pitch': '杂志或文化提案',
+  'magazine / editorial': '杂志或编辑内容',
+  'magazine or zine pitch': '杂志或小志提案',
+  manifesto: '宣言',
+  'membership or subscription pitch': '会员或订阅提案',
+  'modern lifestyle brand': '现代生活方式品牌',
+  'modern startup deck': '现代创业 deck',
+  'museum / cultural institution': '博物馆或文化机构',
+  'museum season announcement': '博物馆季度发布',
+  'music label or release schedule': '音乐厂牌或发行计划',
+  'music or arts brand': '音乐或艺术品牌',
+  'newsletter / community': '通讯或社区',
+  'newsletter or zine pitch': '通讯或小志提案',
+  'outdoor / nature product': '户外或自然产品',
+  'planning office deck': '策划办公室 deck',
+  'policy brief': '政策简报',
+  'product launch': '产品发布',
+  'product launch or catalogue': '产品发布或目录',
+  'qualitative report': '定性报告',
+  'quarterly review': '季度复盘',
+  'research findings': '研究发现',
+  'research findings with personality': '有个性的研究发现',
+  'research recap': '研究回顾',
+  'research report': '研究报告',
+  'retro gaming pitch': '复古游戏提案',
+  'shitpost-but-make-it-fancy deck': '玩梗但精致的演示',
+  'small hospitality / restaurant brand': '小型酒店或餐厅品牌',
+  'small-batch / craft launch': '小批量或手作发布',
+  'small-business pitch': '小企业提案',
+  'startup pitch': '创业路演',
+  'strategy readout': '策略汇报',
+  'studio annual or seasonal bulletin': '工作室年度或季度简报',
+  'studio annual report': '工作室年报',
+  'studio update': '工作室更新',
+  'supper club or dinner series': '晚餐俱乐部或宴会系列',
+  'sustainability brand': '可持续品牌',
+  'synthwave brand': '合成波品牌',
+  'team kickoff': '团队启动会',
+  'tech-history talk': '技术史演讲',
+  'user research synthesis': '用户研究综合',
+  'vintage-flavored brand campaign': '复古风品牌活动',
+  'web3 / crypto deck': 'Web3 或加密主题 deck',
+  'wedding / baby shower planning': '婚礼或宝宝派对策划',
+  'wedding / lifestyle media': '婚礼或生活方式媒体',
+  'wellness brand': '健康品牌',
+  'wellness or beauty pitch': '健康或美妆提案',
+  'wellness program': '健康项目',
+  'white paper': '白皮书',
+  'white paper or longform report': '白皮书或长篇报告',
+  'wine or food brand catalogue': '酒类或食品品牌目录',
+  'winery or restaurant': '酒庄或餐厅',
+  workshop: '工作坊',
+  'workshop debrief': '工作坊复盘',
+  'Y2K-tinged brand work': '带 Y2K 气质的品牌项目',
+}
+
+const attributeLabels: Record<string, string> = {
+  high: '高',
+  'medium-high': '中高',
+  medium: '中',
+  'medium-low': '中低',
+  low: '低',
+  light: '浅色',
+  dark: '深色',
+  mixed: '混合',
 }
 
 // 布局中文名称映射
@@ -374,19 +722,57 @@ const sections = [
   { id: 'quick-start', title: '如何开始', summary: '用最短路径解释第一次使用时应该如何选主题、选模板、补动效和整理 prompt。' },
   { id: 'platform-usage', title: '平台使用说明', summary: '按实际编辑流程说明顶部工具栏、页面、编辑、智能体、画布和资料库的每个功能。' },
   { id: 'themes', title: '主题 Themes', summary: '36 个主题按风格分组，不只列名字，还说明适合的内容气质和提示词写法。' },
-  { id: 'full-decks', title: '完整模板 Full-decks', summary: '14 个完整 deck 模板，适合作为整套演示的起始骨架。' },
+  { id: 'full-decks', title: '完整模板', summary: '14 个完整演示模板，适合作为整套内容的起始骨架。' },
   { id: 'layouts', title: '单页布局 Layouts', summary: '31 个单页布局按用途整理，便于按页面目标快速选型。' },
   { id: 'animations', title: '动效 Animations', summary: '区分 CSS 入场动画和 FX 动效，说明什么时候该用、什么时候不该堆。' },
   { id: 'prompts', title: '提示词怎么写', summary: '把”怎么说”拆成可复用句式，而不是只给一串很长的示例 prompt。' },
 ] as const
 
 const quickStart = [
-  { title: '1. 先说清内容与受众', description: '先交代 deck 是做给谁看的、要讲什么、目标页数大概多少。skill 的默认流程会先围绕 audience 和 deck scope 建立风格判断。' },
+  { title: '1. 先说清内容与受众', description: '先交代演示是做给谁看的、要讲什么、目标页数大概多少。生成流程会先围绕受众和内容范围建立风格判断。' },
   { title: '2. 明确主题或先给 2-3 个候选', description: '如果你没有明确审美，优先说“偏技术分享”“偏投资汇报”“偏小红书图文”这类风格方向，再让 agent 在主题库里收敛。' },
-  { title: '3. 优先选择 full-deck 或现成布局', description: '不要让 agent 完全从零排版。先指定整套 full-deck，或者告诉它正文页要用哪几类单页布局，能显著提升稳定性。' },
+  { title: '3. 优先选择完整模板或现成布局', description: '不要让智能体完全从零排版。先指定整套模板，或者告诉它正文页要用哪几类单页布局，能显著提升稳定性。' },
   { title: '4. 动效最后加，不要一开始堆满', description: '先让结构、信息层级和主题成立，再为关键页补 1-2 种动画节奏。skill 官方也强调单页不要混用太多动画类型。' },
-  { title: '5. 生成后回看 notes、快捷键和导出链路', description: '确认是否需要 speaker notes、theme cycle、overview、deep-link 和 render 到 PNG / HTML 的流程说明，保证使用闭环完整。' },
+  { title: '5. 生成后回看讲者备注、快捷键和导出链路', description: '确认是否需要讲者备注、主题切换、总览页、深链接，以及渲染到 PNG / HTML 的流程说明，保证使用闭环完整。' },
 ] as const
+
+const creationWorkflows: CreationWorkflow[] = [
+  {
+    source: 'oh-my-ppt',
+    title: '一句话快速生成',
+    bestWhen: '主题清楚、资料不多，只需要先得到一套可继续编辑的完整初稿。',
+    steps: ['选择“从零生成”', '写清主题、受众、页数和交付场景', '生成后先看结构，再改细节'],
+    promptStarter: '请生成一套面向 {受众} 的 {主题} HTML 演示，约 {页数} 页，风格偏 {主题/模板}，先保证结构完整、画布不溢出。',
+  },
+  {
+    source: 'oh-my-ppt',
+    title: '上传资料后生成',
+    bestWhen: '已有文档、表格、会议纪要或研究材料，需要先让智能体从资料中整理内容。',
+    steps: ['点击“参考资料”上传文件', '在需求里说明资料用途', '要求输出页数、章节和引用重点'],
+    promptStarter: '请先阅读我上传的资料，提炼出适合做演示的主题、结构和重点，再生成一套 {页数} 页 HTML PPT。',
+  },
+  {
+    source: 'oh-my-ppt',
+    title: '从模板延展新内容',
+    bestWhen: '想复用某个模板的版式节奏、配色和视觉语法，但替换成新主题。',
+    steps: ['在模板页选定完整模板或精选模板', '复制模板提示词', '把新主题、受众和必须包含的内容补进去'],
+    promptStarter: '请以 {模板名} 作为视觉和结构起点，保留它的字体、配色和版式节奏，把内容替换成 {新主题}。',
+  },
+  {
+    source: 'oh-my-ppt',
+    title: '参考截图提取风格',
+    bestWhen: '有品牌截图、设计稿或竞品页面，希望生成时借用视觉方向而不是照抄内容。',
+    steps: ['点击“上传图片”加入本次消息素材', '说明只参考风格还是也参考内容', '要求输出视觉关键词和页面结构'],
+    promptStarter: '请参考我上传图片的视觉风格，提取配色、字体气质、空间节奏和装饰语言，再用这些特征生成 {主题} 演示。',
+  },
+  {
+    source: 'oh-my-ppt',
+    title: '补演讲稿与逐步动效',
+    bestWhen: '用于现场演讲、课程讲解或路演，需要内容按讲述节奏逐步出现。',
+    steps: ['先让正文和版式稳定', '再要求为每页补讲者备注', '只给关键标题、数据卡和列表加 1-2 种动效'],
+    promptStarter: '请在当前演示基础上补充每页讲者备注，并为关键标题、数据卡和步骤列表加入克制的逐步动效，不要堆叠过多动画。',
+  },
+]
 
 const themes: GuideTheme[] = [
   { name: 'minimal-white', category: 'academic', tone: ['极简', '留白', '克制'], useCases: '学术报告、内部复盘、需要压低装饰噪音的内容。', promptHint: '适合写“极简白底、弱装饰、强调结构和文字节奏”。' },
@@ -444,12 +830,90 @@ const embeddedFullDecks: GuideFullDeck[] = [
   { name: 'xhs-white-editorial', scenario: '小红书白底 editorial', visualKeywords: ['白底', '博主', '编辑感'], fit: '适合轻精致品牌、生活方式、内容分享。', promptStarter: '请基于 xhs-white-editorial 模板，做一套白底 editorial 风的小红书图文演示。' },
 ]
 
+function localizeBeautifulTemplate(template: (typeof beautifulHtmlTemplates)[number]): GuideFullDeck {
+  const occasions = translateTerms(template.occasion?.length ? template.occasion : template.scenario.split('/'), beautifulOccasionLabels)
+  const keywords = translateTerms(template.visualKeywords, beautifulCopyLabels)
+  const moods = translateTerms(template.mood ?? [], beautifulCopyLabels)
+  const tones = translateTerms(template.tone ?? [], beautifulCopyLabels)
+  const fitSignals = [...moods, ...tones].filter(Boolean)
+  const displayName = fullDeckNameLabels[template.name] ?? template.displayName ?? template.name
+  const scenario = occasions.length
+    ? `适合：${occasions.slice(0, 4).join('、')}。`
+    : `适合：${template.scenario}。`
+  const fitParts = [
+    fitSignals.length ? `气质：${Array.from(new Set(fitSignals)).slice(0, 6).join('、')}。` : null,
+    occasions.length ? `推荐用于 ${occasions.slice(0, 6).join('、')} 等内容。` : null,
+    template.slideCount ? `模板约 ${template.slideCount} 页，可作为整套演示的起始骨架。` : null,
+  ].filter(Boolean)
+  const avoidSignals = translateAvoidFor(template.avoidFor)
+
+  return {
+    ...template,
+    displayName,
+    scenario,
+    visualKeywords: keywords.length ? keywords : template.visualKeywords,
+    fit: fitParts.join(''),
+    bestFor: occasions.length ? `适合：${occasions.join('、')}。` : template.bestFor,
+    avoidFor: avoidSignals,
+    mood: moods,
+    tone: tones,
+    occasion: occasions,
+    formality: translateAttribute(template.formality),
+    density: translateAttribute(template.density),
+    scheme: translateAttribute(template.scheme),
+    promptStarter: `请以「${displayName}」模板作为起始视觉系统，保留它的字体、色彩、装饰语言和版式节奏，把内容替换成我的主题。最终输出需要适配 HTML PPT 编辑器：每一页使用 section.slide，并保留键盘翻页体验。`,
+    source: 'beautiful-html-templates',
+  }
+}
+
+function translateTerms(values: readonly string[] | undefined, dictionary: Record<string, string>): string[] {
+  if (!values) {
+    return []
+  }
+
+  return values
+    .map((value) => value.trim())
+    .filter(Boolean)
+    .map((value) => normalizeBeautifulDisplayTerm(dictionary[value] ?? beautifulCopyLabels[value] ?? value))
+}
+
+function normalizeBeautifulDisplayTerm(value: string): string {
+  return value
+    .replace(/\bdeck\b/gi, '演示')
+    .replace(/\bpitch\b/gi, '提案')
+}
+
+function translateAttribute(value: string | undefined): string | undefined {
+  return value ? attributeLabels[value] ?? value : undefined
+}
+
+function translateAvoidFor(value: string | undefined): string | undefined {
+  if (!value) {
+    return undefined
+  }
+
+  if (value.toLowerCase().includes('quiet') || value.toLowerCase().includes('restrained')) {
+    return '不适合需要安静、克制或传统机构感的场景。'
+  }
+
+  if (value.toLowerCase().includes('dense') || value.toLowerCase().includes('paragraph')) {
+    return '不适合每页承载大量段落或高密度数据的内容。'
+  }
+
+  if (value.toLowerCase().includes('playful') || value.toLowerCase().includes('informal')) {
+    return '不适合需要轻松、俏皮或非正式语气的内容。'
+  }
+
+  if (value.toLowerCase().includes('corporate') || value.toLowerCase().includes('institutional')) {
+    return '不适合需要强企业感或传统机构可信度的内容。'
+  }
+
+  return '不适合与该模板视觉气质相反的场景。'
+}
+
 const fullDecks: GuideFullDeck[] = [
   ...embeddedFullDecks,
-  ...beautifulHtmlTemplates.map((template): GuideFullDeck => ({
-    ...template,
-    source: 'beautiful-html-templates',
-  })),
+  ...beautifulHtmlTemplates.map((template): GuideFullDeck => localizeBeautifulTemplate(template)),
 ]
 
 const layouts: GuideLayout[] = [
@@ -663,6 +1127,7 @@ export const htmlPptSkillGuideData: GuideCatalog = {
     '需要把 prompt 写得更稳定、更可复用的内容创作者与工程师',
   ],
   quickStart: [...quickStart],
+  creationWorkflows,
   usageOrder,
   platformModules,
   sections: [...sections],

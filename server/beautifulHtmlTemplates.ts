@@ -83,7 +83,8 @@ body{min-height:100vh}
   pointer-events:auto!important;
   transform:none!important;
 }
-.beautiful-template-preview-stage>.slide{
+.beautiful-template-preview-stage>section,
+.beautiful-template-preview-stage>div{
   width:100vw!important;
   height:100vh!important;
   min-height:100vh!important;

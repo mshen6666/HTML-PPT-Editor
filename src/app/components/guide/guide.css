@@ -3,6 +3,8 @@
 .guide-browser {
   min-height: 100vh;
   padding: 32px;
+  box-sizing: border-box;
+  min-width: 0;
   background: linear-gradient(180deg, #faf6ef 0%, #f2ede5 100%);
 }
 
@@ -88,7 +90,7 @@
 .guide-search-input-wrap {
   position: relative;
   flex: 1;
-  min-width: 240px;
+  min-width: 0;
 }
 
 .guide-search-icon {
@@ -319,6 +321,28 @@
 }
 
 /* Responsive */
+
+@media (max-width: 720px) {
+  .guide-browser {
+    padding: 20px 12px;
+  }
+
+  .guide-search-bar {
+    gap: 10px;
+  }
+
+  .guide-search-input-wrap {
+    flex-basis: 100%;
+  }
+
+  .guide-view-toggle {
+    width: fit-content;
+  }
+
+  .guide-preview-panel {
+    width: 100vw;
+  }
+}
 
 /* Project UI refactor: guide browser */
 .guide-browser {

@@ -1,6 +1,7 @@
 .guide-page-shell {
   min-height: 100vh;
   padding: 28px 32px 56px;
+  box-sizing: border-box;
   background:
     radial-gradient(circle at top left, rgba(217, 93, 57, 0.12), transparent 24%),
     linear-gradient(180deg, #faf6ef 0%, #f2ede5 100%);
@@ -147,7 +148,12 @@
 }
 
 .guide-browser-container {
+  min-width: 0;
   padding-top: 8px;
+}
+
+.guide-browser-container > * {
+  min-width: 0;
 }
 
 .guide-audience-list {
@@ -314,6 +320,10 @@
 }
 
 @media (max-width: 720px) {
+  .guide-page-shell {
+    padding: 18px 12px 32px;
+  }
+
   .guide-stats-grid,
   .guide-card-grid,
   .guide-card-grid--wide,

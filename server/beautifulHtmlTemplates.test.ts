@@ -47,6 +47,7 @@ describe('buildBeautifulTemplatePreviewHtml', () => {
     })
 
     expect(preview).toContain('<section class="cover is-active" data-screen-label="01 Cover" data-slide-id="beautiful-editorial-forest-slide-1"><h1>Forest</h1></section>')
+    expect(preview).toMatch(/\.beautiful-template-preview-stage>section,\s*\.beautiful-template-preview-stage>div\{[\s\S]*width:100vw!important[\s\S]*height:100vh!important/)
     expect(preview).not.toContain('Agenda')
   })
 })

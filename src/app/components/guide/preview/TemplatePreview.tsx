@@ -1,3 +1,4 @@
+import { fullDeckNameLabels } from '../../../htmlPptSkillGuideData'
 import type { GuideFullDeck } from '../../../htmlPptSkillGuideData'
 import { useTemplatePreviews } from './useTemplatePreviews'
 import './preview.css'
@@ -9,7 +10,7 @@ interface TemplatePreviewProps {
 export function TemplatePreview({ template }: TemplatePreviewProps) {
   const { previewMap, loading } = useTemplatePreviews()
   const srcdoc = previewMap?.[template.name]
-  const title = template.displayName || template.name
+  const title = fullDeckNameLabels[template.name] || template.displayName || template.name
 
   return (
     <div className="preview-content preview-content--template">
@@ -59,7 +60,7 @@ export function TemplatePreview({ template }: TemplatePreviewProps) {
       </div>
 
       <div className="preview-section">
-        <h4>Prompt 开场白</h4>
+        <h4>提示词开场白</h4>
         <p className="preview-hint">{template.promptStarter}</p>
       </div>
     </div>
