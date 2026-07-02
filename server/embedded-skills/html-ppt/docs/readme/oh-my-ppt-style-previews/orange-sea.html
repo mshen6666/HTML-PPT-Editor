@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<title>晴橙落日海</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html, body { width: 1600px; height: 900px; overflow: hidden; }
+  body { font-family: "PingFang SC", "Microsoft YaHei", sans-serif; color: #333333; }
+  .stage {
+    width: 1600px; height: 900px; position: relative; overflow: hidden;
+    background: linear-gradient(180deg, #48C6F0 0%, #8FD9F0 35%, #FFF0D6 60%, #FFC88A 80%, #FF8A3D 100%);
+  }
+  /* sun */
+  .sun {
+    position: absolute; top: 380px; right: 240px;
+    width: 200px; height: 200px; border-radius: 50%;
+    background: radial-gradient(circle at 40% 40%, #FFE0A8 0%, #FFB36B 60%, #FF8A3D 100%);
+    box-shadow: 0 0 80px rgba(255,138,61,0.4);
+  }
+  /* clouds */
+  .cloud {
+    position: absolute; background: #FFFFFF; border-radius: 50px;
+    box-shadow: 30px 0 0 -5px #FFFFFF, -30px 0 0 -5px #FFFFFF, 60px 6px 0 -10px #FFFFFF;
+    opacity: 0.85;
+  }
+  .c1 { width: 110px; height: 36px; top: 130px; left: 200px; }
+  .c2 { width: 90px; height: 30px; top: 220px; left: 700px; opacity: 0.7; }
+  .c3 { width: 130px; height: 40px; top: 90px; right: 380px; opacity: 0.8; }
+  /* gulls */
+  .gull {
+    position: absolute; width: 30px; height: 12px;
+    border-top: 3px solid #333333; border-radius: 50% 50% 0 0 / 100% 100% 0 0;
+    opacity: 0.5;
+  }
+  .g1 { top: 200px; left: 480px; }
+  .g2 { top: 240px; left: 540px; transform: scale(0.8); }
+  /* water */
+  .water {
+    position: absolute; bottom: 0; left: 0; width: 1600px; height: 180px;
+    background: linear-gradient(180deg, rgba(255,200,138,0.4) 0%, rgba(255,138,61,0.7) 100%);
+  }
+  .reflect {
+    position: absolute; bottom: 0; right: 200px; width: 240px; height: 180px;
+    background: linear-gradient(180deg, rgba(255,180,107,0.6) 0%, transparent 100%);
+    filter: blur(8px);
+  }
+  .ripple { position: absolute; height: 1px; background: rgba(255,255,255,0.5); border-radius: 50%; }
+  .r1 { width: 500px; bottom: 50px; left: 100px; }
+  .r2 { width: 700px; bottom: 90px; left: 500px; opacity: 0.6; }
+  .r3 { width: 400px; bottom: 130px; left: 1000px; opacity: 0.5; }
+
+  /* content card */
+  .card {
+    position: absolute; top: 120px; left: 110px; z-index: 5;
+    background: rgba(255,255,255,0.88);
+    backdrop-filter: blur(10px);
+    border-radius: 28px;
+    padding: 50px 56px;
+    max-width: 720px;
+    box-shadow: 0 20px 50px rgba(72,198,240,0.18);
+  }
+  .card .kicker {
+    display: inline-block;
+    background: #FF8A3D; color: #FFFFFF;
+    font-size: 13px; font-weight: 700; letter-spacing: 3px;
+    padding: 7px 16px; border-radius: 999px; margin-bottom: 22px;
+  }
+  .card h1 {
+    font-size: 64px; font-weight: 800; letter-spacing: -1px;
+    color: #2A6B8A; line-height: 1.1; margin-bottom: 16px;
+  }
+  .card h1 .o { color: #FF8A3D; }
+  .card .sub {
+    font-size: 20px; font-weight: 400; color: #555;
+    line-height: 1.7; margin-bottom: 28px;
+  }
+  .card .stats { display: flex; gap: 36px; }
+  .card .stat .v { font-size: 34px; font-weight: 800; color: #FF8A3D; line-height: 1; }
+  .card .stat .l { font-size: 13px; color: #888; margin-top: 6px; letter-spacing: 1px; }
+
+  /* palette chips */
+  .palette {
+    position: absolute; bottom: 70px; right: 110px; z-index: 5;
+    display: flex; gap: 16px;
+  }
+  .chip {
+    width: 80px; height: 80px; border-radius: 20px;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.12);
+    display: flex; align-items: flex-end; justify-content: center;
+    padding-bottom: 10px;
+  }
+  .chip span {
+    font-size: 10px; font-weight: 700; letter-spacing: 1px;
+    background: rgba(255,255,255,0.85); color: #333;
+    padding: 3px 7px; border-radius: 999px;
+  }
+  .chip1 { background: #48C6F0; }
+  .chip2 { background: #FFF0D6; }
+  .chip3 { background: #FF8A3D; }
+</style>
+</head>
+<body>
+<div class="stage">
+  <div class="cloud c1"></div>
+  <div class="cloud c2"></div>
+  <div class="cloud c3"></div>
+  <div class="gull g1"></div>
+  <div class="gull g2"></div>
+  <div class="sun"></div>
+  <div class="reflect"></div>
+  <div class="water">
+    <div class="ripple r1"></div>
+    <div class="ripple r2"></div>
+    <div class="ripple r3"></div>
+  </div>
+
+  <div class="card">
+    <span class="kicker">HEALING · 治愈系</span>
+    <h1>把午后<br><span class="o">调成柔光</span></h1>
+    <p class="sub">从晴空一路走到夕阳，让落日把海面染成橘色。<br>这里没有待办，只有慢慢退潮的温柔。</p>
+    <div class="stats">
+      <div class="stat"><div class="v">128</div><div class="l">EPISODES</div></div>
+      <div class="stat"><div class="v">5.8万</div><div class="l">SUBSCRIBERS</div></div>
+      <div class="stat"><div class="v">4.9★</div><div class="l">RATING</div></div>
+    </div>
+  </div>
+
+  <div class="palette">
+    <div class="chip chip1"><span>#48C6F0</span></div>
+    <div class="chip chip2"><span>#FFF0D6</span></div>
+    <div class="chip chip3"><span>#FF8A3D</span></div>
+  </div>
+</div>
+</body>
+</html>

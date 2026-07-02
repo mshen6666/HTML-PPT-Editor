@@ -167,7 +167,10 @@ export type AiElementAnchor = {
 const EDITABLE_ROOT_SELECTOR = '[data-fs-editable-deck="1"]'
 const SLIDE_SELECTOR = 'section.slide[data-slide-id]'
 const NODE_SELECTOR = '[data-node-id][data-edit-kind]'
-const EDITOR_ONLY_ATTRIBUTES = ['data-editor-hover']
+const EDITOR_ONLY_ATTRIBUTES = ['data-editor-hover', 'data-editor-selected']
+const EDITOR_ONLY_CLASSES = ['is-selected', 'is-editor-selected', 'is-ai-pick-hover']
+const EDITOR_PREVIEW_STYLE_PROPERTIES = ['outline', 'outline-offset'] as const
+const MIN_EDITABLE_NODES_PER_RICH_SLIDE = 3
 const TEXT_STYLE_PROPERTIES = [
   'font-family',
   'font-size',
@@ -180,6 +183,10 @@ const TEXT_STYLE_PROPERTIES = [
   'letter-spacing',
 ] as const
 const LAYOUT_STYLE_PROPERTIES = ['position', 'left', 'top', 'width', 'height', 'z-index', 'background-image'] as const
+const DEFAULT_CANVAS_WIDTH = 1280
+const DEFAULT_CANVAS_HEIGHT = 720
+const XHS_CANVAS_WIDTH = 810
+const XHS_CANVAS_HEIGHT = 1080
 export type ObjectLayerAction = 'forward' | 'backward' | 'front' | 'back'
 
 export function createDeckDocument(html: string): Document {
@@ -191,6 +198,7 @@ export function adaptImportedHtmlToDeck(html: string): string {
   const profile = detectDeckProfile(document)
   document.documentElement.setAttribute('data-fs-editable-deck', '1')
   document.documentElement.setAttribute('data-fs-deck-profile', profile)
+  ensureCanvasDimensions(document, profile)
 
   const body = document.body ?? document.createElement('body')
   let slides = Array.from(document.querySelectorAll<HTMLElement>('section.slide'))
@@ -220,35 +228,50 @@ export function adaptImportedHtmlToDeck(html: string): string {
 
       nodeCounter += 1
       const nodeId = `${slideId}-node-${nodeCounter}`
-
-      if (element.tagName === 'IMG') {
-        const imageElement = element as HTMLImageElement
-        const existingFigure =
-          imageElement.parentElement?.tagName === 'FIGURE' ? imageElement.parentElement as HTMLElement : null
-
-        if (existingFigure) {
-          existingFigure.dataset.nodeId = nodeId
-          existingFigure.dataset.editKind = 'image'
-          return
-        }
-
-        const figure = document.createElement('figure')
-        figure.dataset.nodeId = nodeId
-        figure.dataset.editKind = 'image'
-        imageElement.replaceWith(figure)
-        figure.appendChild(imageElement)
-        return
-      }
-
-      if (hasBackgroundImage(element)) {
-        element.dataset.nodeId = nodeId
-        element.dataset.editKind = 'image'
-        return
-      }
-
-      element.dataset.nodeId = nodeId
-      element.dataset.editKind = 'text'
+      markEditableElement(document, element, nodeId, profile)
     })
+  })
+
+  return serializeDeck(document)
+}
+
+export function ensureEditableDeck(html: string): string {
+  const document = createDeckDocument(html)
+  const profile = detectDeckProfile(document)
+  document.documentElement.setAttribute('data-fs-editable-deck', '1')
+  document.documentElement.setAttribute('data-fs-deck-profile', profile)
+  ensureCanvasDimensions(document, profile)
+
+  const body = document.body ?? document.createElement('body')
+  let slides = Array.from(document.querySelectorAll<HTMLElement>('section.slide'))
+  if (!slides.length) {
+    const slide = document.createElement('section')
+    slide.className = 'slide'
+    while (body.firstChild) {
+      slide.appendChild(body.firstChild)
+    }
+    body.appendChild(slide)
+    slides = [slide]
+  }
+
+  slides.forEach((slide, slideIndex) => {
+    const slideId = slide.dataset.slideId || `slide-${slideIndex + 1}`
+    slide.dataset.slideId = slideId
+    slide.id = slide.id || slideId
+
+    const currentNodes = Array.from(slide.querySelectorAll<HTMLElement>(NODE_SELECTOR))
+    currentNodes.forEach((node) => {
+      if (node.dataset.editKind === 'component') {
+        ensureComponentSlots(node)
+      }
+    })
+    const shouldEnrich = !currentNodes.length
+      || (profile === 'html-ppt' && currentNodes.length < MIN_EDITABLE_NODES_PER_RICH_SLIDE && hasRichEditableContent(slide))
+    if (!shouldEnrich) {
+      return
+    }
+
+    addMissingEditableMarkers(document, slide, profile, slideId, currentNodes)
   })
 
   return serializeDeck(document)
@@ -718,14 +741,50 @@ function applyDeckPatchToDocument(document: Document, patch: DeckPatch): void {
 
 export function serializeDeck(document: Document): string {
   const clone = document.cloneNode(true) as Document
-  clone.querySelectorAll<HTMLElement>(NODE_SELECTOR).forEach((node) => {
-    node.classList.remove('is-selected')
+  clone.querySelectorAll<HTMLElement>(`${NODE_SELECTOR}, .is-selected, .is-editor-selected, .is-ai-pick-hover, [style]`).forEach((node) => {
+    EDITOR_ONLY_CLASSES.forEach((className) => node.classList.remove(className))
     for (const attribute of EDITOR_ONLY_ATTRIBUTES) {
       node.removeAttribute(attribute)
     }
+    removeEditorPreviewInlineStyles(node)
   })
 
   return '<!doctype html>\n' + clone.documentElement.outerHTML
+}
+
+function removeEditorPreviewInlineStyles(node: HTMLElement): void {
+  const rules = parseStyleRules(node.getAttribute('style'))
+  let changed = false
+
+  for (const property of EDITOR_PREVIEW_STYLE_PROPERTIES) {
+    if (rules[property]) {
+      delete rules[property]
+      changed = true
+    }
+  }
+
+  for (const property of ['box-shadow', 'border', 'border-color']) {
+    if (rules[property] && isEditorPreviewVisualStyle(rules[property])) {
+      delete rules[property]
+      changed = true
+    }
+  }
+
+  if (!changed) {
+    return
+  }
+
+  const serialized = serializeStyleRules(rules)
+  if (serialized) {
+    node.setAttribute('style', serialized)
+    return
+  }
+
+  node.removeAttribute('style')
+}
+
+function isEditorPreviewVisualStyle(value: string): boolean {
+  return /(239,\s*68,\s*68|37,\s*99,\s*235|#ef4444|#2563eb|#325993)/i.test(value)
 }
 
 export function getDeckProfile(document: Document): DeckProfile {
@@ -769,11 +828,12 @@ function readNode(document: Document, slideId: string, nodeId: string): DeckNode
   const style = readTextStyleFromElement(node)
   const resources = readNodeResources(node)
   const locked = readBooleanDatasetState(node, 'editorLocked') || node.getAttribute('aria-disabled') === 'true'
-  const hidden =
+  const hidden = Boolean(
     readBooleanDatasetState(node, 'editorHidden')
-    || node.hidden === true
-    || node.hidden === 'until-found'
-    || node.getAttribute('aria-hidden') === 'true'
+    || node.hidden
+    || node.getAttribute('hidden') === 'until-found'
+    || node.getAttribute('aria-hidden') === 'true',
+  )
   const capabilities = readNodeCapabilities(document, node)
   const common = {
     id: nodeId,
@@ -998,6 +1058,46 @@ function detectDeckProfile(document: Document): DeckProfile {
   return 'frontend-slides'
 }
 
+function ensureCanvasDimensions(document: Document, profile: DeckProfile): void {
+  const root = document.documentElement
+  if (
+    parseCanvasDimension(root.getAttribute('data-fs-canvas-width'))
+    && parseCanvasDimension(root.getAttribute('data-fs-canvas-height'))
+  ) {
+    return
+  }
+
+  const dimensions = profile === 'html-ppt' && looksLikeXhsDeck(document)
+    ? { width: XHS_CANVAS_WIDTH, height: XHS_CANVAS_HEIGHT }
+    : { width: DEFAULT_CANVAS_WIDTH, height: DEFAULT_CANVAS_HEIGHT }
+
+  root.setAttribute('data-fs-canvas-width', String(dimensions.width))
+  root.setAttribute('data-fs-canvas-height', String(dimensions.height))
+}
+
+function parseCanvasDimension(value: string | null): number | null {
+  if (!value) {
+    return null
+  }
+
+  const parsed = Number(value)
+  return Number.isFinite(parsed) && parsed > 0 ? parsed : null
+}
+
+function looksLikeXhsDeck(document: Document): boolean {
+  const bodyClassName = document.body?.className ?? ''
+  if (/\bxhs\b|tpl-xhs-|xhs-/.test(bodyClassName)) {
+    return true
+  }
+
+  const styles = Array.from(document.querySelectorAll('style'))
+    .map((style) => style.textContent ?? '')
+    .join('\n')
+
+  return /aspect-ratio\s*:\s*3\s*\/\s*4/i.test(styles)
+    || /width\s*:\s*810px\s*;\s*height\s*:\s*1080px/i.test(styles)
+}
+
 function collectEditableElements(slide: HTMLElement, profile: DeckProfile): HTMLElement[] {
   const selector = 'h1, h2, h3, h4, h5, h6, p, li, blockquote, figcaption, img'
 
@@ -1016,9 +1116,98 @@ function collectEditableElements(slide: HTMLElement, profile: DeckProfile): HTML
         )
     })
 
-    return candidates.filter((element) => {
-      return !candidates.some((candidate) => candidate !== element && candidate.contains(element))
-    })
+    return pruneNestedHtmlPptEditableElements(candidates)
+  })
+}
+
+function addMissingEditableMarkers(
+  document: Document,
+  slide: HTMLElement,
+  profile: DeckProfile,
+  slideId: string,
+  existingNodes: HTMLElement[],
+): void {
+  let nodeCounter = existingNodes.length
+  const usedNodeIds = new Set(
+    Array.from(document.querySelectorAll<HTMLElement>('[data-node-id]'))
+      .map((node) => node.dataset.nodeId)
+      .filter((value): value is string => Boolean(value)),
+  )
+
+  collectEditableElements(slide, profile).forEach((element) => {
+    if (element.closest('[data-node-id]')) {
+      return
+    }
+
+    nodeCounter += 1
+    const nodeId = allocateEditableNodeId(usedNodeIds, `${slideId}-node-${nodeCounter}`)
+    markEditableElement(document, element, nodeId, profile)
+  })
+}
+
+function markEditableElement(document: Document, element: HTMLElement, nodeId: string, profile: DeckProfile): void {
+  if (element.tagName === 'IMG') {
+    const imageElement = element as HTMLImageElement
+    const existingFigure =
+      imageElement.parentElement?.tagName === 'FIGURE' ? imageElement.parentElement as HTMLElement : null
+
+    if (existingFigure) {
+      existingFigure.dataset.nodeId = nodeId
+      existingFigure.dataset.editKind = 'image'
+      return
+    }
+
+    const figure = document.createElement('figure')
+    figure.dataset.nodeId = nodeId
+    figure.dataset.editKind = 'image'
+    imageElement.replaceWith(figure)
+    figure.appendChild(imageElement)
+    return
+  }
+
+  if (hasBackgroundImage(element)) {
+    element.dataset.nodeId = nodeId
+    element.dataset.editKind = 'image'
+    return
+  }
+
+  if (profile === 'html-ppt' && isHtmlPptComponentElement(element)) {
+    element.dataset.nodeId = nodeId
+    element.dataset.editKind = 'component'
+    ensureComponentSlots(element)
+    return
+  }
+
+  element.dataset.nodeId = nodeId
+  element.dataset.editKind = 'text'
+}
+
+function allocateEditableNodeId(usedNodeIds: Set<string>, baseId: string): string {
+  let candidate = baseId
+  let index = 1
+  while (usedNodeIds.has(candidate)) {
+    candidate = `${baseId}-${index}`
+    index += 1
+  }
+  usedNodeIds.add(candidate)
+  return candidate
+}
+
+function pruneNestedHtmlPptEditableElements(candidates: HTMLElement[]): HTMLElement[] {
+  const componentCandidates = candidates.filter(isHtmlPptComponentElement)
+  return candidates.filter((element) => {
+    const parentComponent = componentCandidates.find((candidate) => candidate !== element && candidate.contains(element))
+    if (parentComponent) {
+      return false
+    }
+    if (isHtmlPptComponentElement(element)) {
+      return !componentCandidates.some((candidate) => candidate !== element && candidate.contains(element))
+    }
+    return !candidates.some((candidate) => (
+      candidate !== element
+      && candidate.contains(element)
+      && !isHtmlPptComponentElement(candidate)
+    ))
   })
 }
 
@@ -1048,11 +1237,75 @@ function isHtmlPptEditableElement(element: HTMLElement): boolean {
   }
 
   if (tagName === 'DIV') {
+    if (isHtmlPptComponentElement(element)) {
+      return true
+    }
+
     return hasVisibleTextContent(element)
       && /(^|\s)(tag|quote|prompt|big|big-num|insight|footer|lede|sub|label|value|step|txt|hero|metric)(\s|$)/.test(element.className)
   }
 
+  if (['ARTICLE', 'SECTION', 'ASIDE'].includes(tagName)) {
+    return isHtmlPptComponentElement(element)
+  }
+
   return false
+}
+
+function isHtmlPptComponentElement(element: HTMLElement): boolean {
+  if (!hasVisibleTextContent(element)) {
+    return false
+  }
+
+  const tagName = element.tagName
+  if (element.dataset.editKind === 'component') {
+    return true
+  }
+
+  if (['ARTICLE', 'ASIDE'].includes(tagName)) {
+    return true
+  }
+
+  return false
+}
+
+function ensureComponentSlots(component: HTMLElement): void {
+  let slotIndex = 0
+  Array.from(component.querySelectorAll<HTMLElement>('h1, h2, h3, h4, h5, h6, p, li, blockquote, figcaption, span, small, strong, em, a, button, dt, dd, mark')).forEach((slot) => {
+    if (slot.dataset.slotKey || slot.closest('[data-node-id]') !== component) {
+      return
+    }
+    if (!hasVisibleTextContent(slot) || slot.closest('svg, pre, code')) {
+      return
+    }
+
+    slotIndex += 1
+    slot.dataset.slotKey = createComponentSlotKey(slot, slotIndex)
+  })
+}
+
+function createComponentSlotKey(slot: HTMLElement, slotIndex: number): string {
+  const tagName = slot.tagName
+  if (/^H[1-6]$/.test(tagName)) {
+    return slotIndex === 1 ? 'title' : `title-${slotIndex}`
+  }
+  if (tagName === 'P' || tagName === 'BLOCKQUOTE') {
+    return slotIndex === 1 ? 'body' : `body-${slotIndex}`
+  }
+  if (['SPAN', 'SMALL', 'STRONG', 'EM', 'MARK'].includes(tagName)) {
+    return `label-${slotIndex}`
+  }
+  if (tagName === 'A' || tagName === 'BUTTON') {
+    return `action-${slotIndex}`
+  }
+  return `slot-${slotIndex}`
+}
+
+function hasRichEditableContent(slide: HTMLElement): boolean {
+  const contentCandidates = Array.from(slide.querySelectorAll<HTMLElement>('main article, main .card, main .panel, main .block, main .module, main .tile, main .info, main .callout, main .summary, main .item, article, .card, .panel, .block, .module, .tile, .info, .callout, .summary'))
+    .filter((element) => !element.closest('.deck-header, .deck-footer, .notes, .notes-overlay, .overview-overlay, .progress, .progress-bar, .nav-dots, svg'))
+  return contentCandidates.some((element) => hasVisibleTextContent(element))
+    || Array.from(slide.querySelectorAll<HTMLElement>('main h1, main h2, main h3, main h4, main p, main li')).length >= MIN_EDITABLE_NODES_PER_RICH_SLIDE
 }
 
 function hasVisibleTextContent(element: HTMLElement): boolean {

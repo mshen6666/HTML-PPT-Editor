@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>青绿湖蓝 · 三色国风</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html, body { width: 1600px; height: 900px; overflow: hidden; font-family: "Songti SC","STSong","SimSun",serif; }
+  .canvas {
+    width: 1600px; height: 900px; position: relative; color: #333333;
+    background: linear-gradient(135deg, #F0F8F6 0%, #E6F5F2 100%);
+  }
+
+  /* 三色顶部带 */
+  .trio-bar {
+    position: absolute; top: 0; left: 0; width: 100%; height: 14px;
+    display: flex;
+  }
+  .trio-bar div { flex: 1; }
+  .tb1 { background: #7BCFA6; }
+  .tb2 { background: #66A9C9; }
+  .tb3 { background: #D9D2C5; }
+
+  /* 几何山峦装饰 */
+  .geo { position: absolute; right: 0; bottom: 0; width: 700px; height: 500px; }
+
+  /* 左上标签 */
+  .tag {
+    position: absolute; top: 80px; left: 140px;
+    font-size: 16px; color: #4A4A4A; letter-spacing: 6px;
+    font-family: "Helvetica Neue",sans-serif;
+  }
+  .tag::before { content:""; display:inline-block; width:28px; height:2px; background:#C0392B; vertical-align:middle; margin-right:12px; }
+
+  /* 标题 */
+  .title { position: absolute; top: 150px; left: 140px; }
+  .main-title {
+    font-size: 108px; font-weight: 800; color: #333333;
+    letter-spacing: 14px; line-height: 1.1;
+  }
+  .main-title .g { color: #7BCFA6; }
+  .main-title .b { color: #66A9C9; }
+  .sub-title {
+    font-size: 28px; color: #4A4A4A; letter-spacing: 10px;
+    margin-top: 26px; font-family: "STKaiti",serif;
+  }
+
+  /* 三色大卡 */
+  .trio {
+    position: absolute; top: 470px; left: 140px;
+    display: flex; gap: 28px;
+  }
+  .tcard {
+    width: 220px; height: 260px; padding: 28px;
+    display: flex; flex-direction: column; justify-content: space-between;
+    color: #FFFFFF;
+  }
+  .tc1 { background: #7BCFA6; }
+  .tc2 { background: #66A9C9; }
+  .tc3 { background: #333333; }
+  .tcard .num { font-size: 56px; font-weight: 800; font-family:"Helvetica Neue",sans-serif; line-height:1; }
+  .tcard .lab { font-size: 22px; letter-spacing: 4px; margin-top: 12px; }
+  .tcard .hex { font-size: 14px; opacity: 0.8; font-family:"Helvetica Neue",sans-serif; margin-top:6px;}
+  .tcard .desc { font-size: 15px; opacity: 0.9; letter-spacing: 1px; line-height: 1.6; }
+
+  /* 右上印章 */
+  .seal {
+    position: absolute; top: 80px; right: 140px;
+    width: 76px; height: 76px; background: #C0392B;
+    display:flex; align-items:center; justify-content:center;
+    color: #F0F8F6; font-size: 20px; font-weight: bold;
+    text-align:center; line-height:1.1; letter-spacing:1px;
+    font-family:"STKaiti",serif;
+  }
+
+  /* 右侧引文 */
+  .quote {
+    position: absolute; top: 200px; right: 140px;
+    width: 360px; font-size: 22px; line-height: 2;
+    color: #4A4A4A; letter-spacing: 2px; text-align: right;
+  }
+  .quote .em { color: #C0392B; font-weight: bold; }
+
+  /* 底部 */
+  .footer {
+    position: absolute; left: 140px; bottom: 60px;
+    font-size: 16px; color: #4A4A4A; letter-spacing: 4px;
+    font-family:"Helvetica Neue",sans-serif;
+  }
+  .footer .pipe { margin: 0 14px; color: #B0B0B0; }
+</style>
+</head>
+<body>
+<div class="canvas">
+  <div class="trio-bar"><div class="tb1"></div><div class="tb2"></div><div class="tb3"></div></div>
+
+  <!-- 几何山峦 -->
+  <svg class="geo" viewBox="0 0 700 500" preserveAspectRatio="none">
+    <path d="M0,500 L0,300 L150,180 L300,320 L450,160 L600,280 L700,220 L700,500 Z" fill="#7BCFA6" opacity="0.55"/>
+    <path d="M0,500 L0,380 L120,280 L280,380 L420,260 L580,360 L700,320 L700,500 Z" fill="#66A9C9" opacity="0.5"/>
+    <path d="M0,500 L0,440 L200,400 L400,450 L600,410 L700,440 L700,500 Z" fill="#D9D2C5" opacity="0.6"/>
+  </svg>
+
+  <div class="tag">CHINESE TRIO COLOR · 三色协奏</div>
+
+  <div class="title">
+    <div class="main-title">青<span class="g">绿</span>湖<span class="b">蓝</span></div>
+    <div class="sub-title">三色一笔 · 写尽东方清韵</div>
+  </div>
+
+  <!-- 三色卡 -->
+  <div class="trio">
+    <div class="tcard tc1">
+      <div><div class="num">01</div><div class="lab">翠竹绿</div><div class="hex">#7BCFA6</div></div>
+      <div class="desc">取自新篁初翠，象征生机与希望</div>
+    </div>
+    <div class="tcard tc2">
+      <div><div class="num">02</div><div class="lab">湖蓝</div><div class="hex">#66A9C9</div></div>
+      <div class="desc">如碧潭映天，清冽而深远</div>
+    </div>
+    <div class="tcard tc3">
+      <div><div class="num">03</div><div class="lab">墨黑</div><div class="hex">#333333</div></div>
+      <div class="desc">以墨为骨，安定整体视觉重心</div>
+    </div>
+  </div>
+
+  <div class="seal">三色<br>协奏</div>
+
+  <div class="quote">
+    雨后青山映碧潭，<br>
+    三色一笔<span class="em">写清韵</span>。
+  </div>
+
+  <div class="footer">
+    VOL. 04 <span class="pipe">|</span> CHINESE FRESH TRIO <span class="pipe">|</span> 清朗国风
+  </div>
+</div>
+</body>
+</html>

@@ -43,7 +43,7 @@ a:hover{text-decoration:underline}
 code,kbd,pre,samp{font-family:var(--font-mono)}
 
 /* ================= SLIDE SYSTEM ================= */
-.deck{position:relative;width:1280px;height:720px;max-width:100vw;max-height:100vh;margin:0 auto;overflow:hidden;background:var(--bg)}
+.deck{position:relative;width:100vw;height:100vh;overflow:hidden;background:var(--bg)}
 .slide{
   position:absolute;inset:0;
   display:flex;flex-direction:column;justify-content:center;
@@ -58,7 +58,7 @@ code,kbd,pre,samp{font-family:var(--font-mono)}
 .slide.is-prev{transform:translateX(-30px)}
 
 /* single-page standalone (used when a layout file is opened directly) */
-body.single .slide{position:relative;width:1280px;height:720px;max-width:100vw;max-height:100vh;margin:0 auto;opacity:1;transform:none;pointer-events:auto}
+body.single .slide{position:relative;width:100vw;height:100vh;opacity:1;transform:none;pointer-events:auto}
 
 /* ================= TYPOGRAPHY ================= */
 .eyebrow{font-size:13px;font-weight:500;letter-spacing:.16em;text-transform:uppercase;color:var(--text-3)}
@@ -139,6 +139,6 @@ h4,.h4{font-size:22px;line-height:1.3;font-weight:600;margin:0 0 8px}
 
 /* ================= PRINT ================= */
 @media print{
-  .slide{position:relative;opacity:1!important;transform:none!important;page-break-after:always;width:1280px;height:720px}
+  .slide{position:relative;opacity:1!important;transform:none!important;page-break-after:always;height:100vh}
   .deck-header,.deck-footer,.progress-bar,.notes-overlay,.overview{display:none!important}
 }

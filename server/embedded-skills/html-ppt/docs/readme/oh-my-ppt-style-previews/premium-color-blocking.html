@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<title>高级撞色</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html, body {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    background: #1B2A4A;
+    font-family: "PingFang SC", "Helvetica Neue", "Inter", sans-serif;
+  }
+  .canvas {
+    width: 100vw;
+    height: 100vh;
+    aspect-ratio: 16 / 9;
+    position: relative;
+    overflow: hidden;
+    background: #F4EFE6;
+  }
+  /* 暖橙色块 - 左上斜切 */
+  .block-orange {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 52%;
+    height: 100%;
+    background: #FF6B47;
+    clip-path: polygon(0 0, 100% 0, 78% 100%, 0 100%);
+  }
+  /* 墨蓝色块 - 右下 */
+  .block-ink {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    width: 56%;
+    height: 64%;
+    background: #1B2A4A;
+    clip-path: polygon(22% 0, 100% 0, 100% 100%, 0 100%);
+  }
+  /* 琥珀色细带 */
+  .band-amber {
+    position: absolute;
+    top: 18%;
+    left: 38%;
+    width: 22%;
+    height: 6px;
+    background: #F4D35E;
+    z-index: 3;
+  }
+  /* 圆形装饰 */
+  .circle {
+    position: absolute;
+    border-radius: 50%;
+  }
+  .circle-coral {
+    width: 140px;
+    height: 140px;
+    background: #F5A623;
+    top: 8%;
+    right: 14%;
+    z-index: 2;
+  }
+  .circle-red {
+    width: 36px;
+    height: 36px;
+    background: #E63946;
+    bottom: 22%;
+    left: 8%;
+    z-index: 4;
+  }
+  /* 标题区 */
+  .header {
+    position: absolute;
+    top: 11%;
+    left: 6%;
+    z-index: 5;
+    color: #F4EFE6;
+  }
+  .kicker {
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.32em;
+    text-transform: uppercase;
+    color: #1B2A4A;
+    margin-bottom: 14px;
+    display: inline-block;
+    padding: 6px 12px;
+    background: #F4D35E;
+  }
+  .title {
+    font-size: 84px;
+    font-weight: 900;
+    line-height: 0.95;
+    letter-spacing: -0.03em;
+    color: #F4EFE6;
+  }
+  .title .em {
+    color: #1B2A4A;
+    display: inline-block;
+  }
+  .subtitle {
+    margin-top: 18px;
+    font-size: 18px;
+    font-weight: 500;
+    letter-spacing: 0.04em;
+    color: #F4EFE6;
+    opacity: 0.92;
+    max-width: 460px;
+    line-height: 1.5;
+  }
+  /* 右下信息卡 */
+  .info {
+    position: absolute;
+    bottom: 10%;
+    right: 6%;
+    z-index: 5;
+    color: #F4EFE6;
+    text-align: right;
+  }
+  .info-num {
+    font-size: 120px;
+    font-weight: 900;
+    line-height: 0.9;
+    letter-spacing: -0.04em;
+    color: #FF6B47;
+  }
+  .info-label {
+    font-size: 14px;
+    font-weight: 500;
+    letter-spacing: 0.24em;
+    text-transform: uppercase;
+    margin-top: 8px;
+    color: #F4EFE6;
+  }
+  /* 左下小标 */
+  .footer-left {
+    position: absolute;
+    bottom: 8%;
+    left: 6%;
+    z-index: 5;
+    color: #F4EFE6;
+  }
+  .footer-left .tag {
+    font-size: 12px;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    opacity: 0.75;
+    margin-bottom: 8px;
+  }
+  .footer-left .quote {
+    font-size: 16px;
+    font-weight: 600;
+    max-width: 280px;
+    line-height: 1.45;
+  }
+  /* 顶部分隔线 */
+  .topline {
+    position: absolute;
+    top: 6%;
+    left: 6%;
+    right: 6%;
+    height: 1px;
+    background: rgba(244, 239, 230, 0.4);
+    z-index: 5;
+  }
+  .topmeta {
+    position: absolute;
+    top: 4%;
+    left: 6%;
+    right: 6%;
+    display: flex;
+    justify-content: space-between;
+    z-index: 6;
+    font-size: 11px;
+    letter-spacing: 0.28em;
+    text-transform: uppercase;
+    color: #F4EFE6;
+    opacity: 0.7;
+  }
+  .topmeta .left { color: #1B2A4A; opacity: 1; font-weight: 700; }
+</style>
+</head>
+<body>
+<div class="canvas">
+  <div class="block-orange"></div>
+  <div class="block-ink"></div>
+  <div class="band-amber"></div>
+  <div class="circle circle-coral"></div>
+  <div class="circle circle-red"></div>
+
+  <div class="topmeta">
+    <span class="left">VOL. 07 — COLOR STORY</span>
+    <span>2026 · SPRING EDITORIAL</span>
+  </div>
+  <div class="topline"></div>
+
+  <div class="header">
+    <span class="kicker">Premium Color Blocking</span>
+    <h1 class="title">让色彩<br><span class="em">替你发声</span></h1>
+    <p class="subtitle">两种色块的克制对峙，胜过千言万语。这是属于有态度的人的视觉语言。</p>
+  </div>
+
+  <div class="footer-left">
+    <div class="tag">— Manifesto</div>
+    <div class="quote">"不解释，只对峙。"</div>
+  </div>
+
+  <div class="info">
+    <div class="info-num">07</div>
+    <div class="info-label">Bold · Quiet · Loud</div>
+  </div>
+</div>
+</body>
+</html>

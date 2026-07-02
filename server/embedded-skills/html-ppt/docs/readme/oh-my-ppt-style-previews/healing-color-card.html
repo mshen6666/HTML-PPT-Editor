@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>情绪疗愈色卡 · 柔光时刻</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html, body { width: 1600px; height: 900px; overflow: hidden; font-family:"PingFang SC","Noto Sans SC","Helvetica Neue",sans-serif; }
+  .canvas {
+    width: 1600px; height: 900px; position: relative; color: #4A4448;
+    background:
+      radial-gradient(ellipse at 15% 20%, rgba(200,184,217,0.35) 0%, transparent 55%),
+      radial-gradient(ellipse at 85% 30%, rgba(232,206,200,0.35) 0%, transparent 55%),
+      radial-gradient(ellipse at 50% 90%, rgba(156,217,201,0.3) 0%, transparent 55%),
+      linear-gradient(135deg, #FBF6F2 0%, #FAF3EC 100%);
+  }
+
+  /* 顶部情绪标 */
+  .mood-tag {
+    position: absolute; top: 70px; left: 140px;
+    font-size: 16px; color: #6B5D5F; letter-spacing: 6px;
+  }
+  .mood-tag::before { content:""; display:inline-block; width:24px; height:2px; background:#9B7FB5; vertical-align:middle; margin-right:12px; border-radius:2px; }
+
+  /* 月亮装饰 */
+  .moon {
+    position: absolute; top: 80px; right: 180px;
+    width: 110px; height: 110px; border-radius: 50%;
+    background: radial-gradient(circle at 35% 35%, #FBF6F2 0%, #DCC8E8 80%);
+    box-shadow: 0 0 50px rgba(200,184,217,0.6);
+  }
+
+  /* 标题 */
+  .title { position: absolute; top: 230px; left: 140px; }
+  .main-title {
+    font-size: 108px; font-weight: 600; color: #4A4448;
+    letter-spacing: 8px; line-height: 1.1;
+  }
+  .main-title .purple { color: #9B7FB5; }
+  .main-title .mint { color: #6FB9A6; }
+  .sub-title {
+    font-size: 26px; color: #6B5D5F; letter-spacing: 8px;
+    margin-top: 26px; font-weight: 300;
+  }
+
+  /* 三色情绪卡 */
+  .moods {
+    position: absolute; top: 480px; left: 140px;
+    display: flex; gap: 30px;
+  }
+  .mcard {
+    width: 280px; padding: 36px 32px; border-radius: 28px;
+    color: #4A4448;
+  }
+  .mc1 { background: linear-gradient(140deg, #DCC8E8 0%, #C8B8D9 100%); }
+  .mc2 { background: linear-gradient(140deg, #F0DDD2 0%, #E8CEC8 100%); }
+  .mc3 { background: linear-gradient(140deg, #BFE8DB 0%, #9CD9C9 100%); }
+  .mcard .emoji { font-size: 44px; margin-bottom: 16px; }
+  .mcard .mood-name {
+    font-size: 30px; font-weight: 600; letter-spacing: 4px; margin-bottom: 10px;
+  }
+  .mcard .mood-desc {
+    font-size: 16px; line-height: 1.8; letter-spacing: 1px; opacity: 0.85;
+  }
+  .mcard .hex {
+    font-size: 13px; margin-top: 18px; opacity: 0.7;
+    font-family:"Helvetica Neue",sans-serif; letter-spacing: 1px;
+  }
+
+  /* 右侧引文 */
+  .quote {
+    position: absolute; top: 250px; right: 140px;
+    width: 340px; font-size: 22px; line-height: 2.1;
+    color: #4A4448; letter-spacing: 1px; text-align: right;
+    font-weight: 300;
+  }
+  .quote .em { color: #9B7FB5; font-weight: 500; }
+  .signature {
+    position: absolute; top: 470px; right: 140px;
+    font-size: 18px; color: #6B5D5F; letter-spacing: 3px;
+    text-align: right; font-family:"STKaiti",serif;
+  }
+
+  /* 底部 */
+  .footer {
+    position: absolute; left: 140px; right: 140px; bottom: 60px;
+    display:flex; justify-content:space-between; align-items:center;
+    padding-top: 22px; border-top: 1px solid rgba(107,93,95,0.15);
+  }
+  .footer .l { font-size: 16px; color: #6B5D5F; letter-spacing: 4px; }
+  .footer .r { font-size: 14px; color: #6B5D5F; letter-spacing: 3px; font-family:"Helvetica Neue",sans-serif; }
+</style>
+</head>
+<body>
+<div class="canvas">
+  <div class="mood-tag">HEALING COLOR · 情绪疗愈</div>
+  <div class="moon"></div>
+
+  <div class="title">
+    <div class="main-title">柔<span class="purple">光</span>时<span class="mint">刻</span></div>
+    <div class="sub-title">每一种情绪，都值得被温柔接住</div>
+  </div>
+
+  <div class="quote">
+    在喧嚣的世界里，<br>
+    给自己留一抹<span class="em">柔软的色</span>。<br>
+    让心慢慢安静下来，<br>
+    像清晨第一缕<span class="em">柔光</span>。
+  </div>
+  <div class="signature">—— 写给每一个疲惫的你</div>
+
+  <div class="moods">
+    <div class="mcard mc1">
+      <div class="emoji">🌙</div>
+      <div class="mood-name">薰衣草</div>
+      <div class="mood-desc">安抚焦虑<br>带来宁静与安然</div>
+      <div class="hex">#C8B8D9</div>
+    </div>
+    <div class="mcard mc2">
+      <div class="emoji">🍑</div>
+      <div class="mood-name">暖桃米</div>
+      <div class="mood-desc">温暖治愈<br>像被柔软拥抱</div>
+      <div class="hex">#E8CEC8</div>
+    </div>
+    <div class="mcard mc3">
+      <div class="emoji">🌿</div>
+      <div class="mood-name">薄荷绿</div>
+      <div class="mood-desc">清新舒缓<br>释放紧绷情绪</div>
+      <div class="hex">#9CD9C9</div>
+    </div>
+  </div>
+
+  <div class="footer">
+    <div class="l">情绪疗愈色卡 · DAY 21</div>
+    <div class="r">HEALING COLOR CARD · VOL. 08</div>
+  </div>
+</div>
+</body>
+</html>

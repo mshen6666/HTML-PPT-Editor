@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>米白樱粉 · 温柔国风</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html, body { width: 1600px; height: 900px; overflow: hidden; font-family:"Songti SC","STSong","SimSun",serif; }
+  .canvas {
+    width: 1600px; height: 900px; position: relative; color: #3D3D3D;
+    background:
+      radial-gradient(ellipse at 80% 20%, rgba(245,191,200,0.3) 0%, transparent 55%),
+      radial-gradient(ellipse at 20% 85%, rgba(232,220,200,0.35) 0%, transparent 55%),
+      linear-gradient(135deg, #FAF7F0 0%, #F5F2E9 100%);
+  }
+
+  /* 樱花装饰 */
+  .blossom { position: absolute; top: 0; right: 0; width: 460px; height: 420px; opacity: 0.9; }
+  .petal-fall { position: absolute; }
+  .pf1 { top: 480px; left: 920px; }
+  .pf2 { top: 680px; left: 1180px; }
+
+  /* 印章 */
+  .seal {
+    position: absolute; top: 80px; left: 140px;
+    width: 70px; height: 70px; background: #B23A48;
+    display:flex; align-items:center; justify-content:center;
+    color:#FAF7F0; font-size:18px; font-weight:bold;
+    text-align:center; line-height:1.1; letter-spacing:1px;
+    font-family:"STKaiti",serif;
+  }
+
+  /* 标签 */
+  .tag {
+    position: absolute; top: 95px; left: 240px;
+    font-size: 16px; color: #7A6B5D; letter-spacing: 6px;
+    font-family:"Helvetica Neue",sans-serif;
+  }
+
+  /* 标题 */
+  .title { position: absolute; top: 250px; left: 140px; }
+  .main-title {
+    font-size: 120px; font-weight: 800; color: #3D3D3D;
+    letter-spacing: 16px; line-height: 1.1;
+  }
+  .main-title .pink { color: #F091A0; }
+  .sub-title {
+    font-size: 30px; color: #7A6B5D; letter-spacing: 12px;
+    margin-top: 30px; font-family:"STKaiti",serif;
+  }
+  .sub-title .em { color: #B23A48; }
+
+  /* 正文 */
+  .body {
+    position: absolute; left: 140px; bottom: 160px;
+    width: 520px; font-size: 22px; line-height: 2.1;
+    color: #3D3D3D; letter-spacing: 2px;
+  }
+  .body strong { color: #F091A0; font-weight: 600; }
+
+  /* 右侧色卡 */
+  .palette {
+    position: absolute; top: 250px; right: 140px;
+    width: 320px;
+  }
+  .pcard {
+    display:flex; align-items:center; padding: 20px 24px;
+    background: rgba(250,247,240,0.7);
+    margin-bottom: 16px; border-left: 4px solid #F091A0;
+  }
+  .pcard .chip { width: 50px; height: 50px; margin-right: 22px; flex-shrink:0; }
+  .pcard .info .name { font-size: 22px; color: #3D3D3D; letter-spacing: 3px; }
+  .pcard .info .hex { font-size: 14px; color: #7A6B5D; font-family:"Helvetica Neue",sans-serif; }
+
+  /* 底部 */
+  .footer {
+    position: absolute; left: 140px; right: 140px; bottom: 70px;
+    display:flex; justify-content:space-between; align-items:center;
+    padding-top: 24px; border-top: 1px solid rgba(122,107,93,0.2);
+  }
+  .footer .l { font-size: 18px; color: #7A6B5D; letter-spacing: 4px; }
+  .footer .r { font-size: 16px; color: #7A6B5D; letter-spacing: 3px; font-family:"Helvetica Neue",sans-serif; }
+</style>
+</head>
+<body>
+<div class="canvas">
+  <!-- 樱花 -->
+  <svg class="blossom" viewBox="0 0 460 420">
+    <g transform="translate(320,120)">
+      <ellipse cx="0" cy="-40" rx="34" ry="50" fill="#F5BFC8" opacity="0.85"/>
+      <ellipse cx="38" cy="-12" rx="34" ry="50" fill="#F091A0" opacity="0.8" transform="rotate(72)"/>
+      <ellipse cx="24" cy="34" rx="34" ry="50" fill="#F5BFC8" opacity="0.85" transform="rotate(144)"/>
+      <ellipse cx="-24" cy="34" rx="34" ry="50" fill="#F091A0" opacity="0.8" transform="rotate(216)"/>
+      <ellipse cx="-38" cy="-12" rx="34" ry="50" fill="#F5BFC8" opacity="0.85" transform="rotate(288)"/>
+      <circle cx="0" cy="0" r="10" fill="#D4A574"/>
+    </g>
+    <g transform="translate(180,220)">
+      <ellipse cx="0" cy="-26" rx="22" ry="32" fill="#F5BFC8" opacity="0.7"/>
+      <ellipse cx="25" cy="-8" rx="22" ry="32" fill="#F091A0" opacity="0.65" transform="rotate(72)"/>
+      <ellipse cx="16" cy="22" rx="22" ry="32" fill="#F5BFC8" opacity="0.7" transform="rotate(144)"/>
+      <ellipse cx="-16" cy="22" rx="22" ry="32" fill="#F091A0" opacity="0.65" transform="rotate(216)"/>
+      <ellipse cx="-25" cy="-8" rx="22" ry="32" fill="#F5BFC8" opacity="0.7" transform="rotate(288)"/>
+      <circle cx="0" cy="0" r="6" fill="#D4A574"/>
+    </g>
+    <path d="M460,0 Q360,80 280,180 Q200,280 120,420" stroke="#7A6B5D" stroke-width="2.5" fill="none" opacity="0.4"/>
+  </svg>
+
+  <svg class="petal-fall pf1" width="40" height="50" viewBox="0 0 40 50">
+    <ellipse cx="20" cy="25" rx="14" ry="22" fill="#F5BFC8" opacity="0.8" transform="rotate(20 20 25)"/>
+  </svg>
+  <svg class="petal-fall pf2" width="36" height="46" viewBox="0 0 36 46">
+    <ellipse cx="18" cy="23" rx="12" ry="20" fill="#F091A0" opacity="0.75" transform="rotate(-30 18 23)"/>
+  </svg>
+
+  <div class="seal">温柔<br>雅致</div>
+  <div class="tag">CREAM · BLOSSOM · 温柔系</div>
+
+  <div class="title">
+    <div class="main-title">米白<span class="pink">樱</span>粉</div>
+    <div class="sub-title">一抹淡粉 <span class="em">·</span> 半卷温柔</div>
+  </div>
+
+  <div class="body">
+    于<strong>米白</strong>宣纸上，晕开一抹<strong>樱粉</strong>。<br>
+    不喧哗，不浓烈，<br>
+    如三月微风拂过花瓣，<br>
+    安静而有温度。
+  </div>
+
+  <div class="palette">
+    <div class="pcard"><div class="chip" style="background:#F091A0"></div><div class="info"><div class="name">樱粉</div><div class="hex">#F091A0</div></div></div>
+    <div class="pcard"><div class="chip" style="background:#F5BFC8"></div><div class="info"><div class="name">淡樱</div><div class="hex">#F5BFC8</div></div></div>
+    <div class="pcard"><div class="chip" style="background:#F5F2E9"></div><div class="info"><div class="name">宣纸米</div><div class="hex">#F5F2E9</div></div></div>
+    <div class="pcard" style="border-left-color:#B23A48"><div class="chip" style="background:#B23A48"></div><div class="info"><div class="name">胭脂红</div><div class="hex">#B23A48</div></div></div>
+  </div>
+
+  <div class="footer">
+    <div class="l">温柔国风配色 · VOL. 05</div>
+    <div class="r">CREAM BLOSSOM · MMXXVI</div>
+  </div>
+</div>
+</body>
+</html>

@@ -4,11 +4,31 @@ import { mkdir, mkdtemp, readdir, readFile, rm, stat, writeFile } from 'node:fs/
 import os from 'node:os'
 import path from 'node:path'
 
-import { describe, expect, it } from 'vitest'
+import { afterEach, beforeEach, describe, expect, it } from 'vitest'
 
 import { blankDeckHtml } from '../src/blankDeck'
 import type { PptxExportEvent } from '../src/agent/protocol'
 import { createSandboxedClaudeCodePptxExportAgent, type PptxExportQueryFactory } from './claudeCodePptxExportAgent'
+
+const originalAnthropicApiKey = process.env.ANTHROPIC_API_KEY
+const originalAnthropicAuthToken = process.env.ANTHROPIC_AUTH_TOKEN
+
+beforeEach(() => {
+  process.env.ANTHROPIC_AUTH_TOKEN = 'test-auth-token'
+})
+
+afterEach(() => {
+  if (originalAnthropicApiKey === undefined) {
+    delete process.env.ANTHROPIC_API_KEY
+  } else {
+    process.env.ANTHROPIC_API_KEY = originalAnthropicApiKey
+  }
+  if (originalAnthropicAuthToken === undefined) {
+    delete process.env.ANTHROPIC_AUTH_TOKEN
+  } else {
+    process.env.ANTHROPIC_AUTH_TOKEN = originalAnthropicAuthToken
+  }
+})
 
 describe('createSandboxedClaudeCodePptxExportAgent', () => {
   it('runs Claude Code with embedded PPTX export instructions and returns a pptx artifact', async () => {

@@ -13,6 +13,7 @@ import {
   type InputReply,
   type PendingInput,
 } from '../agent/protocol'
+import { extractThemeFromPrompt } from '../agent/themeExtractor'
 
 const SESSION_STORAGE_KEY = 'html-slide-editor:agent-session-id'
 const TRANSCRIPT_STORAGE_KEY_PREFIX = 'html-slide-editor:agent-transcript:'
@@ -85,6 +86,7 @@ export function useAgentSession(options: UseAgentSessionOptions = {}) {
   const [isOptimizing, setIsOptimizing] = useState(false)
   const [optimizedPrompt, setOptimizedPrompt] = useState<string | null>(null)
   const [optimizationExplanation, setOptimizationExplanation] = useState<string | null>(null)
+  const [lastSubmittedPrompt, setLastSubmittedPrompt] = useState('')
 
   useEffect(
     () => () => {
@@ -177,7 +179,38 @@ export function useAgentSession(options: UseAgentSessionOptions = {}) {
     const userEntryText = pendingInput
       ? summarizeInputReply(pendingInput, inputReply)
       : message
-    const nextHtmlPptConfig = mergeHtmlPptConfigFromReply(htmlPptConfig, inputReply)
+    const nextLastSubmittedPrompt = pendingInput && lastSubmittedPrompt
+      ? `${lastSubmittedPrompt}\n${userEntryText}`
+      : userEntryText
+    setLastSubmittedPrompt(nextLastSubmittedPrompt)
+    let extractedConfig: ExplicitHtmlPptConfig = {}
+    let shouldLetModelSelectStyle = false
+    if (message && !pendingInput) {
+      const extraction = extractThemeFromPrompt(message, buildThemeExtractionReferenceText(uploadedAssets))
+      if (extraction.confidence > 0.5) {
+        extractedConfig = {
+          ...(extraction.explicitThemeName && extraction.themeName && { themeName: extraction.themeName }),
+          ...(extraction.explicitFullDeckName && extraction.fullDeckName && { fullDeckName: extraction.fullDeckName }),
+          ...(extraction.layoutNames?.length && { layoutNames: extraction.layoutNames }),
+          ...(extraction.audience && { audience: extraction.audience }),
+          ...(extraction.format && { format: extraction.format }),
+        }
+        shouldLetModelSelectStyle = !extraction.explicitThemeName && !extraction.explicitFullDeckName
+      }
+    }
+
+    const shouldResetStyleForNewDeck = shouldLetModelSelectStyle && generationMode === 'from-scratch'
+    const extractedHtmlPptConfig = shouldResetStyleForNewDeck
+      ? {
+          ...htmlPptConfig,
+          themeName: undefined,
+          fullDeckName: undefined,
+          layoutNames: undefined,
+          animationNames: undefined,
+          ...extractedConfig,
+        }
+      : { ...htmlPptConfig, ...extractedConfig }
+    const nextHtmlPptConfig = mergeHtmlPptConfigFromReply(extractedHtmlPptConfig, inputReply)
 
     const requestBody: AiTurnRequest = {
       sessionId,
@@ -571,6 +604,7 @@ export function useAgentSession(options: UseAgentSessionOptions = {}) {
     isOptimizing,
     optimizedPrompt,
     optimizationExplanation,
+    lastSubmittedPrompt,
     setComposerText,
     setReplyText,
     updatePendingFormAnswer,
@@ -830,12 +864,17 @@ function mergeHtmlPptConfigFromReply(
 function buildHtmlPptRequestConfig(
   htmlPptConfig: ExplicitHtmlPptConfig,
 ): HtmlPptConfig | undefined {
-  if (
-    !htmlPptConfig.audience
-    || !htmlPptConfig.format
-    || !htmlPptConfig.themeName
-    || !htmlPptConfig.fullDeckName
-  ) {
+  const hasAnyConfig = Boolean(
+    htmlPptConfig.audience
+    || htmlPptConfig.format
+    || htmlPptConfig.themeName
+    || htmlPptConfig.fullDeckName
+    || htmlPptConfig.slideCountHint
+    || htmlPptConfig.layoutNames?.length
+    || htmlPptConfig.animationNames?.length,
+  )
+
+  if (!hasAnyConfig) {
     return undefined
   }
 
@@ -846,7 +885,14 @@ function buildHtmlPptRequestConfig(
   } as HtmlPptConfig
 }
 
-function isAudience(value: string): value is HtmlPptConfig['audience'] {
+function buildThemeExtractionReferenceText(assets: HtmlPptAsset[]): string {
+  return assets
+    .map((asset) => asset.referenceText?.excerpt)
+    .filter((value): value is string => Boolean(value?.trim()))
+    .join('\n')
+}
+
+function isAudience(value: string): value is NonNullable<HtmlPptConfig['audience']> {
   return value === 'engineers'
     || value === 'executives'
     || value === 'students'
@@ -854,6 +900,6 @@ function isAudience(value: string): value is HtmlPptConfig['audience'] {
     || value === 'general'
 }
 
-function isFormat(value: string): value is HtmlPptConfig['format'] {
+function isFormat(value: string): value is NonNullable<HtmlPptConfig['format']> {
   return value === 'live' || value === 'pdf' || value === 'xhs' || value === 'standalone'
 }

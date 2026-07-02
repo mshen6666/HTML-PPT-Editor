@@ -1,6 +1,7 @@
-import { guideThemeCategoryLabels } from '../../../htmlPptSkillGuideData'
+import { guideThemeCategoryLabels, themeNameLabels } from '../../../htmlPptSkillGuideData'
 import type { GuideTheme } from '../../../htmlPptSkillGuideData'
 import { useThemeCSS } from './useThemeCSS'
+import { useReferenceThemePreview } from './useReferenceThemePreview'
 import { ThemeSlidePreview } from './ThemeSlidePreview'
 import './preview.css'
 
@@ -9,20 +10,31 @@ interface ThemePreviewProps {
 }
 
 export function ThemePreview({ theme }: ThemePreviewProps) {
-  const { cssMap, loading } = useThemeCSS()
+  const isReferenceTheme = theme.referenceOnly === true
+  const { cssMap, loading: cssLoading } = useThemeCSS({ enabled: !isReferenceTheme })
+  const { previewHtml, loading: referenceLoading } = useReferenceThemePreview(theme.name, { enabled: isReferenceTheme })
   const cssData = cssMap?.[theme.name]
+  const loading = isReferenceTheme ? referenceLoading : cssLoading
+  const displayName = theme.label || themeNameLabels[theme.name] || theme.name
 
   return (
     <div className="preview-content preview-content--theme">
       <div className="preview-header">
-        <h2 className="preview-title">{theme.name}</h2>
+        <h2 className="preview-title">{displayName}</h2>
         <span className="preview-badge">
           {guideThemeCategoryLabels[theme.category]}
         </span>
       </div>
 
       <div className="theme-slide-preview-shell">
-        {cssData ? (
+        {isReferenceTheme && previewHtml ? (
+          <iframe
+            className="theme-slide-preview-iframe"
+            sandbox=""
+            title={`${displayName} preview`}
+            srcDoc={previewHtml}
+          />
+        ) : cssData ? (
           <ThemeSlidePreview theme={theme} cssData={cssData} />
         ) : (
           <div className="theme-slide-preview-loading">

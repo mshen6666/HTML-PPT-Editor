@@ -63,6 +63,31 @@ type CreateAiServerOptions = {
   inviteGate?: InviteGate
 }
 
+type HtmlPptSharedCss = {
+  baseCSS: string
+  fontsCSS: string
+  animationsCSS: string
+  runtimeJS: string
+}
+
+type HtmlPptTemplatePreviewPart = {
+  slideHTML: string
+  styleCSS: string
+  bodyClass: string
+}
+
+type HtmlPptLayoutPreviewPart = {
+  slideHTML: string
+  themeCSS: string
+}
+
+const GUIDE_PREVIEW_CACHE_CONTROL = 'public, max-age=3600'
+let sharedCssCache: Promise<HtmlPptSharedCss> | null = null
+let themeCssCache: Promise<Record<string, string>> | null = null
+let templatePreviewPartsCache: Promise<Record<string, HtmlPptTemplatePreviewPart>> | null = null
+let layoutPreviewPartsCache: Promise<Record<string, HtmlPptLayoutPreviewPart>> | null = null
+let ohMyPptStylePreviewPartsCache: Promise<Record<string, string>> | null = null
+
 export function createAiServer(options: CreateAiServerOptions) {
   const app = express()
   const store = options.store ?? createSessionStore()
@@ -75,7 +100,7 @@ export function createAiServer(options: CreateAiServerOptions) {
   })
   const server = createServer(app)
 
-  app.use(express.json({ limit: '1mb' }))
+  app.use(express.json({ limit: '50mb' }))
   app.use(express.urlencoded({ extended: false }))
 
   app.get('/api/health', (_request, response) => {
@@ -104,6 +129,70 @@ export function createAiServer(options: CreateAiServerOptions) {
     response.json({
       previews: createHtmlPptStylePreviews(body.message ?? '', body.htmlPpt),
     })
+  })
+
+  app.get('/api/agent/html-ppt/guide-preview-shared-css', async (_request, response) => {
+    try {
+      response.setHeader('Cache-Control', GUIDE_PREVIEW_CACHE_CONTROL)
+      response.json(await loadHtmlPptSharedCss())
+    } catch (error) {
+      response.status(500).json({
+        error: 'failed_to_load_guide_preview_shared_css',
+        message: error instanceof Error ? error.message : 'Unknown error',
+      })
+    }
+  })
+
+  app.get('/api/agent/html-ppt/css/themes-lite', async (request, response) => {
+    try {
+      const themeMap = pickNamedRecords(await loadHtmlPptThemeCss(), parseNamesQuery(request.query.names))
+      response.setHeader('Cache-Control', GUIDE_PREVIEW_CACHE_CONTROL)
+      response.json({ themeMap })
+    } catch (error) {
+      response.status(500).json({
+        error: 'failed_to_load_theme_css',
+        message: error instanceof Error ? error.message : 'Unknown error',
+      })
+    }
+  })
+
+  app.get('/api/agent/html-ppt/template-preview-parts', async (request, response) => {
+    try {
+      const previewMap = pickNamedRecords(await loadHtmlPptTemplatePreviewParts(), parseNamesQuery(request.query.names))
+      response.setHeader('Cache-Control', GUIDE_PREVIEW_CACHE_CONTROL)
+      response.json({ previewMap })
+    } catch (error) {
+      response.status(500).json({
+        error: 'failed_to_load_template_preview_parts',
+        message: error instanceof Error ? error.message : 'Unknown error',
+      })
+    }
+  })
+
+  app.get('/api/agent/html-ppt/oh-my-ppt-style-preview-parts', async (request, response) => {
+    try {
+      const previewMap = pickNamedRecords(await loadOhMyPptStylePreviewParts(), parseNamesQuery(request.query.names))
+      response.setHeader('Cache-Control', GUIDE_PREVIEW_CACHE_CONTROL)
+      response.json({ previewMap })
+    } catch (error) {
+      response.status(500).json({
+        error: 'failed_to_load_oh_my_ppt_style_preview_parts',
+        message: error instanceof Error ? error.message : 'Unknown error',
+      })
+    }
+  })
+
+  app.get('/api/agent/html-ppt/layout-preview-parts', async (request, response) => {
+    try {
+      const previewMap = pickNamedRecords(await loadHtmlPptLayoutPreviewParts(), parseNamesQuery(request.query.names))
+      response.setHeader('Cache-Control', GUIDE_PREVIEW_CACHE_CONTROL)
+      response.json({ previewMap })
+    } catch (error) {
+      response.status(500).json({
+        error: 'failed_to_load_layout_preview_parts',
+        message: error instanceof Error ? error.message : 'Unknown error',
+      })
+    }
   })
 
   app.get('/api/agent/html-ppt/css/all-themes', async (_request, response) => {
@@ -757,6 +846,138 @@ function decodeUploadFileName(value: string): string {
   } catch {
     return value
   }
+}
+
+function getHtmlPptSkillDir(): string {
+  const serverDir = path.dirname(fileURLToPath(import.meta.url))
+  return path.join(serverDir, 'embedded-skills', 'html-ppt')
+}
+
+function parseNamesQuery(value: unknown): string[] | null {
+  if (typeof value !== 'string') {
+    return null
+  }
+  const names = value
+    .split(',')
+    .map((name) => name.trim())
+    .filter(Boolean)
+  return names.length ? names : null
+}
+
+function pickNamedRecords<T>(records: Record<string, T>, names: string[] | null): Record<string, T> {
+  if (!names) {
+    return records
+  }
+  return Object.fromEntries(
+    names
+      .filter((name) => Object.prototype.hasOwnProperty.call(records, name))
+      .map((name) => [name, records[name]]),
+  )
+}
+
+function loadHtmlPptSharedCss(): Promise<HtmlPptSharedCss> {
+  sharedCssCache ??= (async () => {
+    const skillDir = getHtmlPptSkillDir()
+    const [baseCSS, fontsCSS, animationsCSS, runtimeJS] = await Promise.all([
+      fs.readFile(path.join(skillDir, 'assets', 'base.css'), 'utf-8'),
+      fs.readFile(path.join(skillDir, 'assets', 'fonts.css'), 'utf-8'),
+      fs.readFile(path.join(skillDir, 'assets', 'animations', 'animations.css'), 'utf-8'),
+      fs.readFile(path.join(skillDir, 'assets', 'runtime.js'), 'utf-8'),
+    ])
+    return { baseCSS, fontsCSS, animationsCSS, runtimeJS }
+  })()
+  return sharedCssCache
+}
+
+function loadHtmlPptThemeCss(): Promise<Record<string, string>> {
+  themeCssCache ??= (async () => {
+    const skillDir = getHtmlPptSkillDir()
+    const themesDir = path.join(skillDir, 'assets', 'themes')
+    const themeFiles = await fs.readdir(themesDir)
+    const entries = await Promise.all(
+      themeFiles
+        .filter((file) => file.endsWith('.css'))
+        .map(async (file) => {
+          const themeName = file.replace(/\.css$/, '')
+          const themeCSS = await fs.readFile(path.join(themesDir, file), 'utf-8')
+          return [themeName, themeCSS] as const
+        }),
+    )
+    return Object.fromEntries(entries)
+  })()
+  return themeCssCache
+}
+
+function loadHtmlPptTemplatePreviewParts(): Promise<Record<string, HtmlPptTemplatePreviewPart>> {
+  templatePreviewPartsCache ??= (async () => {
+    const skillDir = getHtmlPptSkillDir()
+    const templatesDir = path.join(skillDir, 'templates', 'full-decks')
+    const templateDirs = await fs.readdir(templatesDir)
+    const entries = await Promise.all(
+      templateDirs.map(async (dir) => {
+        const indexPath = path.join(templatesDir, dir, 'index.html')
+        const stylePath = path.join(templatesDir, dir, 'style.css')
+
+        try {
+          const [html, styleCSS] = await Promise.all([
+            fs.readFile(indexPath, 'utf-8'),
+            fs.readFile(stylePath, 'utf-8').catch(() => ''),
+          ])
+          const bodyClass = html.match(/<body\s+class="([^"]*)"/)?.[1] ?? ''
+          const slideHTML = html.match(/<section\s+class="slide[^"]*"[^>]*>[\s\S]*?<\/section>/)?.[0] ?? ''
+          return slideHTML ? [dir, { slideHTML, styleCSS, bodyClass }] as const : null
+        } catch {
+          return null
+        }
+      }),
+    )
+    return Object.fromEntries(entries.filter((entry): entry is [string, HtmlPptTemplatePreviewPart] => Boolean(entry)))
+  })()
+  return templatePreviewPartsCache
+}
+
+function loadOhMyPptStylePreviewParts(): Promise<Record<string, string>> {
+  ohMyPptStylePreviewPartsCache ??= (async () => {
+    const previewDir = path.join(getHtmlPptSkillDir(), 'docs', 'readme', 'oh-my-ppt-style-previews')
+    const files = await fs.readdir(previewDir).catch(() => [])
+    const entries = await Promise.all(
+      files
+        .filter((file) => file.endsWith('.html'))
+        .map(async (file) => {
+          const name = file.replace(/\.html$/, '')
+          const html = await fs.readFile(path.join(previewDir, file), 'utf-8')
+          return [name, html] as const
+        }),
+    )
+    return Object.fromEntries(entries)
+  })()
+  return ohMyPptStylePreviewPartsCache
+}
+
+function loadHtmlPptLayoutPreviewParts(): Promise<Record<string, HtmlPptLayoutPreviewPart>> {
+  layoutPreviewPartsCache ??= (async () => {
+    const skillDir = getHtmlPptSkillDir()
+    const layoutsDir = path.join(skillDir, 'templates', 'single-page')
+    const files = await fs.readdir(layoutsDir)
+    const themeCss = await loadHtmlPptThemeCss()
+    const entries = await Promise.all(
+      files
+        .filter((file) => file.endsWith('.html'))
+        .map(async (file) => {
+          const name = file.replace(/\.html$/, '')
+          try {
+            const html = await fs.readFile(path.join(layoutsDir, file), 'utf-8')
+            const themeName = html.match(/id="theme-link"\s+href="[^"]*\/([^/]+)\.css"/)?.[1] ?? 'tokyo-night'
+            const slideHTML = html.match(/<section\s+class="slide[^"]*"[^>]*>[\s\S]*?<\/section>/)?.[0] ?? ''
+            return slideHTML ? [name, { slideHTML, themeCSS: themeCss[themeName] ?? '' }] as const : null
+          } catch {
+            return null
+          }
+        }),
+    )
+    return Object.fromEntries(entries.filter((entry): entry is [string, HtmlPptLayoutPreviewPart] => Boolean(entry)))
+  })()
+  return layoutPreviewPartsCache
 }
 
 function writeEvent(response: express.Response, event: AgentTurnEvent): void {

@@ -20,6 +20,7 @@ One command, no build. Pure static HTML/CSS/JS with only CDN webfonts.
 ## What the skill gives you
 
 - **36 themes** (`assets/themes/*.css`) — minimal-white, editorial-serif, soft-pastel, sharp-mono, arctic-cool, sunset-warm, catppuccin-latte/mocha, dracula, tokyo-night, nord, solarized-light, gruvbox-dark, rose-pine, neo-brutalism, glassmorphism, bauhaus, swiss-grid, terminal-green, xiaohongshu-white, rainbow-gradient, aurora, blueprint, memphis-pop, cyberpunk-neon, y2k-chrome, retro-tv, japanese-minimal, vaporwave, midcentury, corporate-clean, academic-paper, news-broadcast, pitch-deck-vc, magazine-bold, engineering-whiteprint
+- **38 oh-my-ppt reference styles** (`docs/readme/oh-my-ppt-style-previews/*.html`) — reference-only visual directions for Chinese business reports, government/engineering presentations, cultural tourism, children's education, lifestyle, healing, and high-impact creator decks. Use them as style inspiration; do not link them as theme CSS files.
 - **14 native full-deck templates** (`templates/full-decks/<name>/`) — complete multi-slide decks with scoped `.tpl-<name>` CSS. 8 extracted from real-world decks (xhs-white-editorial, graphify-dark-graph, knowledge-arch-blueprint, hermes-cyber-terminal, obsidian-claude-gradient, testing-safety-alert, xhs-pastel-card, dir-key-nav-minimal), 6 scenario scaffolds (pitch-deck, product-launch, tech-sharing, weekly-report, xhs-post 3:4, course-module)
 - **34 beautiful-html-templates** (`templates/beautiful-html-templates/<slug>/template.html`) — vendored MIT templates with rich tone metadata for mood-first selection.
 - **31 layouts** (`templates/single-page/*.html`) with realistic demo data
@@ -43,14 +44,16 @@ tasteful default and confirm.
 
 1. **Content & audience.** What's the deck about, how many slides, who's
    watching (engineers / execs / 小红书读者 / 学生 / VC)?
-2. **Style / theme.** Which of the 36 themes fits? If unsure, recommend 2-3
+2. **Style / theme.** Which of the 36 themes or 38 reference styles fits? If unsure, recommend 2-3
    candidates based on tone:
    - Business / investor pitch → `pitch-deck-vc`, `corporate-clean`, `swiss-grid`
    - Tech sharing / engineering → `tokyo-night`, `dracula`, `catppuccin-mocha`,
      `terminal-green`, `blueprint`
    - 小红书图文 → `xiaohongshu-white`, `soft-pastel`, `rainbow-gradient`,
      `magazine-bold`
-   - Academic / report → `academic-paper`, `editorial-serif`, `minimal-white`
+   - Academic / report → `academic-paper`, `editorial-serif`, `blueprint`
+   - Government / SOE / engineering report → `blueprint` plus an oh-my-ppt reference style such as `palace-ink-red`, `blue-white-chart`, `industrial-kaizen`, or `classic-duo-blue`
+   - Culture / tourism / Chinese aesthetics → reference `chinese-ink-landscape`, `ink-wash-jiangnan`, `song-rain-poetic`, or `oriental-poetic-illustration`
    - Edgy / cyber / launch → `cyberpunk-neon`, `vaporwave`, `y2k-chrome`,
      `neo-brutalism`
 3. **Starting point.** One of the 14 native full-deck templates, one of the
@@ -119,6 +122,7 @@ Only after those are clear, scaffold the deck and start writing.
   roughly `1120×600`, and split dense content instead of using scrollable
   slide regions. Use `810×1080` only for 小红书 / `xhs` portrait output.
 - **When using beautiful-html-templates, preserve the chosen template visual system but output editor-compatible section.slide pages.** Some source templates use `div.slide` or `<deck-stage>`; rewrite the final deck so every logical page is `<section class="slide" data-slide-id="...">...</section>`.
+- **When using oh-my-ppt reference styles, recreate the visual direction inside the editor contract.** Keep the named reference's palette, texture, typography mood, page rhythm, and composition cues, but author normal HTML PPT slides with embedded CSS, `section.slide[data-slide-id]`, speaker notes hidden in `.notes`, and no dependency on the preview HTML file.
 - **Supply notes.** Wrap speaker notes in `<div class="notes">…</div>` inside
   each slide. Press S to open the overlay.
 - **NEVER put presenter-only text on the slide itself.** Descriptive text like

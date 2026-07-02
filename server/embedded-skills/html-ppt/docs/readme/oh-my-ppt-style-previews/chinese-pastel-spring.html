@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>春日嫩柳 · 国风配色</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html, body { width: 1600px; height: 900px; overflow: hidden; font-family: "Songti SC","STSong","SimSun",serif; }
+  .canvas {
+    width: 1600px; height: 900px; position: relative; color: #3A3A3A;
+    background:
+      radial-gradient(ellipse at 15% 20%, rgba(168,191,143,0.25) 0%, transparent 50%),
+      radial-gradient(ellipse at 85% 80%, rgba(243,166,148,0.22) 0%, transparent 50%),
+      linear-gradient(135deg, #FBF8F0 0%, #F7F3E8 100%);
+  }
+
+  /* 顶部色带 */
+  .band {
+    position: absolute; top: 0; left: 0; width: 100%; height: 12px;
+    background: linear-gradient(90deg, #A8BF8F 0%, #C5D99E 35%, #F8C9B8 65%, #F3A694 100%);
+  }
+
+  /* 桃花枝 */
+  .branch { position: absolute; top: 0; right: 0; width: 420px; height: 380px; }
+
+  /* 左上小标 */
+  .tag {
+    position: absolute; top: 70px; left: 140px;
+    font-size: 16px; color: #5A4030; letter-spacing: 6px;
+    font-family: "Helvetica Neue",sans-serif;
+  }
+  .tag::before {
+    content: ""; display: inline-block; width: 30px; height: 2px;
+    background: #C0392B; vertical-align: middle; margin-right: 14px;
+  }
+
+  /* 标题 */
+  .title { position: absolute; top: 160px; left: 140px; }
+  .main-title {
+    font-size: 96px; font-weight: 800; color: #3A3A3A;
+    letter-spacing: 12px; line-height: 1.15;
+  }
+  .main-title .pink { color: #F3A694; }
+  .main-title .green { color: #A8BF8F; }
+  .sub-title {
+    font-size: 30px; color: #5A4030; letter-spacing: 14px;
+    margin-top: 24px; font-family: "STKaiti","KaiTi",serif;
+  }
+
+  /* 色卡宫格 */
+  .palette {
+    position: absolute; top: 460px; left: 140px;
+    display: flex; gap: 24px;
+  }
+  .swatch {
+    width: 150px; height: 200px; padding: 18px;
+    display: flex; flex-direction: column; justify-content: flex-end;
+    color: #FBF8F0; font-size: 16px; letter-spacing: 2px;
+  }
+  .s1 { background: #A8BF8F; }
+  .s2 { background: #C5D99E; color: #3A3A3A; }
+  .s3 { background: #F8C9B8; color: #3A3A3A; }
+  .s4 { background: #F3A694; }
+  .swatch .name { font-size: 22px; font-weight: bold; margin-bottom: 6px; }
+  .swatch .hex { font-size: 14px; opacity: 0.85; font-family: "Helvetica Neue",sans-serif; }
+
+  /* 右侧正文卡 */
+  .card {
+    position: absolute; top: 200px; right: 140px;
+    width: 420px; padding: 44px 40px;
+    background: rgba(251,248,240,0.75);
+    border-left: 5px solid #C0392B;
+  }
+  .card h3 {
+    font-size: 30px; color: #3A3A3A; letter-spacing: 6px;
+    margin-bottom: 24px;
+  }
+  .card p {
+    font-size: 20px; line-height: 2; color: #5A4030; letter-spacing: 1.5px;
+  }
+  .card p strong { color: #C0392B; }
+
+  /* 底部 */
+  .footer {
+    position: absolute; left: 140px; right: 140px; bottom: 70px;
+    display: flex; justify-content: space-between; align-items: center;
+    padding-top: 24px; border-top: 1px solid rgba(58,58,58,0.15);
+  }
+  .footer .l { font-size: 18px; color: #5A4030; letter-spacing: 4px; }
+  .footer .r { font-size: 16px; color: #5A4030; letter-spacing: 3px; font-family: "Helvetica Neue",sans-serif; }
+  .dot { display:inline-block;width:8px;height:8px;border-radius:50%;vertical-align:middle;margin:0 8px;}
+  .dot.g { background:#A8BF8F; } .dot.p { background:#F3A694; }
+</style>
+</head>
+<body>
+<div class="canvas">
+  <div class="band"></div>
+
+  <!-- 桃花枝 SVG -->
+  <svg class="branch" viewBox="0 0 420 380">
+    <path d="M420,40 Q300,80 220,160 Q140,240 60,360" stroke="#5A4030" stroke-width="4" fill="none"/>
+    <path d="M350,100 Q330,150 360,220" stroke="#5A4030" stroke-width="2.5" fill="none"/>
+    <circle cx="300" cy="110" r="22" fill="#F3A694" opacity="0.85"/>
+    <circle cx="290" cy="100" r="14" fill="#F8C9B8"/>
+    <circle cx="312" cy="125" r="12" fill="#F8C9B8"/>
+    <circle cx="240" cy="170" r="20" fill="#F3A694" opacity="0.85"/>
+    <circle cx="232" cy="162" r="12" fill="#F8C9B8"/>
+    <circle cx="370" cy="200" r="18" fill="#F3A694" opacity="0.8"/>
+    <circle cx="362" cy="194" r="11" fill="#F8C9B8"/>
+    <circle cx="160" cy="250" r="20" fill="#F3A694" opacity="0.85"/>
+    <circle cx="152" cy="242" r="12" fill="#F8C9B8"/>
+    <circle cx="172" cy="266" r="11" fill="#F8C9B8"/>
+    <!-- 嫩叶 -->
+    <ellipse cx="330" cy="140" rx="10" ry="4" fill="#A8BF8F" transform="rotate(40 330 140)"/>
+    <ellipse cx="270" cy="190" rx="11" ry="4" fill="#C5D99E" transform="rotate(-20 270 190)"/>
+    <ellipse cx="200" cy="220" rx="10" ry="4" fill="#A8BF8F" transform="rotate(30 200 220)"/>
+    <ellipse cx="120" cy="300" rx="11" ry="4" fill="#C5D99E" transform="rotate(-35 120 300)"/>
+  </svg>
+
+  <!-- 标签 -->
+  <div class="tag">CHINESE TRADITIONAL COLOR</div>
+
+  <!-- 标题 -->
+  <div class="title">
+    <div class="main-title">春日<span class="green">嫩</span>柳<span class="pink">桃</span>花</div>
+    <div class="sub-title">三月江南 · 一抹春色入画来</div>
+  </div>
+
+  <!-- 色卡 -->
+  <div class="palette">
+    <div class="swatch s1"><div class="name">嫩柳绿</div><div class="hex">#A8BF8F</div></div>
+    <div class="swatch s2"><div class="name">柳芽黄</div><div class="hex">#C5D99E</div></div>
+    <div class="swatch s3"><div class="name">淡樱粉</div><div class="hex">#F8C9B8</div></div>
+    <div class="swatch s4"><div class="name">桃花粉</div><div class="hex">#F3A694</div></div>
+  </div>
+
+  <!-- 右侧卡 -->
+  <div class="card">
+    <h3>配色理念</h3>
+    <p>取<strong>嫩柳</strong>之青翠，配<strong>桃花</strong>之娇粉，<br>
+       如初春晨光洒落枝头。<br>
+       温柔不腻，明媚不艳，<br>
+       是东方美学的清雅底色。</p>
+  </div>
+
+  <!-- 底部 -->
+  <div class="footer">
+    <div class="l">国风配色 <span class="dot g"></span> 春日系列 <span class="dot p"></span> VOL. 03</div>
+    <div class="r">SPRING · MMXXVI</div>
+  </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<title>青莲碧蓝 · 梦幻国风</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html, body { width: 1600px; height: 900px; overflow: hidden; }
+  body { font-family: "Songti SC", "STSong", "SimSun", serif; }
+  .stage {
+    width: 1600px; height: 900px; position: relative; overflow: hidden;
+    background: linear-gradient(180deg, #5F469A 0%, #6B5AAE 35%, #5A9FB5 70%, #6BC4CA 100%);
+  }
+  /* clouds */
+  .cloud {
+    position: absolute;
+    background: radial-gradient(ellipse at center, rgba(255,255,255,0.55) 0%, rgba(255,255,255,0.15) 50%, transparent 75%);
+    border-radius: 50%;
+    filter: blur(6px);
+  }
+  .c1 { width: 520px; height: 180px; top: 110px; left: 120px; }
+  .c2 { width: 380px; height: 140px; top: 200px; right: 200px; opacity: 0.7; }
+  .c3 { width: 460px; height: 160px; top: 320px; left: 540px; opacity: 0.5; }
+  /* stars */
+  .star {
+    position: absolute; width: 4px; height: 4px; background: #FFFFFF;
+    border-radius: 50%; box-shadow: 0 0 8px rgba(255,255,255,0.9);
+  }
+  .s1 { top: 90px; left: 380px; } .s2 { top: 140px; left: 760px; }
+  .s3 { top: 60px; left: 1100px; } .s4 { top: 180px; left: 1340px; }
+  .s5 { top: 250px; left: 980px; } .s6 { top: 300px; left: 240px; }
+  .s7 { top: 70px; left: 620px; width: 6px; height: 6px; }
+  .s8 { top: 220px; left: 1480px; }
+  /* water ripple lines */
+  .ripple {
+    position: absolute; bottom: 0; left: 0; width: 1600px; height: 180px;
+    overflow: hidden;
+  }
+  .ripple i {
+    position: absolute; height: 1px; background: rgba(255,255,255,0.35);
+    border-radius: 50%;
+  }
+  .r1 { width: 700px; bottom: 40px; left: 100px; }
+  .r2 { width: 520px; bottom: 70px; left: 920px; }
+  .r3 { width: 900px; bottom: 100px; left: 400px; opacity: 0.6; }
+  .r4 { width: 400px; bottom: 130px; left: 1200px; opacity: 0.5; }
+  /* moon */
+  .moon {
+    position: absolute; top: 90px; right: 360px;
+    width: 110px; height: 110px; border-radius: 50%;
+    background: radial-gradient(circle at 35% 35%, #FFFFFF 0%, #F0E6FF 60%, #E0D4F5 100%);
+    box-shadow: 0 0 60px rgba(255,255,255,0.5), 0 0 120px rgba(255,255,255,0.25);
+  }
+  /* content */
+  .content {
+    position: absolute; top: 50%; left: 50%; transform: translate(-50%, -55%);
+    text-align: center; z-index: 5; color: #FFFFFF;
+  }
+  .kicker {
+    font-size: 18px; letter-spacing: 12px; font-weight: 300;
+    opacity: 0.85; margin-bottom: 30px;
+    font-family: "PingFang SC", sans-serif;
+  }
+  .kicker::before, .kicker::after { content: "—"; margin: 0 16px; opacity: 0.5; }
+  h1 {
+    font-size: 130px; font-weight: 600; letter-spacing: 18px;
+    text-shadow: 0 4px 30px rgba(0,0,0,0.25);
+    margin-bottom: 16px;
+  }
+  .h1-sub {
+    font-size: 56px; font-weight: 300; letter-spacing: 30px;
+    color: #E8F4F5; margin-bottom: 50px; opacity: 0.9;
+  }
+  .verse {
+    font-size: 22px; font-weight: 300; line-height: 2;
+    max-width: 720px; margin: 0 auto;
+    opacity: 0.88; letter-spacing: 3px;
+  }
+  .lotus-card {
+    position: absolute; bottom: 70px; left: 50%; transform: translateX(-50%);
+    background: rgba(255,255,255,0.12);
+    backdrop-filter: blur(8px);
+    border: 1px solid rgba(255,255,255,0.25);
+    border-radius: 4px;
+    padding: 18px 48px;
+    color: #FFFFFF;
+    display: flex; gap: 60px; align-items: center;
+    z-index: 5;
+  }
+  .lotus-card .item { text-align: center; }
+  .lotus-card .item .v { font-size: 28px; font-weight: 600; letter-spacing: 4px; }
+  .lotus-card .item .l { font-size: 13px; opacity: 0.7; letter-spacing: 4px; margin-top: 6px; font-family: "PingFang SC", sans-serif; }
+  .divider { width: 1px; height: 30px; background: rgba(255,255,255,0.3); }
+</style>
+</head>
+<body>
+<div class="stage">
+  <div class="cloud c1"></div>
+  <div class="cloud c2"></div>
+  <div class="cloud c3"></div>
+  <div class="star s1"></div><div class="star s2"></div>
+  <div class="star s3"></div><div class="star s4"></div>
+  <div class="star s5"></div><div class="star s6"></div>
+  <div class="star s7"></div><div class="star s8"></div>
+  <div class="moon"></div>
+
+  <div class="ripple">
+    <i class="r1"></i><i class="r2"></i><i class="r3"></i><i class="r4"></i>
+  </div>
+
+  <div class="content">
+    <div class="kicker">山海有期</div>
+    <h1>青莲碧蓝</h1>
+    <div class="h1-sub">一眼入梦</div>
+    <p class="verse">紫是黄昏未尽的霞，蓝是海面初醒的潮。<br>云在天上呼吸，光在水中沉眠。</p>
+  </div>
+
+  <div class="lotus-card">
+    <div class="item"><div class="v">廿四节气</div><div class="l">CULTURE</div></div>
+    <div class="divider"></div>
+    <div class="item"><div class="v">东方意境</div><div class="l">AESTHETIC</div></div>
+    <div class="divider"></div>
+    <div class="item"><div class="v">治愈共读</div><div class="l">HEALING</div></div>
+  </div>
+</div>
+</body>
+</html>

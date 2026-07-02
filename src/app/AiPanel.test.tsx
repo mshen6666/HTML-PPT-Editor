@@ -17,12 +17,40 @@ describe('AiPanel', () => {
     expect(screen.getByText('布局风险')).toBeInTheDocument()
     expect(screen.getByText('第 1 页文本量可能超出内容高度预算。')).toBeInTheDocument()
   })
+
+  it('shows quality gate results for HTML candidates', () => {
+    render(
+      <AiPanel
+        {...createBaseProps()}
+        activeTab="candidate"
+        candidate={createHtmlCandidateWithLayoutWarning()}
+        qualityGateResult={{
+          status: 'warning',
+          statusLabel: '需复核',
+          summary: '门禁需复核：发现 1 项不确定或轻微偏差。',
+          checks: [
+            {
+              id: 'slide-count',
+              label: '页面数量',
+              status: 'warning',
+              detail: '提示词要求 3 页，当前 1 页。',
+            },
+          ],
+        }}
+      />,
+    )
+
+    expect(screen.getByText('质量门禁')).toBeInTheDocument()
+    expect(screen.getByText('需复核')).toBeInTheDocument()
+    expect(screen.getByText('提示词要求 3 页，当前 1 页。')).toBeInTheDocument()
+  })
 })
 
 function createBaseProps(): Parameters<typeof AiPanel>[0] {
   return {
     candidate: null,
     candidatePreviews: [] satisfies CandidatePreview[],
+    qualityGateResult: null,
     composerText: '',
     replyText: '',
     pendingInput: null,

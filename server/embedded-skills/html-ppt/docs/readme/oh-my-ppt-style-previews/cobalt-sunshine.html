@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<title>明黄钴蓝 · 活力专业</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html, body { width: 1600px; height: 900px; overflow: hidden; }
+  body { font-family: "PingFang SC", "Microsoft YaHei", Arial, sans-serif; }
+  .stage { width: 1600px; height: 900px; position: relative; overflow: hidden; background: #FFE470; }
+
+  .left-block {
+    position: absolute; top: 0; left: 0; width: 620px; height: 900px;
+    background: #0B2299;
+    clip-path: polygon(0 0, 100% 0, 78% 100%, 0 100%);
+  }
+  .stripe {
+    position: absolute; top: 0; left: 580px; width: 14px; height: 900px;
+    background: repeating-linear-gradient(45deg, #0B2299 0 10px, transparent 10px 20px);
+    opacity: 0.5;
+  }
+  .circles {
+    position: absolute; top: 80px; right: 80px;
+    display: grid; grid-template-columns: repeat(4, 28px); gap: 16px;
+  }
+  .circles i { width: 28px; height: 28px; border-radius: 50%; background: #0B2299; opacity: 0.85; }
+  .circles i:nth-child(odd) { background: #FFFFFF; }
+
+  .brand {
+    position: absolute; top: 70px; left: 70px; color: #FFE470;
+    font-size: 16px; font-weight: 800; letter-spacing: 5px; z-index: 5;
+  }
+  .brand::before { content: "◆"; margin-right: 10px; }
+
+  .title {
+    position: absolute; top: 220px; left: 70px; z-index: 5; color: #FFFFFF;
+    max-width: 520px;
+  }
+  .title .kicker {
+    display: inline-block; background: #FFE470; color: #0B2299;
+    font-size: 14px; font-weight: 800; letter-spacing: 3px;
+    padding: 8px 16px; border-radius: 4px; margin-bottom: 28px;
+  }
+  .title h1 {
+    font-size: 88px; font-weight: 900; line-height: 0.98;
+    letter-spacing: -2px;
+  }
+  .title h1 .y { color: #FFE470; }
+  .title .sub {
+    font-size: 18px; font-weight: 400; margin-top: 24px;
+    opacity: 0.85; line-height: 1.7; max-width: 460px;
+  }
+
+  .main {
+    position: absolute; top: 200px; left: 740px; right: 80px; z-index: 5;
+  }
+  .main h2 {
+    font-size: 110px; font-weight: 900; color: #0B2299;
+    line-height: 0.92; letter-spacing: -3px;
+  }
+  .main h2 span { display: block; }
+  .main .lead {
+    font-size: 22px; color: #0B2299; font-weight: 500;
+    margin-top: 30px; line-height: 1.6; max-width: 680px;
+  }
+
+  .grid {
+    position: absolute; bottom: 80px; left: 740px; right: 80px;
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px;
+  }
+  .cell {
+    background: #0B2299; color: #FFFFFF;
+    padding: 24px 22px; border-radius: 8px;
+  }
+  .cell .v { font-size: 44px; font-weight: 900; color: #FFE470; line-height: 1; }
+  .cell .l { font-size: 12px; font-weight: 700; letter-spacing: 2px; margin-top: 8px; opacity: 0.85; }
+  .cell .d { font-size: 13px; margin-top: 6px; opacity: 0.7; line-height: 1.4; }
+
+  .tag-rotate {
+    position: absolute; bottom: 80px; left: 70px; z-index: 5;
+    background: #FFE470; color: #0B2299;
+    font-size: 14px; font-weight: 800; letter-spacing: 2px;
+    padding: 10px 18px; border-radius: 4px;
+    transform: rotate(-4deg);
+  }
+</style>
+</head>
+<body>
+<div class="stage">
+  <div class="left-block"></div>
+  <div class="stripe"></div>
+  <div class="circles">
+    <i></i><i></i><i></i><i></i>
+    <i></i><i></i><i></i><i></i>
+  </div>
+
+  <div class="brand">PULSE · LAUNCH 2026</div>
+
+  <div class="title">
+    <span class="kicker">NEW PRODUCT</span>
+    <h1>把阳光<br>装进<span class="y">未来</span></h1>
+    <p class="sub">钴蓝筑基，明黄燃场。<br>专业感与活力感的精准对撞。</p>
+  </div>
+
+  <div class="main">
+    <h2>
+      <span>POWER</span>
+      <span>WITH</span>
+      <span>PULSE.</span>
+    </h2>
+    <p class="lead">为下一代创作者打造的全栈协作平台，性能 ×3，延迟 ÷4，让每一次灵感都能即时落地。</p>
+  </div>
+
+  <div class="grid">
+    <div class="cell"><div class="v">3.2×</div><div class="l">SPEED</div><div class="d">渲染提速</div></div>
+    <div class="cell"><div class="v">98ms</div><div class="l">LATENCY</div><div class="d">端到端延迟</div></div>
+    <div class="cell"><div class="v">12万</div><div class="l">USERS</div><div class="d">月活创作者</div></div>
+  </div>
+
+  <div class="tag-rotate">★ EARLY ACCESS OPEN</div>
+</div>
+</body>
+</html>

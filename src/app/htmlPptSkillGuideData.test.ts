@@ -62,6 +62,29 @@ describe('htmlPptSkillGuideData full deck templates', () => {
   })
 })
 
+describe('htmlPptSkillGuideData themes', () => {
+  it('includes oh-my-ppt reference styles without treating them as built-in css themes', () => {
+    expect(htmlPptSkillGuideData.themes).toHaveLength(74)
+
+    const referenceThemes = htmlPptSkillGuideData.themes.filter((theme) => theme.referenceOnly)
+    expect(referenceThemes).toHaveLength(38)
+    expect(referenceThemes.map((theme) => theme.name)).toEqual(expect.arrayContaining([
+      'amber-aurora',
+      'blue-white-chart',
+      'industrial-kaizen',
+      'palace-ink-red',
+      'summer-warm-color',
+    ]))
+
+    const amberAurora = htmlPptSkillGuideData.themes.find((theme) => theme.name === 'amber-aurora')
+    expect(amberAurora).toEqual(expect.objectContaining({
+      label: '扁豆紫蜜陀僧 · 国风治愈',
+      referenceOnly: true,
+      promptHint: expect.stringContaining('参考 oh-my-ppt'),
+    }))
+  })
+})
+
 describe('htmlPptSkillGuideData creation workflows', () => {
   it('documents oh-my-ppt inspired workflows as reusable web creation recipes', () => {
     expect(htmlPptSkillGuideData.creationWorkflows.map((workflow) => workflow.title)).toEqual([

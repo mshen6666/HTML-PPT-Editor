@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<title>奶油温柔 · 高级感</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html, body { width: 1600px; height: 900px; overflow: hidden; }
+  body { font-family: "PingFang SC", "Microsoft YaHei", sans-serif; color: #5C5248; }
+  .stage {
+    width: 1600px; height: 900px; position: relative; overflow: hidden;
+    background: linear-gradient(135deg, #FBF7F2 0%, #F5EEE6 100%);
+  }
+  .soft-blob {
+    position: absolute; border-radius: 50%; filter: blur(70px); opacity: 0.45;
+  }
+  .b1 { width: 480px; height: 480px; top: -100px; right: -60px; background: #F4E9E8; }
+  .b2 { width: 420px; height: 420px; bottom: -120px; left: -80px; background: #A3B18A; opacity: 0.3; }
+
+  .nav {
+    position: absolute; top: 50px; left: 80px; right: 80px;
+    display: flex; justify-content: space-between; align-items: center;
+    z-index: 5;
+  }
+  .nav .logo {
+    font-size: 24px; font-weight: 700; letter-spacing: 4px; color: #5C5248;
+  }
+  .nav .logo .dot { color: #C9A876; }
+  .nav .menu { display: flex; gap: 32px; font-size: 13px; color: #8A8078; letter-spacing: 2px; }
+  .nav .menu .active { color: #5C5248; font-weight: 600; }
+
+  .hero {
+    position: absolute; top: 160px; left: 80px; z-index: 5;
+    max-width: 700px;
+  }
+  .hero .kicker {
+    display: inline-block;
+    background: #F4E9E8; color: #8A6058;
+    font-size: 13px; font-weight: 700; letter-spacing: 3px;
+    padding: 7px 18px; border-radius: 999px; margin-bottom: 28px;
+  }
+  .hero h1 {
+    font-size: 88px; font-weight: 700; line-height: 1.05;
+    letter-spacing: 1px; color: #5C5248;
+  }
+  .hero h1 .serif {
+    font-family: "Songti SC", serif; font-weight: 600; color: #8A6058;
+  }
+  .hero h1 .green { color: #6B7F4A; }
+  .hero .sub {
+    font-size: 19px; line-height: 1.9; color: #7A6F65;
+    margin-top: 30px; max-width: 580px;
+  }
+  .hero .actions { display: flex; gap: 16px; margin-top: 40px; }
+  .btn1 {
+    background: #5C5248; color: #FBF7F2;
+    padding: 16px 34px; border-radius: 999px;
+    font-size: 15px; font-weight: 600; letter-spacing: 2px;
+  }
+  .btn2 {
+    background: rgba(255,255,255,0.7); color: #5C5248;
+    border: 1px solid rgba(92,82,72,0.2);
+    padding: 16px 34px; border-radius: 999px;
+    font-size: 15px; font-weight: 600; letter-spacing: 2px;
+  }
+
+  /* palette cards on the right */
+  .palette {
+    position: absolute; top: 160px; right: 80px; z-index: 5;
+    width: 520px;
+  }
+  .palette .t {
+    font-size: 13px; letter-spacing: 4px; color: #8A8078;
+    font-weight: 600; margin-bottom: 22px;
+  }
+  .palette .t::before { content: "◆ "; color: #C9A876; }
+  .row {
+    display: flex; align-items: center; gap: 20px;
+    background: rgba(255,255,255,0.55);
+    backdrop-filter: blur(8px);
+    border-radius: 18px;
+    padding: 18px 22px; margin-bottom: 14px;
+    border: 1px solid rgba(255,255,255,0.7);
+  }
+  .row .sw { width: 56px; height: 56px; border-radius: 14px; box-shadow: 0 4px 12px rgba(92,82,72,0.08); flex-shrink: 0; }
+  .row .info { flex: 1; }
+  .row .name { font-size: 17px; font-weight: 600; color: #5C5248; }
+  .row .desc { font-size: 13px; color: #8A8078; margin-top: 3px; line-height: 1.4; }
+  .row .hex { font-size: 12px; color: #A89E94; font-family: monospace; letter-spacing: 1px; }
+
+  .footer-strip {
+    position: absolute; bottom: 50px; left: 80px; right: 80px; z-index: 5;
+    display: flex; justify-content: space-between; align-items: flex-end;
+    padding-top: 24px; border-top: 1px dashed rgba(92,82,72,0.2);
+  }
+  .stats { display: flex; gap: 50px; }
+  .stats .s .v { font-size: 32px; font-weight: 700; color: #5C5248; line-height: 1; }
+  .stats .s .l { font-size: 11px; color: #8A8078; letter-spacing: 2px; margin-top: 6px; }
+  .badge { font-size: 12px; color: #8A8078; letter-spacing: 3px; text-align: right; }
+  .badge .b { color: #5C5248; font-weight: 700; font-size: 14px; }
+</style>
+</head>
+<body>
+<div class="stage">
+  <div class="soft-blob b1"></div>
+  <div class="soft-blob b2"></div>
+
+  <div class="nav">
+    <div class="logo">LAIT<span class="dot">·</span>ON</div>
+    <div class="menu">
+      <span class="active">HOME</span>
+      <span>COLLECTION</span>
+      <span>JOURNAL</span>
+      <span>ABOUT</span>
+    </div>
+  </div>
+
+  <div class="hero">
+    <span class="kicker">GENTLE · 奶油色系</span>
+    <h1>把温柔<br>揉进<span class="serif">日常</span><span class="green">。</span></h1>
+    <p class="sub">奶油白打底，豆沙粉作柔光，抹茶绿添呼吸。<br>每一处都是被温柔包裹的高级感。</p>
+    <div class="actions">
+      <div class="btn1">探索系列 →</div>
+      <div class="btn2">查看色卡</div>
+    </div>
+  </div>
+
+  <div class="palette">
+    <div class="t">COLOR · 六组奶油搭配</div>
+    <div class="row">
+      <div class="sw" style="background:#FBF7F2"></div>
+      <div class="info"><div class="name">奶油白</div><div class="desc">柔白带奶调，温柔底色</div></div>
+      <div class="hex">#FBF7F2</div>
+    </div>
+    <div class="row">
+      <div class="sw" style="background:#F4E9E8"></div>
+      <div class="info"><div class="name">豆沙粉</div><div class="desc">低饱和粉，少女与高级并存</div></div>
+      <div class="hex">#F4E9E8</div>
+    </div>
+    <div class="row">
+      <div class="sw" style="background:#A3B18A"></div>
+      <div class="info"><div class="name">抹茶绿</div><div class="desc">自然系暖灰绿，呼吸感十足</div></div>
+      <div class="hex">#A3B18A</div>
+    </div>
+    <div class="row">
+      <div class="sw" style="background:#9A9488"></div>
+      <div class="info"><div class="name">暖灰绿</div><div class="desc">高级中性，搭配万能</div></div>
+      <div class="hex">#9A9488</div>
+    </div>
+  </div>
+
+  <div class="footer-strip">
+    <div class="stats">
+      <div class="s"><div class="v">36</div><div class="l">SKU</div></div>
+      <div class="s"><div class="v">6 组</div><div class="l">PALETTE</div></div>
+      <div class="s"><div class="v">4.8★</div><div class="l">RATING</div></div>
+    </div>
+    <div class="badge">
+      <div>SS26 · CREAM EDITION</div>
+      <div class="b">LAITON STUDIO · 2026</div>
+    </div>
+  </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<title>星夜闪粉 · 童话感</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html, body { width: 1600px; height: 900px; overflow: hidden; }
+  body { font-family: "PingFang SC", "Microsoft YaHei", sans-serif; }
+  .stage {
+    width: 1600px; height: 900px; position: relative; overflow: hidden;
+    background:
+      radial-gradient(ellipse at 20% 30%, #D8C5E8 0%, transparent 55%),
+      radial-gradient(ellipse at 80% 20%, #B8C8E8 0%, transparent 55%),
+      radial-gradient(ellipse at 70% 80%, #F4D9D0 0%, transparent 55%),
+      linear-gradient(135deg, #F0E6F5 0%, #E8E0F0 100%);
+  }
+
+  /* soft blobs */
+  .blob { position: absolute; border-radius: 50%; filter: blur(50px); }
+  .b1 { width: 400px; height: 400px; top: -80px; left: -60px; background: #D8C5E8; opacity: 0.6; }
+  .b2 { width: 360px; height: 360px; bottom: -80px; right: -40px; background: #F4D9D0; opacity: 0.55; }
+  .b3 { width: 300px; height: 300px; top: 300px; right: 200px; background: #B8C8E8; opacity: 0.4; }
+
+  /* sparkles */
+  .spark { position: absolute; color: #E8C896; font-size: 22px; }
+  .sp1 { top: 120px; left: 280px; font-size: 28px; }
+  .sp2 { top: 200px; right: 320px; font-size: 20px; }
+  .sp3 { top: 380px; left: 180px; font-size: 16px; }
+  .sp4 { bottom: 240px; right: 180px; font-size: 26px; }
+  .sp5 { top: 160px; right: 120px; font-size: 18px; }
+  .sp6 { bottom: 180px; left: 320px; font-size: 22px; }
+  .sp7 { top: 480px; right: 420px; font-size: 14px; }
+  .sp8 { bottom: 320px; left: 600px; font-size: 18px; }
+
+  /* moon */
+  .moon {
+    position: absolute; top: 130px; right: 160px;
+    width: 120px; height: 120px; border-radius: 50%;
+    background: radial-gradient(circle at 35% 35%, #FBF5F0 0%, #F4E8D0 60%, #E8C896 100%);
+    box-shadow: 0 0 50px rgba(232,200,150,0.5);
+  }
+  .moon::after {
+    content: ""; position: absolute; top: 25px; right: 30px;
+    width: 18px; height: 18px; border-radius: 50%;
+    background: rgba(232,200,150,0.3);
+  }
+
+  /* clouds */
+  .cloud {
+    position: absolute; background: rgba(255,255,255,0.6); border-radius: 40px;
+    box-shadow: 24px 0 0 -4px rgba(255,255,255,0.6), -24px 4px 0 -6px rgba(255,255,255,0.6);
+  }
+  .cl1 { width: 90px; height: 28px; top: 250px; left: 200px; }
+  .cl2 { width: 70px; height: 24px; bottom: 280px; right: 280px; opacity: 0.7; }
+
+  /* main content */
+  .content {
+    position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+    text-align: center; z-index: 5; color: #6B5A8A;
+    width: 1000px;
+  }
+  .kicker {
+    display: inline-block;
+    background: rgba(255,255,255,0.7); color: #9A7FB8;
+    font-size: 14px; font-weight: 700; letter-spacing: 4px;
+    padding: 9px 22px; border-radius: 999px; margin-bottom: 32px;
+    box-shadow: 0 6px 20px rgba(216,197,232,0.4);
+  }
+  .kicker::before { content: "✦ "; color: #E8C896; }
+  h1 {
+    font-size: 140px; font-weight: 800; line-height: 1;
+    letter-spacing: 8px; color: #7A68A0;
+    text-shadow: 0 4px 20px rgba(216,197,232,0.6);
+  }
+  h1 .pink { color: #E8A8B8; }
+  .h-sub {
+    font-size: 38px; font-weight: 400; letter-spacing: 16px;
+    color: #9A8AB8; margin-top: 18px; opacity: 0.9;
+  }
+  .lead {
+    font-size: 19px; line-height: 1.9; color: #8A7AA0;
+    margin-top: 36px; max-width: 640px; margin-left: auto; margin-right: auto;
+  }
+
+  /* bottom cards */
+  .cards {
+    position: absolute; bottom: 70px; left: 50%; transform: translateX(-50%);
+    display: flex; gap: 22px; z-index: 5;
+  }
+  .card {
+    background: rgba(255,255,255,0.75);
+    backdrop-filter: blur(8px);
+    border-radius: 28px;
+    padding: 22px 30px; text-align: center;
+    box-shadow: 0 12px 30px rgba(216,197,232,0.35);
+    border: 1px solid rgba(255,255,255,0.8);
+    min-width: 180px;
+  }
+  .card .icon { font-size: 32px; margin-bottom: 8px; }
+  .card .t { font-size: 18px; font-weight: 700; color: #7A68A0; letter-spacing: 2px; }
+  .card .d { font-size: 12px; color: #9A8AB8; margin-top: 6px; letter-spacing: 1px; }
+</style>
+</head>
+<body>
+<div class="stage">
+  <div class="blob b1"></div>
+  <div class="blob b2"></div>
+  <div class="blob b3"></div>
+
+  <div class="moon"></div>
+  <div class="cloud cl1"></div>
+  <div class="cloud cl2"></div>
+
+  <div class="spark sp1">✦</div>
+  <div class="spark sp2">✧</div>
+  <div class="spark sp3">✦</div>
+  <div class="spark sp4">✧</div>
+  <div class="spark sp5">✦</div>
+  <div class="spark sp6">✧</div>
+  <div class="spark sp7">✦</div>
+  <div class="spark sp8">✧</div>
+
+  <div class="content">
+    <span class="kicker">DREAMY · 柔光童话</span>
+    <h1>星屑<br><span class="pink">柔光</span>调色盘</h1>
+    <div class="h-sub">让梦发光</div>
+    <p class="lead">把星星揉进颜料，把月亮磨成柔光。<br>每一种颜色，都是一颗会眨眼的糖。</p>
+  </div>
+
+  <div class="cards">
+    <div class="card"><div class="icon">🌙</div><div class="t">月夜</div><div class="d">MOONLIGHT</div></div>
+    <div class="card"><div class="icon">✨</div><div class="t">闪粉</div><div class="d">GLITTER</div></div>
+    <div class="card"><div class="icon">🦄</div><div class="t">独角兽</div><div class="d">UNICORN</div></div>
+    <div class="card"><div class="icon">🍭</div><div class="t">糖果</div><div class="d">CANDY</div></div>
+  </div>
+</div>
+</body>
+</html>

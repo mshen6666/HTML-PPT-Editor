@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>泼彩多巴胺 · 把彩虹涂进画面</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html, body { width: 1600px; height: 900px; overflow: hidden; font-family:"PingFang SC","Noto Sans SC","Helvetica Neue",sans-serif; }
+  .canvas {
+    width: 1600px; height: 900px; position: relative; color: #1A1A2E;
+    background: #FFF8F0; overflow: hidden;
+  }
+
+  /* 泼墨色块 */
+  .splash { position: absolute; border-radius: 50%; filter: blur(2px); }
+  .sp1 { top: -80px; left: -60px; width: 480px; height: 480px;
+         background: radial-gradient(circle at 40% 40%, #FF4500 0%, #FF4500 40%, transparent 70%); opacity: 0.85;}
+  .sp2 { top: 120px; right: -100px; width: 420px; height: 420px;
+         background: radial-gradient(circle at 50% 50%, #FF1493 0%, #FF1493 45%, transparent 72%); opacity: 0.8;}
+  .sp3 { bottom: -120px; left: 200px; width: 520px; height: 380px;
+         background: radial-gradient(ellipse at 50% 50%, #9370DB 0%, #9370DB 45%, transparent 72%); opacity: 0.8;
+         border-radius: 60% 40% 50% 50% / 50% 60% 40% 50%; }
+  .sp4 { bottom: 80px; right: 100px; width: 360px; height: 360px;
+         background: radial-gradient(circle, #20B2AA 0%, #20B2AA 45%, transparent 72%); opacity: 0.75;}
+  .sp5 { top: 380px; left: 540px; width: 260px; height: 260px;
+         background: radial-gradient(circle, #1E90FF 0%, #1E90FF 45%, transparent 72%); opacity: 0.7;}
+
+  /* 星芒 */
+  .star { position: absolute; }
+  .st1 { top: 180px; left: 900px; }
+  .st2 { top: 600px; left: 1080px; }
+  .st3 { top: 300px; left: 1200px; }
+
+  /* 标签 */
+  .tag {
+    position: absolute; top: 70px; left: 140px; z-index: 5;
+    font-size: 16px; color: #1A1A2E; letter-spacing: 6px; font-weight: 700;
+    background: #FFD700; padding: 8px 20px; border-radius: 30px;
+  }
+
+  /* 标题 */
+  .title { position: absolute; top: 180px; left: 140px; z-index: 5; }
+  .main-title {
+    font-size: 138px; font-weight: 900; line-height: 0.95;
+    letter-spacing: 4px; color: #1A1A2E;
+  }
+  .main-title .c1 { color: #FF4500; }
+  .main-title .c2 { color: #FF1493; }
+  .main-title .c3 { color: #9370DB; }
+  .sub-title {
+    font-size: 30px; color: #2D1B69; letter-spacing: 6px;
+    margin-top: 30px; font-weight: 600;
+  }
+  .sub-title .pipe { color: #FFD700; margin: 0 10px; }
+
+  /* 数据卡 */
+  .stats {
+    position: absolute; bottom: 120px; left: 140px; z-index:5;
+    display: flex; gap: 20px;
+  }
+  .stat {
+    padding: 24px 28px; border-radius: 20px; color: #FFFFFF;
+  }
+  .st-a { background: #FF4500; }
+  .st-b { background: #FF1493; }
+  .st-c { background: #9370DB; }
+  .st-d { background: #20B2AA; }
+  .stat .num { font-size: 48px; font-weight: 900; line-height: 1; font-family:"Helvetica Neue",sans-serif; }
+  .stat .lab { font-size: 16px; margin-top: 8px; letter-spacing: 2px; opacity: 0.95; }
+
+  /* 右侧引文 */
+  .quote {
+    position: absolute; top: 200px; right: 140px; z-index:5;
+    width: 320px; padding: 32px; border-radius: 24px;
+    background: rgba(255,255,255,0.85);
+    border: 3px solid #1A1A2E;
+  }
+  .quote h3 { font-size: 26px; color: #1A1A2E; letter-spacing: 2px; margin-bottom: 14px; }
+  .quote p { font-size: 18px; line-height: 1.8; color: #2D1B69; letter-spacing: 1px; }
+  .quote .em { color: #FF1493; font-weight: 700; }
+
+  /* 底部 */
+  .footer {
+    position: absolute; left: 140px; right: 140px; bottom: 50px; z-index:5;
+    display:flex; justify-content:space-between; align-items:center;
+    font-size: 16px; color: #1A1A2E; letter-spacing: 4px; font-weight: 600;
+  }
+</style>
+</head>
+<body>
+<div class="canvas">
+  <div class="splash sp1"></div>
+  <div class="splash sp2"></div>
+  <div class="splash sp3"></div>
+  <div class="splash sp4"></div>
+  <div class="splash sp5"></div>
+
+  <svg class="star st1" width="40" height="40" viewBox="0 0 40 40"><path d="M20,2 L23,17 L38,20 L23,23 L20,38 L17,23 L2,20 L17,17 Z" fill="#FFD700"/></svg>
+  <svg class="star st2" width="30" height="30" viewBox="0 0 30 30"><path d="M15,2 L17,13 L28,15 L17,17 L15,28 L13,17 L2,15 L13,13 Z" fill="#FFFFFF"/></svg>
+  <svg class="star st3" width="24" height="24" viewBox="0 0 24 24"><path d="M12,1 L14,10 L23,12 L14,14 L12,23 L10,14 L1,12 L10,10 Z" fill="#FF1493"/></svg>
+
+  <div class="tag">★ DOPAMINE SPLASH</div>
+
+  <div class="title">
+    <div class="main-title">把<span class="c1">彩</span><span class="c2">虹</span><br>涂进<span class="c3">画面</span></div>
+    <div class="sub-title">多巴胺泼墨 <span class="pipe">×</span> 活力全开</div>
+  </div>
+
+  <div class="quote">
+    <h3>能量爆棚</h3>
+    <p>不克制，不内敛，<br>
+       把所有<span class="em">情绪</span>都泼出来。<br>
+       这是属于年轻的颜色。</p>
+  </div>
+
+  <div class="stats">
+    <div class="stat st-a"><div class="num">5</div><div class="lab">主色碰撞</div></div>
+    <div class="stat st-b"><div class="num">100%</div><div class="lab">多巴胺</div></div>
+    <div class="stat st-c"><div class="num">∞</div><div class="lab">创造力</div></div>
+    <div class="stat st-d"><div class="num">24/7</div><div class="lab">活力在线</div></div>
+  </div>
+
+  <div class="footer">
+    <div>SPLASH ABSTRACT · VOL. 09</div>
+    <div>★ BE BOLD BE BRIGHT ★</div>
+  </div>
+</div>
+</body>
+</html>

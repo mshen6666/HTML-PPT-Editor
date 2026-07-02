@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>一半星河 · 一半烟火</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html, body { width: 1600px; height: 900px; overflow: hidden; font-family:"Songti SC","Noto Serif SC","SimSun",serif; }
+  .canvas {
+    width: 1600px; height: 900px; position: relative; color: #FFFFFF;
+    background:
+      linear-gradient(125deg, #0A2E5C 0%, #0A2E5C 48%, #2A3A5C 50%, #8A5030 52%, #FF8C42 54%, #FF8C42 100%);
+    overflow: hidden;
+  }
+
+  /* 星河半边星点 */
+  .stars { position: absolute; top:0; left:0; width: 60%; height: 70%; }
+  /* 烟火半边粒子 */
+  .firework-particles { position: absolute; right: 0; bottom: 0; width: 55%; height: 75%; }
+
+  /* 对角柔光 */
+  .soft-glow {
+    position: absolute; top: 30%; left: 35%; width: 30%; height: 40%;
+    background: radial-gradient(ellipse, rgba(255,215,0,0.15) 0%, transparent 70%);
+    filter: blur(20px);
+  }
+
+  /* 月亮（星河侧） */
+  .moon {
+    position: absolute; top: 90px; left: 180px;
+    width: 90px; height: 90px; border-radius: 50%;
+    background: radial-gradient(circle at 35% 35%, #FFFFFF 0%, #FFF3D6 60%, #4A90E2 100%);
+    box-shadow: 0 0 50px rgba(255,255,255,0.4);
+  }
+
+  /* 烟火圆心（烟火侧） */
+  .fire-core {
+    position: absolute; bottom: 200px; right: 240px;
+    width: 16px; height: 16px; border-radius: 50%;
+    background: radial-gradient(circle, #FFFFFF 0%, #FFD700 50%, #FF8C42 100%);
+    box-shadow: 0 0 40px rgba(255,215,0,0.8);
+  }
+
+  /* 标签 */
+  .tag {
+    position: absolute; top: 70px; left: 50%; transform: translateX(-50%); z-index: 6;
+    font-size: 15px; letter-spacing: 8px; font-weight: 600;
+    color: #FFF3D6; text-shadow: 0 1px 4px rgba(0,0,0,0.5);
+    font-family:"Helvetica Neue",sans-serif;
+  }
+  .tag::before, .tag::after { content:""; display:inline-block; width:30px; height:1px; background:#FFD700; vertical-align:middle; margin:0 14px;}
+
+  /* 主标题（跨对角居中） */
+  .title {
+    position: absolute; top: 200px; left: 50%; transform: translateX(-50%); z-index: 6;
+    text-align: center;
+  }
+  .main-title {
+    font-size: 96px; font-weight: 700; line-height: 1.15;
+    letter-spacing: 12px; color: #FFFFFF;
+    text-shadow: 0 2px 12px rgba(0,0,0,0.5);
+  }
+  .main-title .blue { color: #B8D4F0; }
+  .main-title .orange { color: #FFD700; }
+  .sub-title {
+    font-size: 24px; color: #FFF3D6; letter-spacing: 10px;
+    margin-top: 26px; font-weight: 300; font-family:"STKaiti",serif;
+    text-shadow: 0 1px 6px rgba(0,0,0,0.4);
+  }
+
+  /* 剪影 */
+  .silhouette {
+    position: absolute; bottom: 80px; z-index: 5;
+  }
+  .sil1 { left: 38%; }
+  .sil2 { left: 56%; }
+
+  /* 左下引文 */
+  .quote-l {
+    position: absolute; left: 80px; bottom: 120px; z-index: 6;
+    width: 320px; font-size: 18px; line-height: 1.9;
+    color: #B8D4F0; letter-spacing: 2px; font-weight: 300;
+    font-family:"Songti SC",serif;
+  }
+  .quote-l .em { color: #FFD700; }
+
+  /* 右下引文 */
+  .quote-r {
+    position: absolute; right: 80px; bottom: 120px; z-index: 6;
+    width: 320px; font-size: 18px; line-height: 1.9; text-align: right;
+    color: #FFF3D6; letter-spacing: 2px; font-weight: 300;
+    font-family:"Songti SC",serif;
+  }
+  .quote-r .em { color: #FFD700; }
+
+  /* 底部 */
+  .footer {
+    position: absolute; left: 50%; bottom: 40px; transform: translateX(-50%); z-index:6;
+    font-size: 13px; color: #FFF3D6; letter-spacing: 5px; opacity: 0.7;
+    font-family:"Helvetica Neue",sans-serif;
+  }
+</style>
+</head>
+<body>
+<div class="canvas">
+  <!-- 星点 -->
+  <svg class="stars" viewBox="0 0 960 630" preserveAspectRatio="none">
+    <g fill="#FFFFFF">
+      <circle cx="80" cy="100" r="1.5" opacity="0.9"/>
+      <circle cx="220" cy="60" r="1" opacity="0.7"/>
+      <circle cx="360" cy="140" r="2" opacity="0.95"/>
+      <circle cx="140" cy="240" r="1" opacity="0.6"/>
+      <circle cx="300" cy="320" r="1.5" opacity="0.85"/>
+      <circle cx="460" cy="220" r="1" opacity="0.7"/>
+      <circle cx="200" cy="420" r="2" opacity="0.9"/>
+      <circle cx="80" cy="520" r="1" opacity="0.6"/>
+      <circle cx="520" cy="120" r="1.5" opacity="0.8"/>
+      <circle cx="600" cy="280" r="1" opacity="0.6"/>
+      <circle cx="380" cy="500" r="1" opacity="0.5"/>
+    </g>
+    <g fill="#4A90E2">
+      <circle cx="160" cy="180" r="2.5" opacity="0.9"/>
+      <circle cx="420" cy="380" r="2" opacity="0.8"/>
+    </g>
+    <g fill="#FFD700">
+      <circle cx="280" cy="120" r="2" opacity="0.9"/>
+      <circle cx="500" cy="440" r="2.5" opacity="0.85"/>
+    </g>
+  </svg>
+
+  <!-- 烟火粒子 -->
+  <svg class="firework-particles" viewBox="0 0 880 675" preserveAspectRatio="none">
+    <g stroke="#FFD700" stroke-width="1.5" fill="none" opacity="0.8">
+      <line x1="600" y1="300" x2="600" y2="220"/>
+      <line x1="600" y1="300" x2="660" y2="240"/>
+      <line x1="600" y1="300" x2="700" y2="300"/>
+      <line x1="600" y1="300" x2="660" y2="360"/>
+      <line x1="600" y1="300" x2="600" y2="380"/>
+      <line x1="600" y1="300" x2="540" y2="360"/>
+      <line x1="600" y1="300" x2="500" y2="300"/>
+      <line x1="600" y1="300" x2="540" y2="240"/>
+    </g>
+    <g fill="#FFA500">
+      <circle cx="600" cy="220" r="3"/><circle cx="660" cy="240" r="3"/>
+      <circle cx="700" cy="300" r="3"/><circle cx="660" cy="360" r="3"/>
+      <circle cx="600" cy="380" r="3"/><circle cx="540" cy="360" r="3"/>
+      <circle cx="500" cy="300" r="3"/><circle cx="540" cy="240" r="3"/>
+    </g>
+    <g fill="#FFD700" opacity="0.7">
+      <circle cx="780" cy="180" r="2"/><circle cx="820" cy="220" r="1.5"/>
+      <circle cx="760" cy="440" r="2"/><circle cx="820" cy="480" r="1.5"/>
+      <circle cx="680" cy="540" r="2"/>
+    </g>
+  </svg>
+
+  <div class="soft-glow"></div>
+  <div class="moon"></div>
+  <div class="fire-core"></div>
+
+  <div class="tag">HALF STARRY RIVER · HALF FIREWORKS</div>
+
+  <div class="title">
+    <div class="main-title">一半<span class="blue">星河</span> · 一半<span class="orange">烟火</span></div>
+    <div class="sub-title">仰望永恒 · 拥抱绚烂</div>
+  </div>
+
+  <!-- 剪影 -->
+  <svg class="silhouette sil1" width="80" height="200" viewBox="0 0 80 200">
+    <path d="M40,200 L40,120 Q30,100 32,80 Q34,55 40,50 Q46,55 48,80 Q50,100 40,120 L42,200 Z M32,80 Q20,90 18,110" fill="#000000" opacity="0.9"/>
+    <circle cx="40" cy="40" r="12" fill="#000000" opacity="0.9"/>
+  </svg>
+  <svg class="silhouette sil2" width="70" height="180" viewBox="0 0 70 180">
+    <path d="M35,180 L35,110 Q28,95 30,78 Q32,58 35,54 Q38,58 40,78 Q42,95 35,110 L37,180 Z" fill="#000000" opacity="0.9"/>
+    <circle cx="35" cy="44" r="10" fill="#000000" opacity="0.9"/>
+  </svg>
+
+  <div class="quote-l">
+    星河滚烫，<br>
+    是<span class="em">永恒</span>的寂静，<br>
+    照亮每一个仰望的夜。
+  </div>
+
+  <div class="quote-r">
+    人间烟火，<br>
+    是<span class="em">瞬间</span>的绚烂，<br>
+    温暖每一个归家的人。
+  </div>
+
+  <div class="footer">STARLIGHT FIREWORKS · VOL. 14 · 一半星河一半烟火</div>
+</div>
+</body>
+</html>

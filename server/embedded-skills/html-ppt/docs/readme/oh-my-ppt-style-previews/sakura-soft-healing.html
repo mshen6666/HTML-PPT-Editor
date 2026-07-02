@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8" />
+<title>樱花治愈</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { width: 100%; height: 100%; overflow: hidden; }
+  body {
+    display: grid;
+    place-items: center;
+    font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Songti SC", "Microsoft YaHei", serif;
+  }
+  .slide {
+    position: relative;
+    aspect-ratio: 16 / 9;
+    width: min(100vw, calc(100vh * 16 / 9));
+    overflow: hidden;
+    background: linear-gradient(180deg, #F7E7DD 0%, #FBEDE6 45%, #E8EFE3 75%, #DCE8DF 100%);
+    color: #3A2A22;
+  }
+  /* 樱花树冠（顶部一团团粉） */
+  .blossom {
+    position: absolute;
+    border-radius: 50%;
+    background: radial-gradient(circle at 40% 40%, #FBC0CB 0%, #F4A8B6 60%, #CC6F88 100%);
+    opacity: 0.78;
+    filter: blur(0.4px);
+  }
+  .b1 { top: -8%;  left: 4%;  width: 30%; aspect-ratio: 1; }
+  .b2 { top: -12%; left: 26%; width: 34%; aspect-ratio: 1; opacity: 0.85; }
+  .b3 { top: -6%;  left: 52%; width: 26%; aspect-ratio: 1; opacity: 0.72; }
+  .b4 { top: -14%; left: 70%; width: 30%; aspect-ratio: 1; opacity: 0.8; }
+  /* 飘落花瓣 */
+  .petal {
+    position: absolute;
+    width: 10px; height: 7px;
+    background: #FBC0CB;
+    border-radius: 50% 50% 50% 0;
+    opacity: 0.7;
+  }
+  .p1 { top: 22%; left: 18%; transform: rotate(35deg); }
+  .p2 { top: 34%; left: 42%; transform: rotate(-20deg); opacity: 0.55; }
+  .p3 { top: 28%; left: 68%; transform: rotate(50deg); opacity: 0.6; }
+  .p4 { top: 44%; left: 12%; transform: rotate(15deg); opacity: 0.5; }
+
+  /* 湖水 */
+  .lake {
+    position: absolute;
+    left: 0;
+    bottom: 18%;
+    width: 46%;
+    height: 22%;
+    background: linear-gradient(180deg, #6FB2BC 0%, #5BA0AD 60%, #4A8A97 100%);
+    border-radius: 50% 12% 8% 0 / 60% 20% 12% 0;
+    opacity: 0.88;
+  }
+  /* 草地 */
+  .grass {
+    position: absolute;
+    left: 0; right: 0; bottom: 0;
+    height: 26%;
+    background: linear-gradient(180deg, #8FBE7E 0%, #72AB60 60%, #5E964F 100%);
+    border-radius: 50% 50% 0 0 / 22% 22% 0 0;
+  }
+  /* 草地小花 */
+  .flower {
+    position: absolute;
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    background: #CC6F88;
+    opacity: 0.85;
+  }
+  .f1 { bottom: 9%; left: 38%; }
+  .f2 { bottom: 6%;  left: 52%; background: #FBC0CB; }
+  .f3 { bottom: 11%; left: 68%; }
+  .f4 { bottom: 7%;  left: 82%; background: #FBC0CB; opacity: 0.7; }
+
+  /* 天鹅 */
+  .swan {
+    position: absolute;
+    bottom: 30%;
+    left: 22%;
+    width: 26px; height: 14px;
+  }
+  .swan::before {
+    content: ""; position: absolute; inset: 0;
+    background: #FFFFFF;
+    border-radius: 50% 50% 60% 60% / 70% 70% 40% 40%;
+  }
+  .swan::after {
+    content: ""; position: absolute;
+    top: -8px; right: 2px;
+    width: 7px; height: 10px;
+    background: #FFFFFF;
+    border-radius: 60% 60% 0 60%;
+    transform: rotate(-15deg);
+    box-shadow: 0 -1px 0 1px #F4A35A inset;
+  }
+  /* 飞鸟剪影 */
+  .bird {
+    position: absolute;
+    top: 18%;
+    width: 16px; height: 6px;
+    border-top: 2px solid #3A2A22;
+    border-radius: 50% 50% 0 0 / 100% 100% 0 0;
+    opacity: 0.55;
+  }
+  .bd1 { left: 30%; transform: scale(0.7); }
+  .bd2 { left: 40%; top: 20%; transform: scale(0.55); opacity: 0.45; }
+
+  /* 文字内容 */
+  .content {
+    position: absolute;
+    top: 14%;
+    right: 7%;
+    text-align: right;
+  }
+  .eyebrow {
+    font-family: "Snell Roundhand", "Bradley Hand", "STKaiti", cursive;
+    font-style: italic;
+    font-size: clamp(12px, 1.4vw, 22px);
+    color: #CC6F88;
+    letter-spacing: 0.08em;
+    margin-bottom: 10px;
+    opacity: 0.9;
+  }
+  .title {
+    font-family: "Snell Roundhand", "Bradley Hand", "STKaiti", "KaiTi", cursive;
+    font-size: clamp(64px, 11vw, 150px);
+    font-weight: 600;
+    line-height: 1;
+    color: #CC6F88;
+    letter-spacing: 0.06em;
+    text-shadow: 0 2px 8px rgba(204,111,136,0.18);
+  }
+  .poem {
+    position: absolute;
+    right: 9%;
+    top: 48%;
+    writing-mode: vertical-rl;
+    font-family: "Songti SC", "STSong", "SimSun", serif;
+    font-size: clamp(11px, 1.2vw, 18px);
+    font-weight: 300;
+    color: #5E4A3E;
+    letter-spacing: 0.3em;
+    opacity: 0.82;
+    line-height: 2.2;
+  }
+
+  /* 色卡 */
+  .palette {
+    position: absolute;
+    right: 6%;
+    bottom: 6%;
+    display: flex;
+    gap: clamp(8px, 1vw, 16px);
+  }
+  .sw {
+    width: clamp(30px, 3.6vw, 54px);
+    aspect-ratio: 1;
+    border-radius: 50%;
+    box-shadow: 0 3px 8px rgba(90,60,50,0.12);
+    border: 2px solid rgba(255,255,255,0.7);
+  }
+  /* 签名 */
+  .sign {
+    position: absolute;
+    left: 6%;
+    bottom: 6%;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    color: #5E4A3E;
+    font-size: clamp(10px, 1vw, 15px);
+    letter-spacing: 0.22em;
+    opacity: 0.8;
+  }
+  .sign .bar { width: 28px; height: 1px; background: #CC6F88; opacity: 0.7; }
+</style>
+</head>
+<body>
+  <div class="slide">
+    <div class="blossom b1"></div>
+    <div class="blossom b2"></div>
+    <div class="blossom b3"></div>
+    <div class="blossom b4"></div>
+    <div class="petal p1"></div>
+    <div class="petal p2"></div>
+    <div class="petal p3"></div>
+    <div class="petal p4"></div>
+
+    <div class="bird bd1"></div>
+    <div class="bird bd2"></div>
+
+    <div class="lake"></div>
+    <div class="swan"></div>
+    <div class="grass"></div>
+    <div class="flower f1"></div>
+    <div class="flower f2"></div>
+    <div class="flower f3"></div>
+    <div class="flower f4"></div>
+
+    <div class="content">
+      <div class="eyebrow">toward the sun</div>
+      <h1 class="title">向阳</h1>
+    </div>
+
+    <div class="poem">风暖并消融　万物始发生</div>
+
+    <div class="palette">
+      <div class="sw" style="background:#F7E7DD"></div>
+      <div class="sw" style="background:#FBC0CB"></div>
+      <div class="sw" style="background:#CC6F88"></div>
+      <div class="sw" style="background:#72AB60"></div>
+      <div class="sw" style="background:#5BA0AD"></div>
+    </div>
+
+    <div class="sign">
+      <span class="bar"></span>
+      <span>色彩沉溺 · 夏的另一种可能</span>
+    </div>
+  </div>
+</body>
+</html>

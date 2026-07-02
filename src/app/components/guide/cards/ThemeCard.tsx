@@ -2,6 +2,7 @@ import { useMemo } from 'react'
 import { guideThemeCategoryLabels, themeNameLabels } from '../../../htmlPptSkillGuideData'
 import type { GuideTheme } from '../../../htmlPptSkillGuideData'
 import { useThemeCSS } from '../preview/useThemeCSS'
+import { useReferenceThemePreview } from '../preview/useReferenceThemePreview'
 import { generateSlideHTML } from '../preview/themeSlideContent'
 import { buildThemeSrcdoc } from '../preview/buildThemeSrcdoc'
 import { useCopyToClipboard } from '../../../hooks/useCopyToClipboard'
@@ -15,11 +16,16 @@ interface ThemeCardProps {
 }
 
 export function ThemeCard({ theme, viewMode, onClick }: ThemeCardProps) {
-  const chineseName = themeNameLabels[theme.name] || theme.name
-  const { cssMap, loading } = useThemeCSS()
+  const chineseName = theme.label || themeNameLabels[theme.name] || theme.name
+  const isReferenceTheme = theme.referenceOnly === true
+  const { cssMap, loading: cssLoading } = useThemeCSS({ enabled: !isReferenceTheme })
+  const { previewHtml, loading: referenceLoading } = useReferenceThemePreview(theme.name, { enabled: isReferenceTheme })
   const { copied, copy } = useCopyToClipboard()
 
   const srcdoc = useMemo(() => {
+    if (isReferenceTheme) {
+      return previewHtml
+    }
     const cssData = cssMap?.[theme.name]
     if (!cssData) return null
     const { slide1 } = generateSlideHTML(theme)
@@ -29,7 +35,8 @@ export function ThemeCard({ theme, viewMode, onClick }: ThemeCardProps) {
       themeCSS: cssData.theme,
       slide1HTML: slide1,
     })
-  }, [cssMap, theme])
+  }, [cssMap, isReferenceTheme, previewHtml, theme])
+  const loading = isReferenceTheme ? referenceLoading : cssLoading
 
   return (
     <article

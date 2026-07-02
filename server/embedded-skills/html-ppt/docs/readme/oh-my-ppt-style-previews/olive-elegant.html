@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<title>橄榄奶白 · 高级稳重</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html, body { width: 1600px; height: 900px; overflow: hidden; }
+  body { font-family: "Songti SC", "STSong", "PingFang SC", serif; }
+  .stage { width: 1600px; height: 900px; position: relative; overflow: hidden; background: #E5E0D0; }
+
+  .left-panel {
+    position: absolute; top: 0; left: 0; width: 620px; height: 900px;
+    background: #4A5D34;
+  }
+  .left-panel::before {
+    content: ""; position: absolute; inset: 30px;
+    border: 1px solid rgba(229,224,208,0.25);
+  }
+  .pattern {
+    position: absolute; inset: 60px;
+    background-image:
+      repeating-linear-gradient(45deg, transparent 0 28px, rgba(229,224,208,0.04) 28px 29px),
+      repeating-linear-gradient(-45deg, transparent 0 28px, rgba(229,224,208,0.04) 28px 29px);
+  }
+
+  .brand {
+    position: absolute; top: 90px; left: 90px; z-index: 3;
+    color: #E5E0D0;
+  }
+  .brand .mark {
+    font-size: 13px; letter-spacing: 6px; font-weight: 600;
+    color: #B89B5E; margin-bottom: 14px;
+  }
+  .brand .name {
+    font-size: 42px; font-weight: 700; letter-spacing: 8px;
+    font-family: "Songti SC", serif;
+  }
+  .brand .en {
+    font-size: 13px; letter-spacing: 5px; color: #9A9488;
+    margin-top: 10px; font-family: "PingFang SC", sans-serif;
+  }
+
+  .quote {
+    position: absolute; bottom: 110px; left: 90px; right: 90px; z-index: 3;
+    color: #E5E0D0;
+  }
+  .quote .line {
+    font-size: 26px; font-weight: 400; line-height: 1.8;
+    font-family: "Songti SC", serif; letter-spacing: 2px;
+    opacity: 0.92;
+  }
+  .quote .from {
+    font-size: 13px; letter-spacing: 4px; color: #B89B5E;
+    margin-top: 22px; font-family: "PingFang SC", sans-serif;
+  }
+  .quote .from::before { content: "—— "; }
+
+  /* right content */
+  .content {
+    position: absolute; top: 110px; left: 720px; right: 90px; z-index: 3;
+    color: #3A3326;
+  }
+  .content .kicker {
+    font-size: 13px; letter-spacing: 6px; color: #B89B5E;
+    font-weight: 600; margin-bottom: 26px;
+    font-family: "PingFang SC", sans-serif;
+  }
+  .content .kicker::before { content: "◆ "; }
+  .content h1 {
+    font-size: 76px; font-weight: 700; line-height: 1.1;
+    letter-spacing: 4px; color: #4A5D34;
+    font-family: "Songti SC", serif;
+  }
+  .content h1 .accent { color: #B89B5E; font-style: italic; }
+  .content .en-title {
+    font-size: 22px; font-weight: 400; letter-spacing: 6px;
+    color: #9A9488; margin-top: 18px;
+    font-family: "Times New Roman", serif; font-style: italic;
+  }
+  .content .divider {
+    width: 60px; height: 2px; background: #B89B5E;
+    margin: 36px 0;
+  }
+  .content .body {
+    font-size: 17px; line-height: 2; color: #3A3326;
+    max-width: 640px; font-family: "PingFang SC", sans-serif;
+  }
+
+  .meta-grid {
+    position: absolute; bottom: 110px; left: 720px; right: 90px; z-index: 3;
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 28px;
+    padding-top: 30px; border-top: 1px solid rgba(74,93,52,0.25);
+  }
+  .meta-grid .m .v {
+    font-size: 34px; font-weight: 700; color: #4A5D34;
+    font-family: "Songti SC", serif; letter-spacing: 2px;
+  }
+  .meta-grid .m .l {
+    font-size: 12px; letter-spacing: 3px; color: #9A9488;
+    margin-top: 8px; font-family: "PingFang SC", sans-serif;
+  }
+
+  .corner-stamp {
+    position: absolute; top: 90px; right: 90px; z-index: 3;
+    text-align: right; color: #9A9488;
+    font-size: 12px; letter-spacing: 3px;
+    font-family: "PingFang SC", sans-serif;
+  }
+  .corner-stamp .no { color: #B89B5E; font-weight: 700; font-size: 14px; }
+</style>
+</head>
+<body>
+<div class="stage">
+  <div class="left-panel">
+    <div class="pattern"></div>
+    <div class="brand">
+      <div class="mark">EST · MMXXVI</div>
+      <div class="name">橄 榄 集</div>
+      <div class="en">OLIVADE ATELIER</div>
+    </div>
+    <div class="quote">
+      <div class="line">"深绿是岁月沉淀的底色，<br>奶白是时光未尽的柔光。"</div>
+      <div class="from">橄榄集 · 卷一</div>
+    </div>
+  </div>
+
+  <div class="corner-stamp">
+    <div>NO. <span class="no">07</span></div>
+    <div>HERITAGE EDITION</div>
+  </div>
+
+  <div class="content">
+    <div class="kicker">高 级 系 列 · 第 七 期</div>
+    <h1>沉静之力<br><span class="accent">Olive & Ivory</span></h1>
+    <div class="en-title">A Study in Stillness</div>
+    <div class="divider"></div>
+    <p class="body">以深橄榄绿筑基，奶白绿作柔光，金线作点睛。<br>不喧哗，不张扬，只把高级感藏在每一处克制的留白里。<br>这是属于懂得的人的稳重温雅。</p>
+  </div>
+
+  <div class="meta-grid">
+    <div class="m"><div class="v">36 件</div><div class="l">CAPSULE</div></div>
+    <div class="m"><div class="v">2026</div><div class="l">AUTUMN</div></div>
+    <div class="m"><div class="v">手工</div><div class="l">CRAFTED</div></div>
+  </div>
+</div>
+</body>
+</html>

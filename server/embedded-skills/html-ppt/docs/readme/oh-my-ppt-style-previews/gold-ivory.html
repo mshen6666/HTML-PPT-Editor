@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<title>鎏金象牙 · 高级质感</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html, body { width: 1600px; height: 900px; overflow: hidden; }
+  body { font-family: "Songti SC", "STSong", "Times New Roman", serif; }
+  .stage {
+    width: 1600px; height: 900px; position: relative; overflow: hidden;
+    background: #E8DCC8;
+  }
+  /* gold foil texture */
+  .stage::before {
+    content: ""; position: absolute; inset: 0;
+    background-image:
+      repeating-linear-gradient(115deg, transparent 0 3px, rgba(201,168,118,0.04) 3px 4px);
+    pointer-events: none;
+  }
+
+  .frame {
+    position: absolute; inset: 40px;
+    border: 1px solid #C9A876;
+  }
+  .frame::before {
+    content: ""; position: absolute; inset: 8px;
+    border: 1px solid rgba(201,168,118,0.4);
+  }
+
+  .top-bar {
+    position: absolute; top: 80px; left: 0; right: 0;
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 0 100px; z-index: 5;
+  }
+  .brand {
+    color: #4A2E15;
+  }
+  .brand .mark {
+    font-size: 12px; letter-spacing: 6px; color: #C9A876; font-weight: 600;
+    margin-bottom: 8px; font-family: "PingFang SC", sans-serif;
+  }
+  .brand .name {
+    font-size: 28px; font-weight: 700; letter-spacing: 8px;
+    font-family: "Songti SC", serif;
+  }
+  .nav {
+    display: flex; gap: 32px; font-size: 12px; letter-spacing: 3px;
+    color: #7A4E1D; font-family: "PingFang SC", sans-serif;
+  }
+  .nav span { padding-bottom: 4px; }
+  .nav .active { border-bottom: 1px solid #C9A876; color: #4A2E15; font-weight: 600; }
+
+  .hero {
+    position: absolute; top: 220px; left: 0; right: 0;
+    text-align: center; z-index: 5;
+  }
+  .hero .ornament {
+    color: #C9A876; font-size: 22px; letter-spacing: 14px;
+    margin-bottom: 30px;
+  }
+  .hero .kicker {
+    font-size: 13px; letter-spacing: 8px; color: #7A4E1D;
+    font-weight: 600; margin-bottom: 26px;
+    font-family: "PingFang SC", sans-serif;
+  }
+  .hero h1 {
+    font-size: 130px; font-weight: 700; line-height: 1;
+    letter-spacing: 20px; color: #4A2E15;
+    font-family: "Songti SC", serif;
+    text-shadow: 0 2px 0 rgba(201,168,118,0.3);
+  }
+  .hero h1 .gold {
+    background: linear-gradient(180deg, #C9A876 0%, #7A4E1D 100%);
+    -webkit-background-clip: text; background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  .hero .en {
+    font-size: 26px; font-weight: 400; letter-spacing: 10px;
+    color: #7A4E1D; margin-top: 24px; font-style: italic;
+    font-family: "Times New Roman", serif;
+  }
+  .hero .lead {
+    font-size: 17px; line-height: 2; color: #5A3A1F;
+    margin: 40px auto 0; max-width: 720px;
+    font-family: "PingFang SC", sans-serif;
+  }
+
+  /* gold block accent */
+  .gold-block {
+    position: absolute; bottom: 110px; left: 50%; transform: translateX(-50%);
+    display: flex; gap: 0; z-index: 5;
+    box-shadow: 0 16px 40px rgba(122,78,29,0.25);
+  }
+  .gold-block .cell {
+    background: #7A4E1D; color: #E8DCC8;
+    padding: 26px 44px; text-align: center;
+    border-right: 1px solid rgba(232,220,200,0.2);
+  }
+  .gold-block .cell:last-child { border-right: none; }
+  .gold-block .cell .v {
+    font-size: 30px; font-weight: 700; letter-spacing: 3px;
+    color: #C9A876; font-family: "Songti SC", serif;
+  }
+  .gold-block .cell .l {
+    font-size: 11px; letter-spacing: 3px; color: #E8DCC8;
+    opacity: 0.7; margin-top: 8px;
+    font-family: "PingFang SC", sans-serif;
+  }
+
+  .footer-line {
+    position: absolute; bottom: 60px; left: 100px; right: 100px;
+    display: flex; justify-content: space-between;
+    font-size: 11px; letter-spacing: 4px; color: #7A4E1D;
+    font-family: "PingFang SC", sans-serif; z-index: 5;
+  }
+  .footer-line .center { color: #C9A876; font-weight: 600; }
+
+  .corner-orn {
+    position: absolute; color: #C9A876; font-size: 18px; z-index: 4;
+  }
+  .co1 { top: 60px; left: 60px; }
+  .co2 { top: 60px; right: 60px; }
+  .co3 { bottom: 60px; left: 60px; }
+  .co4 { bottom: 60px; right: 60px; }
+</style>
+</head>
+<body>
+<div class="stage">
+  <div class="frame"></div>
+
+  <div class="corner-orn co1">❦</div>
+  <div class="corner-orn co2">❦</div>
+  <div class="corner-orn co3">❦</div>
+  <div class="corner-orn co4">❦</div>
+
+  <div class="top-bar">
+    <div class="brand">
+      <div class="mark">EST · MMXXVI</div>
+      <div class="name">鎏 金 集</div>
+    </div>
+    <div class="nav">
+      <span class="active">COLLECTION</span>
+      <span>HERITAGE</span>
+      <span>JOURNAL</span>
+      <span>CONTACT</span>
+    </div>
+  </div>
+
+  <div class="hero">
+    <div class="ornament">— ◆ —</div>
+    <div class="kicker">高 级 系 列 · 典 藏 版</div>
+    <h1><span class="gold">鎏金</span> · 象牙</h1>
+    <div class="en">AURUM & EBUR</div>
+    <p class="lead">以鎏金棕筑底，象牙白作丝光，香槟金线作点睛。<br>每一处留白都是仪式，每一次落笔都是典藏。</p>
+  </div>
+
+  <div class="gold-block">
+    <div class="cell"><div class="v">N°07</div><div class="l">EDITION</div></div>
+    <div class="cell"><div class="v">MMXXVI</div><div class="l">YEAR</div></div>
+    <div class="cell"><div class="v">限量</div><div class="l">LIMITED</div></div>
+    <div class="cell"><div class="v">手工</div><div class="l">CRAFTED</div></div>
+  </div>
+
+  <div class="footer-line">
+    <span>AURUMA ATELIER</span>
+    <span class="center">— HERITAGE EDITION —</span>
+    <span>2026 · AUTUMN</span>
+  </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>水墨江南 · 烟雨如墨</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html, body { width: 1600px; height: 900px; overflow: hidden; background: #F5F5DC; font-family: "Songti SC", "STSong", "SimSun", serif; }
+
+  .canvas {
+    width: 1600px; height: 900px;
+    background:
+      radial-gradient(ellipse at 20% 30%, rgba(169,169,169,0.08) 0%, transparent 50%),
+      radial-gradient(ellipse at 80% 70%, rgba(107,142,107,0.06) 0%, transparent 50%),
+      linear-gradient(180deg, #FAF7F0 0%, #F5F5DC 100%);
+    position: relative; color: #1A1A1A;
+  }
+
+  /* 远山 */
+  .mountain {
+    position: absolute; bottom: 0; width: 100%; height: 360px; opacity: 0.55;
+  }
+  .m1 { fill: #A9A9A9; opacity: 0.35; }
+  .m2 { fill: #696969; opacity: 0.45; }
+  .m3 { fill: #1A1A1A; opacity: 0.7; }
+
+  /* 柳条 */
+  .willow { position: absolute; top: 0; left: 60px; }
+
+  /* 印章 */
+  .seal {
+    position: absolute; top: 80px; right: 110px;
+    width: 78px; height: 78px; background: #DC143C;
+    display: flex; align-items: center; justify-content: center;
+    color: #FAF7F0; font-size: 22px; font-weight: bold;
+    letter-spacing: 2px; line-height: 1.1; text-align: center;
+    box-shadow: 0 0 0 3px #DC143C inset;
+    font-family: "STKaiti", "KaiTi", serif;
+  }
+
+  /* 主标题区 */
+  .title-block {
+    position: absolute; top: 200px; left: 140px;
+    z-index: 5;
+  }
+  .vert-label {
+    writing-mode: vertical-rl;
+    font-size: 28px; color: #696969;
+    letter-spacing: 8px; position: absolute;
+    left: -50px; top: 10px;
+  }
+  .main-title {
+    font-family: "STKaiti", "KaiTi", "Songti SC", serif;
+    font-size: 132px; font-weight: 900;
+    color: #000000; letter-spacing: 24px;
+    line-height: 1.1; text-shadow: 2px 2px 0 rgba(0,0,0,0.08);
+  }
+  .sub-title {
+    font-size: 30px; color: #6B8E6B; letter-spacing: 12px;
+    margin-top: 30px; font-weight: 300;
+  }
+  .ink-line {
+    width: 220px; height: 6px; margin-top: 36px;
+    background: linear-gradient(90deg, #000000 0%, transparent 100%);
+  }
+
+  /* 副文 */
+  .body-text {
+    position: absolute; left: 140px; bottom: 130px;
+    width: 480px; font-size: 22px; line-height: 2;
+    color: #1A1A1A; letter-spacing: 3px;
+  }
+  .body-text span { color: #DC143C; font-weight: bold; }
+
+  /* 右侧卡片 */
+  .card {
+    position: absolute; top: 230px; right: 140px;
+    width: 340px; padding: 40px 36px;
+    background: rgba(250,247,240,0.7);
+    border: 1px solid rgba(26,26,26,0.15);
+    backdrop-filter: blur(2px);
+  }
+  .card-title {
+    font-size: 28px; color: #000000; letter-spacing: 6px;
+    margin-bottom: 28px; border-left: 4px solid #DC143C;
+    padding-left: 16px;
+  }
+  .card-item {
+    display: flex; justify-content: space-between;
+    padding: 14px 0; border-bottom: 1px dashed rgba(0,0,0,0.15);
+    font-size: 20px;
+  }
+  .card-item .k { color: #696969; letter-spacing: 2px; }
+  .card-item .v { color: #1A1A1A; font-weight: 600; }
+
+  /* 底部诗句 */
+  .verse {
+    position: absolute; right: 140px; bottom: 90px;
+    font-size: 22px; color: #696969; letter-spacing: 6px;
+    writing-mode: vertical-rl; line-height: 2;
+  }
+
+  /* 乌篷船 */
+  .boat { position: absolute; bottom: 60px; left: 820px; opacity: 0.75; }
+</style>
+</head>
+<body>
+<div class="canvas">
+  <!-- 柳条 -->
+  <svg class="willow" width="200" height="500" viewBox="0 0 200 500">
+    <path d="M30,0 Q40,100 25,250 Q15,400 35,500" stroke="#6B8E6B" stroke-width="2" fill="none" opacity="0.6"/>
+    <path d="M60,0 Q70,120 55,280 Q45,420 65,500" stroke="#8FBC8F" stroke-width="2" fill="none" opacity="0.5"/>
+    <path d="M90,0 Q80,100 95,260 Q105,400 85,500" stroke="#6B8E6B" stroke-width="2" fill="none" opacity="0.55"/>
+    <ellipse cx="22" cy="180" rx="4" ry="10" fill="#8FBC8F" opacity="0.6" transform="rotate(20 22 180)"/>
+    <ellipse cx="58" cy="220" rx="4" ry="10" fill="#8FBC8F" opacity="0.5" transform="rotate(-15 58 220)"/>
+    <ellipse cx="98" cy="300" rx="4" ry="10" fill="#6B8E6B" opacity="0.6" transform="rotate(25 98 300)"/>
+  </svg>
+
+  <!-- 远山三层 -->
+  <svg class="mountain" viewBox="0 0 1600 360" preserveAspectRatio="none">
+    <path class="m1" d="M0,360 L0,200 Q200,120 400,180 Q600,240 800,150 Q1000,80 1200,170 Q1400,240 1600,160 L1600,360 Z"/>
+    <path class="m2" d="M0,360 L0,260 Q300,200 500,250 Q700,300 900,220 Q1100,160 1300,240 Q1500,300 1600,250 L1600,360 Z"/>
+    <path class="m3" d="M0,360 L0,310 Q200,280 400,300 Q600,320 800,290 Q1000,260 1200,300 Q1400,330 1600,300 L1600,360 Z"/>
+  </svg>
+
+  <!-- 乌篷船 -->
+  <svg class="boat" width="160" height="70" viewBox="0 0 160 70">
+    <path d="M10,50 Q80,70 150,50 L140,40 Q80,55 20,40 Z" fill="#1A1A1A" opacity="0.85"/>
+    <path d="M40,40 Q80,15 120,40" stroke="#1A1A1A" stroke-width="3" fill="none" opacity="0.7"/>
+    <line x1="80" y1="20" x2="80" y2="42" stroke="#1A1A1A" stroke-width="2"/>
+  </svg>
+
+  <!-- 印章 -->
+  <div class="seal">江南<br>水墨</div>
+
+  <!-- 标题 -->
+  <div class="title-block">
+    <div class="vert-label">烟雨如墨</div>
+    <div class="main-title">水墨江南</div>
+    <div class="sub-title">一纸烟雨 · 半卷流年</div>
+    <div class="ink-line"></div>
+  </div>
+
+  <!-- 正文 -->
+  <div class="body-text">
+    青砖黛瓦之间，乌篷船摇过千年时光。<br>
+    以墨为骨，以水为韵，于<span>留白</span>处见天地。<br>
+    让每一帧画面，都成一首未完的诗。
+  </div>
+
+  <!-- 右侧卡片 -->
+  <div class="card">
+    <div class="card-title">意境构成</div>
+    <div class="card-item"><span class="k">主　色</span><span class="v">浓墨 · 留白</span></div>
+    <div class="card-item"><span class="k">点　缀</span><span class="v">朱砂红</span></div>
+    <div class="card-item"><span class="k">字　体</span><span class="v">楷书 · 仿宋</span></div>
+    <div class="card-item"><span class="k">气　韵</span><span class="v">宁静悠远</span></div>
+  </div>
+
+  <!-- 竖排诗句 -->
+  <div class="verse">春风又绿江南岸</div>
+</div>
+</body>
+</html>

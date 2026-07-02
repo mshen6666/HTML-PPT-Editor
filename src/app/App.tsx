@@ -57,6 +57,7 @@ import { pptxExportEventSchema, type PptxExportEvent } from '../agent/protocol'
 import { blankDeckHtml } from '../blankDeck'
 import { Link, useInRouterContext } from 'react-router-dom'
 import { HTML_PPT_SKILL_GUIDE_PATH } from './routePaths'
+import { evaluatePptQualityGate } from './pptQualityGate'
 
 const PLACEHOLDER_IMAGE =
   "data:image/svg+xml;charset=UTF-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 960 540'%3E%3Crect width='960' height='540' fill='%23f0ebe4'/%3E%3Crect x='72' y='72' width='816' height='396' rx='18' fill='%23fffaf1' stroke='%23d8cfc0'/%3E%3Cpath d='M144 372l152-156 132 124 164-180 224 212H144Z' fill='%23d95d39' opacity='.78'/%3E%3Ccircle cx='336' cy='192' r='42' fill='%23201715' opacity='.14'/%3E%3C/svg%3E"
@@ -207,6 +208,7 @@ export function App({
     isOptimizing,
     optimizedPrompt,
     optimizationExplanation,
+    lastSubmittedPrompt,
     setOptimizedPrompt,
     optimizePrompt,
     applyOptimizedPrompt,
@@ -295,6 +297,17 @@ export function App({
   const agentProgressPhase = activePhase ?? (candidate ? 'finalizing' : 'queued')
   const agentProgressText = streamingAssistantText.trim() || activeStatus || '智能体正在处理'
   const candidatePreviews = useMemo(() => buildCandidatePreviews(candidate), [candidate])
+  const qualityGateResult = useMemo(() => {
+    if (!candidate || candidate.type !== 'html_candidate_ready') {
+      return null
+    }
+
+    return evaluatePptQualityGate({
+      prompt: lastSubmittedPrompt,
+      html: candidate.html,
+      expectedSlideCount: candidate.previewMeta.targetSlideCount ?? candidate.previewMeta.slideCount,
+    })
+  }, [candidate, lastSubmittedPrompt])
   const previewMetricsLabel =
     fitMode === 'adaptive'
       ? `画布 ${canvasDimensions.width}×${canvasDimensions.height} · 适配 ${Math.min(
@@ -1820,6 +1833,7 @@ export function App({
     <AiPanel
       candidate={candidate}
       candidatePreviews={candidatePreviews}
+      qualityGateResult={qualityGateResult}
       composerText={composerText}
       replyText={replyText}
       pendingInput={pendingInput}

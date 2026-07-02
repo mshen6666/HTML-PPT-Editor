@@ -7,19 +7,24 @@ export type ExportViewportSize = {
   height: number
 }
 
+type ExportFrameOptions = {
+  scripts?: 'allow' | 'remove'
+}
+
 export async function createExportFrame(
   html: string,
   viewportSize: ExportViewportSize = {
     width: EXPORT_VIEWPORT_WIDTH,
     height: EXPORT_VIEWPORT_HEIGHT,
   },
+  options: ExportFrameOptions = {},
 ): Promise<HTMLIFrameElement> {
   if (typeof window === 'undefined' || typeof document === 'undefined') {
     throw new Error('导出仅支持在浏览器中运行')
   }
 
   const iframe = createHiddenExportFrame(viewportSize)
-  iframe.srcdoc = html
+  iframe.srcdoc = options.scripts === 'remove' ? removeScriptsFromHtml(html) : html
 
   document.body.appendChild(iframe)
   await waitForExportDocumentReady(iframe, EXPORT_LOAD_TIMEOUT_MS)
@@ -198,4 +203,11 @@ function delay(timeoutMs: number): Promise<void> {
   return new Promise((resolve) => {
     window.setTimeout(resolve, timeoutMs)
   })
+}
+
+export function removeScriptsFromHtml(html: string): string {
+  const parser = new DOMParser()
+  const document = parser.parseFromString(html, 'text/html')
+  document.querySelectorAll('script').forEach((script) => script.remove())
+  return '<!doctype html>\n' + document.documentElement.outerHTML
 }

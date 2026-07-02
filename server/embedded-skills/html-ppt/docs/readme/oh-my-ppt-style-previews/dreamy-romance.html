@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<title>梦幻浪漫 · 治愈系</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html, body { width: 1600px; height: 900px; overflow: hidden; }
+  body { font-family: "Songti SC", "STSong", "PingFang SC", serif; }
+  .stage {
+    width: 1600px; height: 900px; position: relative; overflow: hidden;
+    background:
+      radial-gradient(ellipse at 20% 20%, #D8C5E8 0%, transparent 55%),
+      radial-gradient(ellipse at 80% 30%, #B8C8E8 0%, transparent 55%),
+      radial-gradient(ellipse at 60% 90%, #F4C8D8 0%, transparent 55%),
+      linear-gradient(135deg, #FBF5F0 0%, #F0E8F5 50%, #E8E0F0 100%);
+  }
+  /* dreamy glow */
+  .glow { position: absolute; border-radius: 50%; filter: blur(80px); }
+  .g1 { width: 500px; height: 500px; top: -100px; left: -100px; background: #D8C5E8; opacity: 0.5; }
+  .g2 { width: 420px; height: 420px; bottom: -80px; right: -60px; background: #F4C8D8; opacity: 0.45; }
+  .g3 { width: 360px; height: 360px; top: 280px; right: 280px; background: #B8C8E8; opacity: 0.35; }
+
+  /* petals / sparkles */
+  .petal { position: absolute; color: #F4C8D8; font-size: 18px; opacity: 0.85; }
+  .star { position: absolute; color: #E8C896; font-size: 16px; opacity: 0.8; }
+  .p1{top:120px;left:240px;font-size:22px}.p2{top:200px;right:380px}
+  .p3{bottom:240px;left:320px}.p4{top:380px;right:200px;font-size:14px}
+  .st1{top:90px;right:240px;font-size:20px}.st2{bottom:200px;right:400px;font-size:14px}
+  .st3{top:300px;left:140px;font-size:14px}.st4{bottom:340px;right:160px;font-size:18px}
+
+  /* moon */
+  .moon {
+    position: absolute; top: 110px; right: 200px;
+    width: 100px; height: 100px; border-radius: 50%;
+    background: radial-gradient(circle at 35% 35%, #FBF5F0 0%, #F4E8D8 60%, #E8C896 100%);
+    box-shadow: 0 0 60px rgba(232,200,150,0.4);
+  }
+
+  /* content */
+  .content {
+    position: absolute; top: 50%; left: 50%; transform: translate(-50%, -52%);
+    text-align: center; z-index: 5; color: #6B5A8A;
+    width: 1100px;
+  }
+  .kicker {
+    display: inline-block;
+    background: rgba(255,255,255,0.65); color: #8A6FA8;
+    font-size: 13px; font-weight: 700; letter-spacing: 5px;
+    padding: 9px 22px; border-radius: 999px; margin-bottom: 32px;
+    box-shadow: 0 6px 22px rgba(216,197,232,0.4);
+    font-family: "PingFang SC", sans-serif;
+  }
+  .kicker::before { content: "✿ "; color: #F4A8C8; }
+  h1 {
+    font-size: 130px; font-weight: 700; line-height: 1.02;
+    letter-spacing: 12px; color: #7A68A0;
+    font-family: "Songti SC", serif;
+    text-shadow: 0 4px 24px rgba(216,197,232,0.6);
+  }
+  h1 .pink { color: #D898B0; font-style: italic; }
+  h1 .blue { color: #8AA0C8; }
+  .verse {
+    font-size: 22px; line-height: 2.1; color: #8A7AA0;
+    margin: 40px auto 0; max-width: 720px;
+    font-family: "Songti SC", serif; letter-spacing: 3px;
+  }
+  .verse .em { color: #D898B0; }
+
+  /* bottom row */
+  .bottom {
+    position: absolute; bottom: 70px; left: 50%; transform: translateX(-50%);
+    display: flex; gap: 24px; z-index: 5;
+  }
+  .card {
+    background: rgba(255,255,255,0.6);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255,255,255,0.7);
+    border-radius: 24px;
+    padding: 22px 32px; text-align: center;
+    box-shadow: 0 12px 30px rgba(216,197,232,0.35);
+    min-width: 200px;
+  }
+  .card .icon { font-size: 28px; margin-bottom: 8px; }
+  .card .t { font-size: 18px; font-weight: 700; color: #7A68A0; letter-spacing: 3px; }
+  .card .d { font-size: 12px; color: #9A8AB8; margin-top: 6px; letter-spacing: 2px; font-family: "PingFang SC", sans-serif; }
+
+  .signature {
+    position: absolute; top: 70px; left: 90px; z-index: 5;
+    color: #8A7AA0; font-size: 12px; letter-spacing: 3px;
+    font-family: "PingFang SC", sans-serif;
+  }
+  .signature .b { color: #7A68A0; font-weight: 700; }
+  .signature::before { content: "✦ "; color: #E8C896; }
+
+  .vol {
+    position: absolute; top: 70px; right: 90px; z-index: 5;
+    text-align: right; color: #9A8AB8;
+    font-size: 12px; letter-spacing: 3px;
+    font-family: "PingFang SC", sans-serif;
+  }
+  .vol .n { color: #D898B0; font-weight: 700; font-size: 14px; }
+</style>
+</head>
+<body>
+<div class="stage">
+  <div class="glow g1"></div>
+  <div class="glow g2"></div>
+  <div class="glow g3"></div>
+  <div class="moon"></div>
+
+  <div class="petal p1">❀</div>
+  <div class="petal p2">❀</div>
+  <div class="petal p3">❀</div>
+  <div class="petal p4">❀</div>
+  <div class="star st1">✦</div>
+  <div class="star st2">✧</div>
+  <div class="star st3">✦</div>
+  <div class="star st4">✧</div>
+
+  <div class="signature">
+    <span class="b">NUAGE</span> · 色彩共读
+  </div>
+  <div class="vol">
+    <div>第 <span class="n">05</span> 期</div>
+    <div>DREAMY EDITION</div>
+  </div>
+
+  <div class="content">
+    <span class="kicker">DREAMY · 梦幻浪漫</span>
+    <h1>把<span class="pink">浪漫</span><br>写成<span class="blue">治愈</span>的诗</h1>
+    <p class="verse">紫是云端的呢喃，粉是花瓣的呼吸，蓝是星河的低语。<br>把每一种颜色，<span class="em">都写成一首治愈的诗</span>。</p>
+  </div>
+
+  <div class="bottom">
+    <div class="card"><div class="icon">🌙</div><div class="t">月色</div><div class="d">MOONLIGHT</div></div>
+    <div class="card"><div class="icon">🌸</div><div class="t">樱花</div><div class="d">SAKURA</div></div>
+    <div class="card"><div class="icon">✨</div><div class="t">星河</div><div class="d">STARDUST</div></div>
+    <div class="card"><div class="icon">🦋</div><div class="t">蝶梦</div><div class="d">PAPILLON</div></div>
+  </div>
+</div>
+</body>
+</html>

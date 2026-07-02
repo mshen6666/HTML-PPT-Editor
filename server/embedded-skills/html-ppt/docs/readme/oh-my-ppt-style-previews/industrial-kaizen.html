@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>表格 · 现代周报</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html, body { width: 100%; height: 100%; overflow: hidden; }
+  body {
+    font-family: "PingFang SC", "Microsoft YaHei", "Inter", "Helvetica Neue", Arial, sans-serif;
+    color: #1F1E1A;
+    font-variant-numeric: tabular-nums;
+    background: #EDE9DC;
+    display: grid;
+    place-items: center;
+    -webkit-font-smoothing: antialiased;
+  }
+  .slide {
+    aspect-ratio: 16 / 9;
+    width: min(100vw, calc(100vh * 16 / 9));
+    background: #FBFAF6;
+    padding: 3.6% 4.4% 3%;
+    display: flex;
+    flex-direction: column;
+    gap: 2%;
+    overflow: hidden;
+  }
+
+  /* ====== Header ====== */
+  .head {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    padding-bottom: 1.3%;
+    border-bottom: 1px solid #D8D4C8;
+  }
+  .head .eyebrow {
+    font-size: clamp(9px, 0.7vw, 11px);
+    color: #8B8478;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    font-weight: 600;
+    margin-bottom: 7px;
+  }
+  .head h1 {
+    font-size: clamp(22px, 2.45vw, 34px);
+    font-weight: 700;
+    color: #1F1E1A;
+    letter-spacing: -0.015em;
+    line-height: 1.15;
+  }
+  .head .meta {
+    text-align: right;
+    font-size: clamp(10px, 0.78vw, 12px);
+    color: #6B6558;
+    line-height: 1.7;
+  }
+  .head .meta strong { color: #1F1E1A; font-weight: 600; }
+
+  /* ====== KPI 横栏 ====== */
+  .kpis {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    border-top: 1px solid #E8E4D6;
+    border-bottom: 1px solid #E8E4D6;
+    padding: 1.5% 0;
+  }
+  .kpi {
+    padding: 0 4.5%;
+    border-right: 1px solid #EDE9DC;
+  }
+  .kpi:last-child { border-right: none; }
+  .kpi .k-label {
+    font-size: clamp(9px, 0.72vw, 11px);
+    color: #8B8478;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin-bottom: 7px;
+    font-weight: 500;
+  }
+  .kpi .k-value {
+    font-size: clamp(20px, 2.05vw, 28px);
+    font-weight: 700;
+    color: #1F1E1A;
+    line-height: 1;
+    letter-spacing: -0.015em;
+  }
+  .kpi .k-value .unit {
+    font-size: 0.5em;
+    font-weight: 500;
+    color: #8B8478;
+    margin-left: 4px;
+    letter-spacing: 0;
+  }
+  .kpi .k-delta {
+    margin-top: 8px;
+    font-size: clamp(9px, 0.74vw, 11px);
+    font-weight: 500;
+    color: #2A2924;
+  }
+  .kpi .k-delta.up::before { content: "▲ "; color: #1F1E1A; font-size: 0.78em; margin-right: 2px; }
+  .kpi .k-delta.down::before { content: "▼ "; color: #8B8478; font-size: 0.78em; margin-right: 2px; }
+
+  /* ====== 主表格 ====== */
+  .table-section {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+  }
+  .table-title {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: 0.6%;
+  }
+  .table-title h2 {
+    font-size: clamp(13px, 1.05vw, 16px);
+    font-weight: 700;
+    color: #1F1E1A;
+    letter-spacing: -0.005em;
+  }
+  .table-title .filter {
+    font-size: clamp(9px, 0.74vw, 11px);
+    color: #8B8478;
+    letter-spacing: 0.04em;
+  }
+
+  table.report {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: clamp(11px, 0.88vw, 13px);
+    table-layout: fixed;
+  }
+  table.report thead th {
+    text-align: left;
+    padding: 9px 12px 10px;
+    font-size: clamp(9px, 0.72vw, 11px);
+    font-weight: 600;
+    color: #8B8478;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    border-bottom: 1.5px solid #1F1E1A;
+  }
+  table.report thead th.num { text-align: right; }
+  table.report tbody td {
+    padding: 11px 12px;
+    border-bottom: 1px solid #EDE9DC;
+    color: #2A2924;
+    vertical-align: middle;
+    line-height: 1.4;
+  }
+  table.report tbody td.num {
+    text-align: right;
+    font-variant-numeric: tabular-nums;
+    color: #1F1E1A;
+    font-weight: 500;
+  }
+  table.report tbody td.num.muted { color: #8B8478; font-weight: 400; }
+  table.report tbody td.num.neg { color: #6B6558; }
+  table.report tbody td.primary { font-weight: 600; color: #1F1E1A; }
+  table.report tbody tr.total td {
+    background: #F2EFE5;
+    font-weight: 700;
+    color: #1F1E1A;
+    border-top: 1px solid #1F1E1A;
+    border-bottom: 1.5px solid #1F1E1A;
+  }
+
+  .badge {
+    display: inline-block;
+    padding: 2.5px 8px;
+    font-size: clamp(9px, 0.72vw, 11px);
+    font-weight: 600;
+    border-radius: 2px;
+    letter-spacing: 0.04em;
+    line-height: 1.3;
+    white-space: nowrap;
+  }
+  .badge.active { background: #1F1E1A; color: #FBFAF6; }
+  .badge.review { background: #EDE9DC; color: #5C5852; }
+  .badge.done { background: transparent; color: #1F1E1A; border: 1px solid #1F1E1A; }
+
+  /* ====== Footer ====== */
+  .foot {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: 1.2%;
+    border-top: 1px solid #D8D4C8;
+    font-size: clamp(9px, 0.74vw, 11px);
+    color: #8B8478;
+  }
+  .foot .left { display: flex; gap: clamp(16px, 2vw, 26px); }
+  .foot .left strong { color: #1F1E1A; font-weight: 600; }
+  .foot .brand {
+    font-weight: 700;
+    color: #1F1E1A;
+    letter-spacing: 0.24em;
+  }
+
+  @media (max-aspect-ratio: 16/9) { .slide { width: min(100vw, calc(100vh * 16/9)); height: auto; } }
+  @media (min-aspect-ratio: 16/9) { .slide { height: min(100vh, calc(100vw * 9/16)); width: auto; } }
+</style>
+</head>
+<body>
+<div class="slide">
+
+  <!-- ====== Header ====== -->
+  <div class="head">
+    <div>
+      <div class="eyebrow">Quarterly Performance Review</div>
+      <h1>2026 Q2 经营周报 · 关键指标复盘</h1>
+    </div>
+    <div class="meta">
+      <div>报告周期 · <strong>2026.04 — 2026.06</strong></div>
+      <div>编制 · <strong>财务与运营组</strong> · 第 24 周</div>
+    </div>
+  </div>
+
+  <!-- ====== KPI 横栏 ====== -->
+  <div class="kpis">
+    <div class="kpi">
+      <div class="k-label">营业收入</div>
+      <div class="k-value">4.82<span class="unit">亿元</span></div>
+      <div class="k-delta up">环比 +12.4%</div>
+    </div>
+    <div class="kpi">
+      <div class="k-label">毛利率</div>
+      <div class="k-value">38.6<span class="unit">%</span></div>
+      <div class="k-delta up">较目标 +2.1pp</div>
+    </div>
+    <div class="kpi">
+      <div class="k-label">活跃客户</div>
+      <div class="k-value">1,284</div>
+      <div class="k-delta up">本期新增 96</div>
+    </div>
+    <div class="kpi">
+      <div class="k-label">交付达成率</div>
+      <div class="k-value">97.2<span class="unit">%</span></div>
+      <div class="k-delta down">较目标 −1.3pp</div>
+    </div>
+  </div>
+
+  <!-- ====== 主表格 ====== -->
+  <div class="table-section">
+    <div class="table-title">
+      <h2>业务分部业绩明细</h2>
+      <div class="filter">单位 · 万元　|　排序 · 营收降序</div>
+    </div>
+    <table class="report">
+      <colgroup>
+        <col style="width:8%">
+        <col style="width:26%">
+        <col style="width:14%">
+        <col style="width:14%">
+        <col style="width:14%">
+        <col style="width:12%">
+        <col style="width:12%">
+      </colgroup>
+      <thead>
+        <tr>
+          <th>编号</th>
+          <th>业务条线</th>
+          <th class="num">营业收入</th>
+          <th class="num">同比</th>
+          <th class="num">毛利率</th>
+          <th class="num">客户数</th>
+          <th>状态</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="num muted">B-01</td>
+          <td class="primary">企业服务</td>
+          <td class="num">18,640</td>
+          <td class="num">+24.1%</td>
+          <td class="num">42.3%</td>
+          <td class="num">428</td>
+          <td><span class="badge active">运营中</span></td>
+        </tr>
+        <tr>
+          <td class="num muted">B-02</td>
+          <td class="primary">数字商品</td>
+          <td class="num">12,180</td>
+          <td class="num">+18.6%</td>
+          <td class="num">51.7%</td>
+          <td class="num">612</td>
+          <td><span class="badge active">运营中</span></td>
+        </tr>
+        <tr>
+          <td class="num muted">B-03</td>
+          <td class="primary">订阅服务</td>
+          <td class="num">9,720</td>
+          <td class="num">+31.4%</td>
+          <td class="num">58.1%</td>
+          <td class="num">184</td>
+          <td><span class="badge done">达成目标</span></td>
+        </tr>
+        <tr>
+          <td class="num muted">B-04</td>
+          <td class="primary">咨询服务</td>
+          <td class="num">5,860</td>
+          <td class="num">+6.2%</td>
+          <td class="num">34.5%</td>
+          <td class="num">42</td>
+          <td><span class="badge review">观察</span></td>
+        </tr>
+        <tr>
+          <td class="num muted">B-05</td>
+          <td class="primary">渠道分销</td>
+          <td class="num">1,800</td>
+          <td class="num neg">−8.4%</td>
+          <td class="num">22.1%</td>
+          <td class="num">18</td>
+          <td><span class="badge review">收缩中</span></td>
+        </tr>
+        <tr class="total">
+          <td></td>
+          <td>合计</td>
+          <td class="num">48,200</td>
+          <td class="num">+18.3%</td>
+          <td class="num">44.6%</td>
+          <td class="num">1,284</td>
+          <td>—</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- ====== Footer ====== -->
+  <div class="foot">
+    <div class="left">
+      <span>编制人 · <strong>运营组</strong></span>
+      <span>复核 · <strong>财务负责人</strong></span>
+      <span>下次复盘 · <strong>2026.07.15</strong></span>
+    </div>
+    <div class="brand">TABLEAU · 2026 Q2</div>
+  </div>
+
+</div>
+</body>
+</html>

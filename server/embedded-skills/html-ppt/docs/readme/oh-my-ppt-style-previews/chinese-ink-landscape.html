@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>山水之境 · 中式水墨</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html, body { width: 1600px; height: 900px; overflow: hidden; font-family:"Songti SC","STSong","SimSun",serif; }
+  .canvas {
+    width: 1600px; height: 900px; position: relative; color: #2C3E50;
+    background:
+      radial-gradient(ellipse at 30% 20%, rgba(244,241,234,0.9) 0%, transparent 60%),
+      linear-gradient(180deg, #F4F1EA 0%, #EDE7DA 60%, #D4C4A0 100%);
+  }
+
+  /* 山峦层叠 */
+  .hills { position: absolute; bottom: 0; left: 0; width: 100%; height: 560px; }
+
+  /* 云雾圆 */
+  .mist {
+    position: absolute; top: 200px; left: 200px;
+    width: 360px; height: 80px; border-radius: 50%;
+    background: radial-gradient(ellipse, rgba(244,241,234,0.85) 0%, transparent 70%);
+    filter: blur(8px);
+  }
+  .mist2 { top: 420px; left: 700px; width: 420px; height: 70px; }
+
+  /* 印章 */
+  .seal {
+    position: absolute; top: 80px; right: 140px;
+    width: 72px; height: 72px; background: #A93226;
+    display:flex; align-items:center; justify-content:center;
+    color:#F4F1EA; font-size:18px; font-weight:bold;
+    text-align:center; line-height:1.1; letter-spacing:1px;
+    font-family:"STKaiti",serif;
+  }
+
+  /* 标签 */
+  .tag {
+    position: absolute; top: 95px; left: 140px;
+    font-size: 16px; color: #5D6D7E; letter-spacing: 6px;
+    font-family:"Helvetica Neue",sans-serif;
+  }
+  .tag::before { content:""; display:inline-block; width:26px; height:2px; background:#A93226; vertical-align:middle; margin-right:12px; }
+
+  /* 标题 */
+  .title { position: absolute; top: 170px; left: 140px; z-index:5; }
+  .main-title {
+    font-size: 124px; font-weight: 800; color: #2C3E50;
+    letter-spacing: 20px; line-height: 1.05;
+  }
+  .main-title .blue { color: #4A90A4; }
+  .sub-title {
+    font-size: 28px; color: #5D6D7E; letter-spacing: 12px;
+    margin-top: 28px; font-family:"STKaiti",serif;
+  }
+  .sub-title .em { color: #A93226; }
+
+  /* 正文 */
+  .body {
+    position: absolute; left: 140px; bottom: 200px;
+    width: 480px; font-size: 22px; line-height: 2.1;
+    color: #2C3E50; letter-spacing: 2px; z-index:5;
+  }
+  .body strong { color: #4A90A4; font-weight: 600; }
+
+  /* 右侧竖排 */
+  .vert {
+    position: absolute; right: 220px; top: 220px;
+    writing-mode: vertical-rl; font-family:"STKaiti",serif;
+    font-size: 32px; color: #5D6D7E; letter-spacing: 16px;
+    line-height: 2.2; z-index:5;
+  }
+  .vert .red { color: #A93226; }
+
+  /* 色卡 */
+  .palette {
+    position: absolute; right: 140px; bottom: 90px;
+    display:flex; gap: 14px; z-index:5;
+  }
+  .ps { width: 80px; height: 80px; display:flex; align-items:flex-end; justify-content:center;
+        padding-bottom: 8px; color:#FFF; font-size:12px; font-family:"Helvetica Neue",sans-serif; letter-spacing:1px;}
+  .ps1 { background: #4A90A4; }
+  .ps2 { background: #8B9DC3; }
+  .ps3 { background: #D4C4A0; color:#2C3E50; }
+  .ps4 { background: #2C3E50; }
+
+  /* 飞鸟 */
+  .bird { position: absolute; }
+  .b1 { top: 280px; left: 760px; }
+  .b2 { top: 320px; left: 840px; }
+</style>
+</head>
+<body>
+<div class="canvas">
+  <div class="mist"></div>
+  <div class="mist mist2"></div>
+
+  <!-- 山峦 -->
+  <svg class="hills" viewBox="0 0 1600 560" preserveAspectRatio="none">
+    <path d="M0,560 L0,300 Q200,200 400,260 Q600,320 800,220 Q1000,140 1200,240 Q1400,320 1600,260 L1600,560 Z" fill="#8B9DC3" opacity="0.35"/>
+    <path d="M0,560 L0,380 Q250,300 500,360 Q700,410 900,320 Q1100,250 1300,340 Q1500,400 1600,360 L1600,560 Z" fill="#4A90A4" opacity="0.45"/>
+    <path d="M0,560 L0,460 Q300,400 600,450 Q900,500 1200,430 Q1400,390 1600,440 L1600,560 Z" fill="#2C3E50" opacity="0.55"/>
+    <path d="M0,560 L0,520 Q400,500 800,520 Q1200,540 1600,510 L1600,560 Z" fill="#D4C4A0" opacity="0.6"/>
+  </svg>
+
+  <!-- 飞鸟 -->
+  <svg class="bird b1" width="30" height="14" viewBox="0 0 30 14"><path d="M2,12 Q8,4 15,10 Q22,4 28,12" stroke="#2C3E50" stroke-width="1.5" fill="none"/></svg>
+  <svg class="bird b2" width="24" height="12" viewBox="0 0 24 12"><path d="M2,10 Q7,3 12,8 Q17,3 22,10" stroke="#2C3E50" stroke-width="1.5" fill="none"/></svg>
+
+  <div class="seal">山水<br>之境</div>
+  <div class="tag">CHINESE INK LANDSCAPE · 山水之境</div>
+
+  <div class="title">
+    <div class="main-title">山水<span class="blue">之</span>境</div>
+    <div class="sub-title">层峦叠嶂 <span class="em">·</span> 云雾深处见天地</div>
+  </div>
+
+  <div class="body">
+    青灰山色隐于<strong>云雾</strong>，暖沙米色铺陈大地。<br>
+    一笔写意，半卷留白，<br>
+    于山水之间，照见内心的<strong>澄明</strong>。
+  </div>
+
+  <div class="vert">会当凌绝顶<br><span class="red">一览众山小</span></div>
+
+  <div class="palette">
+    <div class="ps ps1">#4A90A4</div>
+    <div class="ps ps2">#8B9DC3</div>
+    <div class="ps ps3">#D4C4A0</div>
+    <div class="ps ps4">#2C3E50</div>
+  </div>
+</div>
+</body>
+</html>

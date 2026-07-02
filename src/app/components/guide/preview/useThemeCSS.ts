@@ -14,14 +14,19 @@ async function fetchAllThemeCSS(): Promise<Record<string, ThemeCSSData>> {
   return data.cssMap
 }
 
-export function useThemeCSS(): {
+export function useThemeCSS(options: { enabled?: boolean } = {}): {
   cssMap: Record<string, ThemeCSSData> | null
   loading: boolean
 } {
+  const enabled = options.enabled ?? true
   const [cssMap, setCssMap] = useState<Record<string, ThemeCSSData> | null>(cachedCSSMap)
-  const [loading, setLoading] = useState(!cachedCSSMap)
+  const [loading, setLoading] = useState(enabled && !cachedCSSMap)
 
   useEffect(() => {
+    if (!enabled) {
+      setLoading(false)
+      return
+    }
     if (cachedCSSMap) return
 
     if (!fetchPromise) {
@@ -42,7 +47,7 @@ export function useThemeCSS(): {
     })
 
     return () => { cancelled = true }
-  }, [])
+  }, [enabled])
 
   return { cssMap, loading }
 }

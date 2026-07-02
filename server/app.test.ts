@@ -570,6 +570,49 @@ describe('createAiServer', () => {
     }
   }, 10_000)
 
+  it('returns guide preview assets through filtered lightweight endpoints', async () => {
+    const server = createAiServer({
+      store: new InMemorySessionStore(),
+      agent: {
+        async *runTurn() {
+          yield createAssistantDoneEvent('unused')
+          yield createCandidateEvent('candidate-unused')
+        },
+      },
+    })
+
+    const address = await server.listen(0)
+
+    try {
+      const sharedResponse = await fetch(`${address}/api/agent/html-ppt/guide-preview-shared-css`)
+      expect(sharedResponse.status).toBe(200)
+      const shared = await sharedResponse.json() as {
+        baseCSS: string
+        fontsCSS: string
+        animationsCSS: string
+        runtimeJS: string
+      }
+      expect(shared.baseCSS).toContain('.slide')
+      expect(shared.fontsCSS).toContain('@import')
+      expect(shared.animationsCSS).toContain('@keyframes')
+      expect(shared.runtimeJS).toContain('runtime.js')
+
+      const themeResponse = await fetch(`${address}/api/agent/html-ppt/css/themes-lite?names=tokyo-night,missing-theme`)
+      expect(themeResponse.status).toBe(200)
+      const themeData = await themeResponse.json() as { themeMap: Record<string, string> }
+      expect(Object.keys(themeData.themeMap)).toEqual(['tokyo-night'])
+      expect(themeData.themeMap['tokyo-night']).toContain('tokyo')
+
+      const referenceResponse = await fetch(`${address}/api/agent/html-ppt/oh-my-ppt-style-preview-parts?names=amber-aurora,missing-style`)
+      expect(referenceResponse.status).toBe(200)
+      const referenceData = await referenceResponse.json() as { previewMap: Record<string, string> }
+      expect(Object.keys(referenceData.previewMap)).toEqual(['amber-aurora'])
+      expect(referenceData.previewMap['amber-aurora']).toContain('扁豆紫蜜陀僧')
+    } finally {
+      await server.close()
+    }
+  }, 10_000)
+
   it('disables host filesystem scanning for html-ppt assets', async () => {
     const tempDir = await mkdtemp(path.join(tmpdir(), 'ppt-fs-assets-'))
     const server = createAiServer({

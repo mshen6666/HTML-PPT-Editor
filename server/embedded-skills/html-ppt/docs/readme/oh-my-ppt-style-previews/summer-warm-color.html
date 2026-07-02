@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8" />
+<title>夏日暖色</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { width: 100%; height: 100%; overflow: hidden; }
+  body {
+    display: grid;
+    place-items: center;
+    font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei", sans-serif;
+  }
+  .slide {
+    position: relative;
+    aspect-ratio: 16 / 9;
+    width: min(100vw, calc(100vh * 16 / 9));
+    overflow: hidden;
+    background: linear-gradient(180deg, #20A1EE 0%, #58C3F6 42%, #9DDF67 62%, #DAF5A7 100%);
+    color: #FFFFFF;
+  }
+  /* 太阳 */
+  .sun {
+    position: absolute;
+    top: 9%;
+    right: 11%;
+    width: 12%;
+    aspect-ratio: 1;
+    border-radius: 50%;
+    z-index: 1;
+    background:
+      radial-gradient(circle at 50% 50%, #FFF7B0 0%, #FFF061 55%, #FFE15A 100%);
+    box-shadow: 0 0 60px 10px rgba(255,240,97,0.55);
+  }
+  .sun::before {
+    content: "";
+    position: absolute;
+    inset: -32%;
+    border-radius: 50%;
+    background:
+      repeating-conic-gradient(
+        from 0deg,
+        rgba(255,240,97,0.65) 0deg 6deg,
+        rgba(255,240,97,0) 6deg 28deg
+      );
+    opacity: 0.8;
+    z-index: -1;
+  }
+  /* 云朵 */
+  .cloud {
+    position: absolute;
+    background: #FFFFFF;
+    border-radius: 50px;
+    opacity: 0.92;
+  }
+  .cloud::before, .cloud::after {
+    content: "";
+    position: absolute;
+    background: #FFFFFF;
+    border-radius: 50%;
+  }
+  .cloud.c1 { top: 16%; left: 9%; width: 16%; height: 3.6%; }
+  .cloud.c1::before { width: 55%; height: 180%; top: -75%; left: 18%; }
+  .cloud.c1::after  { width: 42%; height: 150%; top: -50%; left: 50%; }
+  .cloud.c2 { top: 26%; left: 30%; width: 12%; height: 2.8%; opacity: 0.8; }
+  .cloud.c2::before { width: 60%; height: 190%; top: -85%; left: 15%; }
+  .cloud.c2::after  { width: 45%; height: 160%; top: -55%; left: 48%; }
+
+  /* 草地纹理 */
+  .grass {
+    position: absolute;
+    left: 0; right: 0; bottom: 0;
+    height: 30%;
+    background:
+      radial-gradient(ellipse 60% 100% at 20% 100%, rgba(157,223,103,0.0) 40%, rgba(124,200,70,0.25) 100%),
+      radial-gradient(ellipse 70% 100% at 80% 100%, rgba(124,200,70,0.0) 40%, rgba(124,200,70,0.2) 100%);
+  }
+  /* 纸飞机 */
+  .plane {
+    position: absolute;
+    width: 0; height: 0;
+    border-style: solid;
+    opacity: 0.95;
+  }
+  .plane.p1 {
+    top: 40%; left: 14%;
+    border-width: 0 14px 22px 14px;
+    border-color: transparent transparent #FFFFFF transparent;
+    transform: rotate(-18deg);
+    filter: drop-shadow(0 4px 3px rgba(0,0,0,0.12));
+  }
+  .plane.p2 {
+    top: 33%; right: 24%;
+    border-width: 0 10px 16px 10px;
+    border-color: transparent transparent #FFFFFF transparent;
+    transform: rotate(22deg) scale(0.8);
+    opacity: 0.8;
+  }
+
+  /* 内容 */
+  .content {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    padding: 0 8%;
+  }
+  .eyebrow {
+    font-family: "Snell Roundhand", "Bradley Hand", "STKaiti", cursive;
+    font-style: italic;
+    font-size: clamp(14px, 1.9vw, 30px);
+    color: #FFF061;
+    letter-spacing: 0.04em;
+    margin-bottom: 1.4%;
+    text-shadow: 0 2px 6px rgba(20,90,150,0.25);
+  }
+  .title {
+    font-family: "Snell Roundhand", "Bradley Hand", "STKaiti", "KaiTi", cursive;
+    font-size: clamp(48px, 9vw, 132px);
+    font-weight: 700;
+    line-height: 1.05;
+    color: #FFFFFF;
+    letter-spacing: 0.02em;
+    text-shadow: 0 4px 14px rgba(20,90,150,0.28), 0 1px 0 rgba(255,255,255,0.15);
+  }
+  .title .accent {
+    color: #FE7F08;
+    text-shadow: 0 4px 14px rgba(254,127,8,0.35);
+  }
+  .subtitle {
+    margin-top: 2.2%;
+    font-size: clamp(13px, 1.7vw, 24px);
+    font-weight: 400;
+    line-height: 1.6;
+    color: #FFFFFF;
+    opacity: 0.95;
+    max-width: 52%;
+    text-shadow: 0 1px 4px rgba(20,90,150,0.3);
+  }
+  /* 色卡 */
+  .palette {
+    position: absolute;
+    left: 8%;
+    bottom: 5%;
+    display: flex;
+    gap: clamp(10px, 1.4vw, 22px);
+    align-items: center;
+  }
+  .swatch {
+    width: clamp(40px, 5.4vw, 80px);
+    aspect-ratio: 1;
+    border-radius: 50%;
+    box-shadow: 0 6px 14px rgba(0,0,0,0.12), inset 0 -3px 6px rgba(0,0,0,0.08);
+    border: 3px solid rgba(255,255,255,0.85);
+  }
+  .tag {
+    position: absolute;
+    right: 8%;
+    bottom: 6%;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: #FFFFFF;
+    font-size: clamp(11px, 1.2vw, 18px);
+    opacity: 0.85;
+    letter-spacing: 0.16em;
+  }
+  .tag .dot { width: 8px; height: 8px; border-radius: 50%; background: #FFADDD; }
+</style>
+</head>
+<body>
+  <div class="slide">
+    <div class="sun"></div>
+    <div class="cloud c1"></div>
+    <div class="cloud c2"></div>
+    <div class="plane p1"></div>
+    <div class="plane p2"></div>
+    <div class="grass"></div>
+
+    <div class="content">
+      <div class="eyebrow">summer · 夏日碎片</div>
+      <h1 class="title">蝉鸣漫过<span class="accent">树梢</span></h1>
+      <p class="subtitle">把阳光、草地和一阵风，都揉进这一页里。<br/>属于六月的，松弛又明亮的小确幸。</p>
+    </div>
+
+    <div class="palette">
+      <div class="swatch" style="background:#20A1EE"></div>
+      <div class="swatch" style="background:#9DDF67"></div>
+      <div class="swatch" style="background:#FFF061"></div>
+      <div class="swatch" style="background:#FE7F08"></div>
+      <div class="swatch" style="background:#FFADDD"></div>
+    </div>
+
+    <div class="tag">
+      <span class="dot"></span>
+      <span>色彩沉溺 · 夏的另一种可能</span>
+    </div>
+  </div>
+</body>
+</html>

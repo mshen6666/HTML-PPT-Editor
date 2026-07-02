@@ -39,7 +39,7 @@ export async function exportDeckToPdf(
   const document = createDeckDocument(html)
   const deck = parseControlledDeck(document)
   const canvasDimensions = resolveCanvasDimensions(document)
-  const exportFrame = await createExportFrame(html, canvasDimensions)
+  const exportFrame = await createExportFrame(html, canvasDimensions, { scripts: 'remove' })
   const exportDocument = exportFrame.contentDocument
 
   if (!exportDocument) {
@@ -192,7 +192,13 @@ function formatPdfNumber(value: number): string {
 }
 
 function createSafeFileName(value: string): string {
-  const nextValue = value.replace(/[<>:"/\\|?*\u0000-\u001F]/g, '').trim()
+  const nextValue = Array.from(value)
+    .filter((char) => {
+      const codePoint = char.codePointAt(0) ?? 0
+      return codePoint > 31 && !'<>:"/\\|?*'.includes(char)
+    })
+    .join('')
+    .trim()
   return nextValue || EXPORT_FILE_NAME
 }
 

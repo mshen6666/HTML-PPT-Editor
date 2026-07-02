@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>渐变美学 · 樱粉雾蓝</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html, body { width: 1600px; height: 900px; overflow: hidden; font-family:"PingFang SC","Noto Sans SC","Helvetica Neue",sans-serif; }
+  .canvas {
+    width: 1600px; height: 900px; position: relative; color: #2E4B8F;
+    background:
+      radial-gradient(ellipse at 15% 20%, rgba(255,205,225,0.6) 0%, transparent 55%),
+      radial-gradient(ellipse at 85% 80%, rgba(124,150,255,0.4) 0%, transparent 55%),
+      linear-gradient(135deg, #FFF5F9 0%, #F5F0FF 50%, #EFEEFF 100%);
+    overflow: hidden;
+  }
+
+  /* 大渐变球 */
+  .orb {
+    position: absolute; border-radius: 50%; filter: blur(40px);
+  }
+  .orb1 { top: -150px; left: -100px; width: 600px; height: 600px;
+          background: radial-gradient(circle, #FFCDE1 0%, #FFB3D1 50%, transparent 75%); opacity: 0.7;}
+  .orb2 { bottom: -200px; right: -100px; width: 700px; height: 700px;
+          background: radial-gradient(circle, #7C96FF 0%, #A8B8FF 50%, transparent 75%); opacity: 0.55;}
+  .orb3 { top: 350px; left: 600px; width: 400px; height: 400px;
+          background: radial-gradient(circle, #FF6B9D 0%, transparent 70%); opacity: 0.3;}
+
+  /* 星星 */
+  .star { position: absolute; }
+  .s1 { top: 120px; left: 900px; }
+  .s2 { top: 280px; left: 1180px; }
+  .s3 { top: 480px; left: 820px; }
+  .s4 { top: 640px; left: 1280px; }
+
+  /* 月亮 */
+  .moon {
+    position: absolute; top: 100px; right: 220px;
+    width: 130px; height: 130px; border-radius: 50%;
+    background: radial-gradient(circle at 35% 35%, #FFFFFF 0%, #FFCDE1 60%, #FFB3D1 100%);
+    box-shadow: 0 0 60px rgba(255,205,225,0.7);
+  }
+
+  /* 标签 */
+  .tag {
+    position: absolute; top: 70px; left: 140px; z-index:5;
+    font-size: 16px; letter-spacing: 6px; font-weight: 600;
+    background: linear-gradient(90deg, #FF6B9D, #7C96FF);
+    -webkit-background-clip: text; background-clip: text; color: transparent;
+  }
+  .tag::before { content:""; display:inline-block; width:24px; height:2px; background:#FF6B9D; vertical-align:middle; margin-right:12px; }
+
+  /* 标题 */
+  .title { position: absolute; top: 200px; left: 140px; z-index:5; }
+  .main-title {
+    font-size: 124px; font-weight: 800; line-height: 1.05;
+    letter-spacing: 6px;
+    background: linear-gradient(120deg, #FF6B9D 0%, #A8B8FF 50%, #2E4B8F 100%);
+    -webkit-background-clip: text; background-clip: text; color: transparent;
+  }
+  .sub-title {
+    font-size: 28px; color: #2E4B8F; letter-spacing: 10px;
+    margin-top: 28px; font-weight: 400; opacity: 0.85;
+  }
+  .sub-title .pink { color: #FF6B9D; font-weight: 600; }
+
+  /* 正文 */
+  .body {
+    position: absolute; left: 140px; bottom: 220px; z-index:5;
+    width: 480px; font-size: 22px; line-height: 2.1;
+    color: #2E4B8F; letter-spacing: 1.5px; font-weight: 400;
+  }
+  .body strong { color: #FF6B9D; font-weight: 600; }
+
+  /* 色卡渐变 */
+  .gradient-bar {
+    position: absolute; left: 140px; bottom: 90px; z-index:5;
+    width: 540px; height: 70px; border-radius: 35px;
+    background: linear-gradient(90deg, #FFCDE1 0%, #FFB3D1 25%, #A8B8FF 60%, #7C96FF 80%, #2E4B8F 100%);
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 0 30px;
+  }
+  .gradient-bar span { font-size: 13px; color: #FFFFFF; letter-spacing: 1px; font-family:"Helvetica Neue",sans-serif; font-weight: 600; text-shadow: 0 1px 3px rgba(0,0,0,0.2);}
+
+  /* 右侧卡 */
+  .card {
+    position: absolute; top: 280px; right: 140px; z-index:5;
+    width: 340px; padding: 36px; border-radius: 28px;
+    background: rgba(255,255,255,0.6);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255,255,255,0.8);
+  }
+  .card h3 { font-size: 26px; color: #2E4B8F; letter-spacing: 3px; margin-bottom: 20px; }
+  .card .row { display: flex; align-items: center; margin-bottom: 16px; }
+  .card .chip { width: 36px; height: 36px; border-radius: 12px; margin-right: 16px; }
+  .card .info .n { font-size: 18px; color: #2E4B8F; font-weight: 600; letter-spacing: 2px;}
+  .card .info .h { font-size: 13px; color: #3A2D5C; opacity: 0.7; font-family:"Helvetica Neue",sans-serif; }
+
+  /* 底部 */
+  .footer {
+    position: absolute; right: 140px; bottom: 50px; z-index:5;
+    font-size: 14px; letter-spacing: 4px; font-weight: 600;
+    background: linear-gradient(90deg, #FF6B9D, #7C96FF);
+    -webkit-background-clip: text; background-clip: text; color: transparent;
+  }
+</style>
+</head>
+<body>
+<div class="canvas">
+  <div class="orb orb1"></div>
+  <div class="orb orb2"></div>
+  <div class="orb orb3"></div>
+  <div class="moon"></div>
+
+  <svg class="star s1" width="28" height="28" viewBox="0 0 28 28"><path d="M14,2 L16,12 L26,14 L16,16 L14,26 L12,16 L2,14 L12,12 Z" fill="#FF6B9D" opacity="0.8"/></svg>
+  <svg class="star s2" width="20" height="20" viewBox="0 0 20 20"><path d="M10,1 L11,9 L19,10 L11,11 L10,19 L9,11 L1,10 L9,9 Z" fill="#7C96FF"/></svg>
+  <svg class="star s3" width="16" height="16" viewBox="0 0 16 16"><path d="M8,1 L9,7 L15,8 L9,9 L8,15 L7,9 L1,8 L7,7 Z" fill="#FFCDE1"/></svg>
+  <svg class="star s4" width="22" height="22" viewBox="0 0 22 22"><path d="M11,1 L12,10 L21,11 L12,12 L11,21 L10,12 L1,11 L10,10 Z" fill="#A8B8FF"/></svg>
+
+  <div class="tag">DREAMY GRADIENT · 小众粉系</div>
+
+  <div class="title">
+    <div class="main-title">樱粉雾蓝<br>梦幻渐变</div>
+    <div class="sub-title">清晨黄昏 <span class="pink">·</span> 粉与蓝的温柔接吻</div>
+  </div>
+
+  <div class="body">
+    淡樱粉如<strong>晨曦初绽</strong>，<br>
+    雾紫蓝似<strong>夜幕将临</strong>。<br>
+    在交界处，<br>
+    所有浪漫都温柔地相遇。
+  </div>
+
+  <div class="gradient-bar">
+    <span>#FFCDE1</span><span>#FFB3D1</span><span>#A8B8FF</span><span>#7C96FF</span><span>#2E4B8F</span>
+  </div>
+
+  <div class="card">
+    <h3>渐变档案</h3>
+    <div class="row"><div class="chip" style="background:linear-gradient(135deg,#FFCDE1,#FF6B9D)"></div><div class="info"><div class="n">樱粉霞</div><div class="h">#FFCDE1 → #FF6B9D</div></div></div>
+    <div class="row"><div class="chip" style="background:linear-gradient(135deg,#A8B8FF,#7C96FF)"></div><div class="info"><div class="n">雾紫蓝</div><div class="h">#A8B8FF → #7C96FF</div></div></div>
+    <div class="row"><div class="chip" style="background:linear-gradient(135deg,#7C96FF,#2E4B8F)"></div><div class="info"><div class="n">深靛蓝</div><div class="h">#7C96FF → #2E4B8F</div></div></div>
+  </div>
+
+  <div class="footer">DREAMY PINK GRADIENT · VOL. 12</div>
+</div>
+</body>
+</html>

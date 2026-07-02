@@ -5,6 +5,7 @@ import {
   serializeDeck,
 } from '../deck-contract/deckContract'
 import { createExportFrame, waitForExportSurfaceReady } from '../export-runtime/exportFrame'
+import { inlineEmbeddedHtmlPptAssetsForBrowser } from '../html-ppt/browserEmbeddedAssetLoader'
 
 const EXPORT_FILE_NAME = '可编辑演示'
 const HTML_MIME_TYPE = 'text/html;charset=utf-8'
@@ -44,6 +45,9 @@ export async function createStandaloneHtmlExport(document: Document): Promise<st
   const clone = document.cloneNode(true) as Document
   normalizeHtmlPptStandaloneStructure(clone)
   await inlineExternalAssets(document, clone)
+  const normalizedHtml = await inlineEmbeddedHtmlPptAssetsForBrowser(serializeDeck(clone))
+  const normalizedClone = createDeckDocument(normalizedHtml)
+  clone.replaceChild(clone.importNode(normalizedClone.documentElement, true), clone.documentElement)
   injectStandaloneExportStyles(clone)
   injectStandaloneExportNavigationRuntime(clone)
   injectStandaloneExportRuntime(clone)
@@ -81,7 +85,10 @@ export function prepareDeckDocumentForHtmlExport(document: Document): void {
 }
 
 function createSafeFileName(value: string): string {
-  const nextValue = value.replace(/[<>:"/\\|?*\u0000-\u001F]/g, '').trim()
+  const nextValue = Array.from(value)
+    .filter((char) => char.charCodeAt(0) >= 0x20 && !'<>:"/\\|?*'.includes(char))
+    .join('')
+    .trim()
   return nextValue || EXPORT_FILE_NAME
 }
 
@@ -310,9 +317,9 @@ function normalizeHtmlPptStandaloneStructure(document: Document): void {
 }
 
 function injectStandaloneExportRuntime(document: Document): void {
-  if (document.querySelector('script[data-export-runtime="standalone-animation-replay"]')) {
-    return
-  }
+  document.querySelectorAll('script[data-export-runtime="standalone-animation-replay"]').forEach((script) => {
+    script.remove()
+  })
 
   const script = document.createElement('script')
   script.setAttribute('data-export-runtime', 'standalone-animation-replay')
@@ -376,9 +383,9 @@ function injectStandaloneExportNavigationRuntime(document: Document): void {
     return
   }
 
-  if (document.querySelector('script[data-export-runtime="standalone-slide-navigation"]')) {
-    return
-  }
+  document.querySelectorAll('script[data-export-runtime="standalone-slide-navigation"]').forEach((script) => {
+    script.remove()
+  })
 
   const script = document.createElement('script')
   script.setAttribute('data-export-runtime', 'standalone-slide-navigation')
@@ -390,6 +397,87 @@ function injectStandaloneExportNavigationRuntime(document: Document): void {
       function slides() {
         const deckSlides = Array.from(document.querySelectorAll('.deck section.slide'))
         return deckSlides.length ? deckSlides : Array.from(document.querySelectorAll('section.slide'))
+      }
+
+      function syncDeckHeight(activeSlide) {
+        const deck = activeSlide && activeSlide.closest ? activeSlide.closest('.deck') : null
+        if (!(deck instanceof HTMLElement) || !(activeSlide instanceof HTMLElement)) {
+          return
+        }
+
+        const canvasWidth = Number(document.documentElement.dataset.fsCanvasWidth) || 1280
+        const canvasHeight = Number(document.documentElement.dataset.fsCanvasHeight) || 720
+        const contentWidth = canvasWidth
+        const contentHeight = canvasHeight
+        const scale = Math.min(window.innerWidth / contentWidth, window.innerHeight / contentHeight) || 1
+        deck.style.setProperty('--standalone-export-canvas-width', canvasWidth + 'px')
+        deck.style.setProperty('--standalone-export-canvas-height', canvasHeight + 'px')
+        deck.style.setProperty('--standalone-export-scale', String(scale))
+        deck.style.setProperty('--standalone-export-offset-x', Math.max((window.innerWidth - contentWidth * scale) / 2, 0) + 'px')
+        const backdrop = resolveSlideBackdrop(activeSlide)
+        deck.style.setProperty('--standalone-export-stage-bg-color', backdrop.color)
+        deck.style.setProperty('--standalone-export-stage-bg-image', backdrop.image)
+        deck.style.setProperty('--standalone-export-stage-bg-size', backdrop.size)
+        deck.style.setProperty('--standalone-export-stage-bg-position', backdrop.position)
+        deck.style.setProperty('--standalone-export-stage-bg-repeat', backdrop.repeat)
+        document.documentElement.style.setProperty('--standalone-export-stage-bg-color', backdrop.color)
+        document.documentElement.style.setProperty('--standalone-export-stage-bg-image', backdrop.image)
+        document.documentElement.style.setProperty('--standalone-export-stage-bg-size', backdrop.size)
+        document.documentElement.style.setProperty('--standalone-export-stage-bg-position', backdrop.position)
+        document.documentElement.style.setProperty('--standalone-export-stage-bg-repeat', backdrop.repeat)
+      }
+
+      function resolveSlideBackdrop(activeSlide) {
+        const candidates = [
+          activeSlide,
+          activeSlide.querySelector('[data-page-scaffold="1"]'),
+          activeSlide.querySelector('.ppt-page-content'),
+          activeSlide.querySelector('[data-role="content"]'),
+          activeSlide.querySelector('main'),
+          document.body,
+          document.documentElement,
+        ].filter(Boolean)
+
+        for (const node of candidates) {
+          if (!(node instanceof HTMLElement)) continue
+          const style = window.getComputedStyle(node)
+          if (style.backgroundImage && style.backgroundImage !== 'none') {
+            return {
+              color: readVisibleBackgroundColor(candidates) || readThemeBackgroundColor() || 'transparent',
+              image: style.backgroundImage,
+              size: style.backgroundSize || 'auto',
+              position: style.backgroundPosition || '0% 0%',
+              repeat: style.backgroundRepeat || 'repeat',
+            }
+          }
+        }
+
+        return {
+          color: readVisibleBackgroundColor(candidates) || readThemeBackgroundColor() || 'transparent',
+          image: 'none',
+          size: 'auto',
+          position: '0% 0%',
+          repeat: 'repeat',
+        }
+      }
+
+      function readVisibleBackgroundColor(candidates) {
+        for (const node of candidates) {
+          if (!(node instanceof HTMLElement)) continue
+          const style = window.getComputedStyle(node)
+          const color = style.backgroundColor && !/^rgba?\\(\\s*0\\s*,\\s*0\\s*,\\s*0\\s*,\\s*0\\s*\\)$/i.test(style.backgroundColor)
+            ? style.backgroundColor
+            : ''
+          if (color) return color
+        }
+        return ''
+      }
+
+      function readThemeBackgroundColor() {
+        const rootStyle = window.getComputedStyle(document.documentElement)
+        return rootStyle.getPropertyValue('--bg').trim()
+          || rootStyle.getPropertyValue('--background').trim()
+          || rootStyle.getPropertyValue('--deck-bg').trim()
       }
 
       function activeIndex(list) {
@@ -462,6 +550,7 @@ function injectStandaloneExportNavigationRuntime(document: Document): void {
         })
 
         syncNavigationChrome(list, activeSlide, index)
+        syncDeckHeight(activeSlide)
 
         if (updateHash) {
           const nextHash = '#/' + (index + 1)
@@ -508,6 +597,10 @@ function injectStandaloneExportNavigationRuntime(document: Document): void {
       window.addEventListener('hashchange', () => {
         go(activeIndex(slides()), false)
       })
+      window.addEventListener('resize', () => {
+        const list = slides()
+        syncDeckHeight(list[index] || list[0])
+      })
 
       function init() {
         const list = slides()
@@ -526,9 +619,9 @@ function injectStandaloneExportNavigationRuntime(document: Document): void {
 }
 
 function injectStandaloneExportStyles(document: Document): void {
-  if (document.querySelector('style[data-export-runtime="standalone-stagger-fix"]')) {
-    return
-  }
+  document.querySelectorAll('style[data-export-runtime="standalone-stagger-fix"]').forEach((style) => {
+    style.remove()
+  })
 
   const style = document.createElement('style')
   style.setAttribute('data-export-runtime', 'standalone-stagger-fix')
@@ -540,11 +633,31 @@ function injectStandaloneExportStyles(document: Document): void {
       overflow: hidden;
     }
 
+    html[data-fs-deck-profile='html-ppt'],
+    html[data-fs-deck-profile='html-ppt'] body {
+      width: 100vw;
+      height: 100vh;
+      margin: 0;
+      overflow: hidden;
+      background-color: var(--standalone-export-stage-bg-color);
+      background-image: var(--standalone-export-stage-bg-image);
+      background-size: var(--standalone-export-stage-bg-size);
+      background-position: var(--standalone-export-stage-bg-position);
+      background-repeat: var(--standalone-export-stage-bg-repeat);
+    }
+
     html[data-fs-deck-profile='html-ppt'] .deck section.slide {
       position: absolute !important;
-      inset: 0 !important;
+      top: 0 !important;
+      left: 0 !important;
+      right: 0 !important;
+      width: var(--standalone-export-canvas-width, 1280px) !important;
+      height: var(--standalone-export-canvas-height, 720px) !important;
+      overflow: hidden !important;
       opacity: 0;
       pointer-events: none;
+      transform: translateX(var(--standalone-export-offset-x, 0)) scale(var(--standalone-export-scale, 1)) !important;
+      transform-origin: top left;
       visibility: hidden;
     }
 

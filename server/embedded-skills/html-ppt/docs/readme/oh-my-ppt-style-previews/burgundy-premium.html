@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8" />
+<title>勃艮第红高级感</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { width: 100%; height: 100%; overflow: hidden; }
+  body {
+    display: grid;
+    place-items: center;
+    font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei", "Helvetica Neue", sans-serif;
+  }
+  .slide {
+    position: relative;
+    aspect-ratio: 16 / 9;
+    width: min(100vw, calc(100vh * 16 / 9));
+    overflow: hidden;
+    background: #000000;
+    color: #FFFFFF;
+  }
+  /* 勃艮第红主块 */
+  .burgundy {
+    position: absolute;
+    top: 0; left: 0;
+    width: 64%;
+    height: 100%;
+    background: linear-gradient(135deg, #81021F 0%, #6A0219 60%, #560114 100%);
+  }
+  /* 玫瑰金细线 */
+  .gold-line {
+    position: absolute;
+    top: 50%;
+    left: 0;
+    width: 64%;
+    height: 1px;
+    background: linear-gradient(90deg, transparent 0%, #F8B37F 30%, #F8B37F 70%, transparent 100%);
+    opacity: 0.7;
+  }
+  /* 品牌 mark */
+  .brand {
+    position: absolute;
+    top: 7%;
+    left: 6%;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .brand .mark {
+    width: 30px;
+    height: 30px;
+    border: 1.5px solid #F8B37F;
+    display: grid;
+    place-items: center;
+    color: #F8B37F;
+    font-weight: 800;
+    font-size: 16px;
+    letter-spacing: 0;
+  }
+  .brand .name {
+    color: #F8B37F;
+    font-size: clamp(11px, 1.1vw, 16px);
+    letter-spacing: 0.32em;
+    font-weight: 500;
+  }
+
+  /* 主内容 */
+  .content {
+    position: absolute;
+    top: 50%;
+    left: 6%;
+    transform: translateY(-50%);
+    max-width: 52%;
+  }
+  .eyebrow {
+    color: #F8B37F;
+    font-size: clamp(10px, 1vw, 15px);
+    letter-spacing: 0.34em;
+    font-weight: 500;
+    margin-bottom: 3%;
+  }
+  .hearts {
+    display: inline-flex;
+    gap: 4px;
+    margin-left: 12px;
+    color: #FDD95F;
+    font-size: clamp(10px, 1vw, 14px);
+    vertical-align: middle;
+  }
+  .title-en {
+    font-size: clamp(56px, 11vw, 150px);
+    font-weight: 900;
+    letter-spacing: 0.1em;
+    line-height: 0.95;
+    color: #F8B37F;
+    margin-bottom: 4%;
+    text-shadow: 0 2px 20px rgba(248,179,127,0.18);
+  }
+  .title-zh {
+    font-size: clamp(22px, 3vw, 42px);
+    font-weight: 800;
+    letter-spacing: 0.14em;
+    color: #FFFFFF;
+  }
+  .title-zh .sep {
+    color: #F8B37F;
+    margin: 0 12px;
+    font-weight: 400;
+  }
+  .sub {
+    margin-top: 5%;
+    font-size: clamp(11px, 1.15vw, 17px);
+    color: #FDD95F;
+    letter-spacing: 0.22em;
+    font-weight: 400;
+    opacity: 0.92;
+  }
+
+  /* 右侧色卡区 */
+  .cards {
+    position: absolute;
+    top: 50%;
+    right: 4%;
+    transform: translateY(-50%);
+    width: 30%;
+    display: flex;
+    flex-direction: column;
+    gap: clamp(10px, 1.4vw, 20px);
+  }
+  .card {
+    border-radius: 14px;
+    padding: clamp(12px, 1.5vw, 20px) clamp(16px, 1.8vw, 26px);
+    color: #FFFFFF;
+    position: relative;
+  }
+  .card .label {
+    font-size: clamp(10px, 1vw, 14px);
+    letter-spacing: 0.2em;
+    font-weight: 600;
+    opacity: 0.92;
+  }
+  .card .hex {
+    font-size: clamp(9px, 0.9vw, 13px);
+    margin-top: 6px;
+    letter-spacing: 0.16em;
+    opacity: 0.78;
+    font-weight: 400;
+  }
+  .c-main { background: linear-gradient(135deg, #81021F, #560114); }
+  .c-gold { background: linear-gradient(135deg, #F8B37F, #E89A5E); color: #3A1500; }
+  .c-gold .hex { color: #3A1500; opacity: 0.7; }
+  .c-gray  { background: linear-gradient(135deg, #363636, #1F1F1F); }
+  .c-blue  { background: linear-gradient(135deg, #093D77, #062A52); }
+
+  /* 底部签名 */
+  .footer {
+    position: absolute;
+    bottom: 6%;
+    left: 6%;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+  .footer .bar { width: 36px; height: 2px; background: #F8B37F; }
+  .footer .text {
+    color: #F8B37F;
+    font-size: clamp(10px, 1vw, 14px);
+    letter-spacing: 0.28em;
+    font-weight: 500;
+  }
+</style>
+</head>
+<body>
+  <div class="slide">
+    <div class="burgundy"></div>
+    <div class="gold-line"></div>
+
+    <div class="brand">
+      <div class="mark">Z</div>
+      <div class="name">CHUANGYI · 创艺</div>
+    </div>
+
+    <div class="content">
+      <div class="eyebrow">
+        配色灵感
+        <span class="hearts">♥ ♥ ♥ ♥ ♥ ♥</span>
+      </div>
+      <div class="title-en">COLOR</div>
+      <div class="title-zh">勃艮第红<span class="sep">·</span>高级感配色</div>
+      <div class="sub">不一样的配色 · 绚丽多彩</div>
+    </div>
+
+    <div class="cards">
+      <div class="card c-main">
+        <div class="label">BURGUNDY · 主色</div>
+        <div class="hex">#81021F</div>
+      </div>
+      <div class="card c-gold">
+        <div class="label">ROSE GOLD · 强调</div>
+        <div class="hex">#F8B37F</div>
+      </div>
+      <div class="card c-gray">
+        <div class="label">DEEP GRAY · 平衡</div>
+        <div class="hex">#363636</div>
+      </div>
+      <div class="card c-blue">
+        <div class="label">INDIGO · 点缀</div>
+        <div class="hex">#093D77</div>
+      </div>
+    </div>
+
+    <div class="footer">
+      <span class="bar"></span>
+      <span class="text">PREMIUM PALETTE · 2026</span>
+    </div>
+  </div>
+</body>
+</html>

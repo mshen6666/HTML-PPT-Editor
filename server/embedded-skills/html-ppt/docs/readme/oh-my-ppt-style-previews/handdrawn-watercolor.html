@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>治愈手绘水彩 / Handdrawn Watercolor</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{width:100%;height:100%;overflow:hidden}
+html{display:grid;place-items:center;background:#0f1117}
+body{display:grid;place-items:center;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif;background:#0f1117}
+.slide{position:relative;width:min(100vw,calc(100vh*16/9));aspect-ratio:16/9;overflow:hidden;background:#f5f5dc;border-radius:6px;box-shadow:0 0 0 1px rgba(255,255,255,.08)}
+.blob{position:absolute;border-radius:50%;pointer-events:none}
+.b1{top:6%;right:8%;width:clamp(80px,18vw,220px);height:clamp(80px,18vw,220px);background:rgba(135,206,235,.28);filter:blur(clamp(14px,2.8vw,36px))}
+.b2{bottom:8%;right:20%;width:clamp(60px,13vw,160px);height:clamp(60px,13vw,160px);background:rgba(255,127,80,.22);filter:blur(clamp(14px,2.8vw,36px))}
+.b3{top:28%;left:30%;width:clamp(48px,10vw,130px);height:clamp(48px,10vw,130px);background:rgba(135,206,235,.14);filter:blur(clamp(14px,2.8vw,36px))}
+.b4{bottom:16%;left:12%;width:clamp(40px,8vw,100px);height:clamp(40px,8vw,100px);background:rgba(255,127,80,.13);filter:blur(clamp(14px,2.8vw,36px))}
+.b5{top:46%;right:6%;width:clamp(32px,6.5vw,80px);height:clamp(32px,6.5vw,80px);background:rgba(135,206,235,.18);filter:blur(clamp(14px,2.8vw,36px))}
+.b6{top:8%;left:18%;width:clamp(28px,5.5vw,70px);height:clamp(28px,5.5vw,70px);background:rgba(255,127,80,.1);filter:blur(clamp(14px,2.8vw,36px))}
+.doodle-circle{position:absolute;bottom:14%;right:12%;width:clamp(28px,5.5vw,70px);height:clamp(28px,5.5vw,70px);border:2px solid rgba(135,206,235,.28);border-radius:50%;z-index:1}
+.doodle-wave{position:absolute;bottom:30%;right:5%;width:clamp(40px,8vw,100px);height:clamp(18px,3.5vw,44px);border:2px solid rgba(255,127,80,.18);border-radius:0 0 50% 50%;border-top:none;z-index:1}
+.content{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:center;padding:clamp(12px,3vw,40px) clamp(16px,4.5vw,60px);z-index:2}
+.tag{font-family:"SFMono-Regular",Consolas,monospace;font-size:clamp(7px,.9vw,10px);color:#87ceeb;letter-spacing:2.5px;text-transform:uppercase;margin-bottom:clamp(4px,.8vw,10px)}
+.title{font-family:Georgia,"Songti SC",serif;font-size:clamp(26px,5vw,60px);color:#6b705c;font-weight:bold;line-height:1.2;margin-bottom:clamp(4px,.8vw,10px)}
+.desc{font-family:Georgia,"Songti SC",serif;font-size:clamp(10px,1.3vw,15px);color:#8a8570;line-height:1.7;max-width:clamp(140px,30vw,380px)}
+.palette{display:flex;gap:clamp(5px,.8vw,10px);margin-top:clamp(8px,1.5vw,20px)}
+.sw{width:clamp(14px,2vw,24px);height:clamp(14px,2vw,24px);border-radius:50%;background:var(--c);border:1px solid rgba(0,0,0,.06)}
+</style>
+</head>
+<body>
+<div class="slide">
+  <div class="blob b1"></div>
+  <div class="blob b2"></div>
+  <div class="blob b3"></div>
+  <div class="blob b4"></div>
+  <div class="blob b5"></div>
+  <div class="blob b6"></div>
+  <div class="doodle-circle"></div>
+  <div class="doodle-wave"></div>
+  <div class="content">
+    <div class="tag">Handdrawn Watercolor</div>
+    <div class="title">治愈手绘水彩</div>
+    <div class="desc">低饱和暖色与海洋蓝交织，治愈感从纸面上流淌而出</div>
+    <div class="palette">
+      <i class="sw" style="--c:#87ceeb"></i>
+      <i class="sw" style="--c:#f5f5dc"></i>
+      <i class="sw" style="--c:#ff7f50"></i>
+    </div>
+  </div>
+</div>
+</body>
+</html>

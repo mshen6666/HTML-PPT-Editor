@@ -2011,8 +2011,15 @@ describe('App', () => {
     await user.type(screen.getByLabelText(/给智能体的需求/i), '生成一份 AI 产品发布演示')
     await user.click(screen.getByRole('button', { name: /生成候选/i }))
 
-    expect(seenRequestBody).toContain('"skillId":"html_ppt"')
-    expect(seenRequestBody).not.toContain('"htmlPpt"')
+    const parsedRequestBody = JSON.parse(seenRequestBody) as {
+      skillId?: string
+      htmlPpt?: { fullDeckName?: string; layoutNames?: string[] }
+    }
+    expect(parsedRequestBody.skillId).toBe('html_ppt')
+    expect(parsedRequestBody.htmlPpt).toEqual(expect.objectContaining({
+      fullDeckName: 'product-launch',
+      layoutNames: expect.arrayContaining(['cover', 'hero']),
+    }))
     expect(await screen.findByText('已生成一份 html-ppt 风格的 HTML 候选。')).toBeInTheDocument()
     expect(screen.queryByRole('button', { name: /应用草稿/i })).toBeNull()
     expect(screen.getByRole('button', { name: /进入对比模式/i })).toBeInTheDocument()
@@ -2106,7 +2113,13 @@ describe('App', () => {
       fileName: 'metrics.xlsx',
       contentType: 'application/octet-stream',
     }))
-    expect(requestBodies[0]).not.toContain('"htmlPpt"')
+    const generationRequestBody = JSON.parse(requestBodies[0]) as {
+      htmlPpt?: { fullDeckName?: string; layoutNames?: string[] }
+    }
+    expect(generationRequestBody.htmlPpt).toEqual(expect.objectContaining({
+      fullDeckName: 'product-launch',
+      layoutNames: expect.arrayContaining(['cover', 'hero']),
+    }))
     expect(requestBodies[0]).not.toContain('./assets/screenshots')
   })
 

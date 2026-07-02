@@ -4,6 +4,7 @@ import {
   type OptimizePromptRequest,
   type OptimizePromptResponse,
 } from '../src/agent/protocol'
+import { buildClaudeCodeEnv } from './agentAuthConfig'
 
 const OPTIMIZE_TIMEOUT_MS = 30_000
 
@@ -45,8 +46,9 @@ function withTimeout<T>(promise: Promise<T>, ms: number): Promise<T> {
 }
 
 function createAnthropicClient(): Anthropic {
-  const apiKey = process.env.ANTHROPIC_API_KEY ?? ''
-  const baseURL = process.env.ANTHROPIC_BASE_URL || undefined
+  const env = buildClaudeCodeEnv()
+  const apiKey = env.ANTHROPIC_API_KEY ?? ''
+  const baseURL = env.ANTHROPIC_BASE_URL || undefined
   return new Anthropic({ apiKey, baseURL })
 }
 

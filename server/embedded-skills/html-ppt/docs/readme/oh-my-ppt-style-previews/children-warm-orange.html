@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8" />
+<title>童趣橙暖</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { width: 100%; height: 100%; overflow: hidden; }
+  body {
+    display: grid;
+    place-items: center;
+    font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei", "Hiragino Maru Gothic", sans-serif;
+  }
+  .slide {
+    position: relative;
+    aspect-ratio: 16 / 9;
+    width: min(100vw, calc(100vh * 16 / 9));
+    overflow: hidden;
+    background: linear-gradient(180deg, #FF7F00 0%, #FF8E1C 40%, #FFA500 75%, #FEBB3E 100%);
+    color: #FFFFFF;
+  }
+  /* 草地 */
+  .grass {
+    position: absolute;
+    left: 0; right: 0; bottom: 0;
+    height: 26%;
+    background: linear-gradient(180deg, #7CE62E 0%, #70D422 60%, #5CB81A 100%);
+    border-radius: 50% 50% 0 0 / 30% 30% 0 0;
+  }
+  /* 云朵 */
+  .cloud {
+    position: absolute;
+    background: #FFFFFF;
+    border-radius: 40px;
+    opacity: 0.92;
+  }
+  .cloud::before, .cloud::after {
+    content: ""; position: absolute; background: #FFFFFF; border-radius: 50%;
+  }
+  .cloud.c1 { top: 12%; left: 8%; width: 14%; height: 3.2%; }
+  .cloud.c1::before { width: 60%; height: 200%; top: -90%; left: 15%; }
+  .cloud.c1::after  { width: 45%; height: 160%; top: -55%; left: 48%; }
+  .cloud.c2 { top: 20%; right: 12%; width: 11%; height: 2.6%; opacity: 0.8; }
+  .cloud.c2::before { width: 55%; height: 190%; top: -80%; left: 18%; }
+  .cloud.c2::after  { width: 42%; height: 150%; top: -50%; left: 50%; }
+
+  /* 太阳 */
+  .sun {
+    position: absolute;
+    top: 8%;
+    right: 7%;
+    width: 11%;
+    aspect-ratio: 1;
+    border-radius: 50%;
+    background: radial-gradient(circle, #FFF7B0 0%, #FFE15A 60%, #FEBB3E 100%);
+    box-shadow: 0 0 50px 12px rgba(255,235,120,0.6);
+  }
+
+  /* 中央木马 + 标题区 */
+  .stage {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -52%);
+    text-align: center;
+    width: 70%;
+  }
+  .eyebrow {
+    display: inline-block;
+    background: #A6B0FF;
+    color: #FFFFFF;
+    font-size: clamp(10px, 1.1vw, 16px);
+    letter-spacing: 0.28em;
+    font-weight: 700;
+    padding: 5px 18px;
+    border-radius: 30px;
+    margin-bottom: 3%;
+    box-shadow: 0 4px 10px rgba(166,176,255,0.4);
+  }
+  .title {
+    font-size: clamp(56px, 10vw, 140px);
+    font-weight: 800;
+    line-height: 1;
+    letter-spacing: 0.06em;
+    text-shadow: 0 4px 0 rgba(0,0,0,0.12), 0 8px 20px rgba(180,80,0,0.35);
+  }
+  .title .green { color: #70D422; }
+  .title .orange { color: #FE7F08; }
+  .subtitle {
+    margin-top: 3%;
+    font-size: clamp(13px, 1.6vw, 23px);
+    font-weight: 600;
+    color: #FFFFFF;
+    opacity: 0.95;
+    letter-spacing: 0.1em;
+    text-shadow: 0 2px 6px rgba(180,80,0,0.3);
+  }
+
+  /* 气球串 */
+  .balloon {
+    position: absolute;
+    width: clamp(26px, 3vw, 44px);
+    aspect-ratio: 0.85;
+    border-radius: 50% 50% 48% 48% / 55% 55% 45% 45%;
+    box-shadow: inset -4px -6px 8px rgba(0,0,0,0.12);
+  }
+  .balloon::after {
+    content: ""; position: absolute; bottom: -28px; left: 50%;
+    width: 1.5px; height: 28px; background: rgba(255,255,255,0.6);
+  }
+  .b1 { top: 30%; left: 6%;  background: #FFADDD; }
+  .b2 { top: 38%; left: 11%; background: #A6B0FF; transform: scale(0.85); }
+  .b3 { top: 28%; right: 5%;  background: #FFF061; }
+  .b4 { top: 36%; right: 10%; background: #70D422; transform: scale(0.8); }
+
+  /* 纸飞机 */
+  .plane {
+    position: absolute;
+    width: 0; height: 0;
+    border-style: solid;
+  }
+  .plane.p1 {
+    top: 42%; left: 20%;
+    border-width: 0 12px 18px 12px;
+    border-color: transparent transparent #FFFFFF transparent;
+    transform: rotate(-15deg);
+    filter: drop-shadow(0 3px 3px rgba(0,0,0,0.15));
+  }
+  .plane.p2 {
+    top: 35%; right: 22%;
+    border-width: 0 9px 14px 9px;
+    border-color: transparent transparent #FFFFFF transparent;
+    transform: rotate(20deg) scale(0.75);
+    opacity: 0.85;
+  }
+
+  /* 色卡 */
+  .palette {
+    position: absolute;
+    left: 50%;
+    bottom: 4%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: clamp(8px, 1.2vw, 18px);
+  }
+  .sw {
+    width: clamp(28px, 3.4vw, 50px);
+    aspect-ratio: 1;
+    border-radius: 50%;
+    box-shadow: 0 4px 10px rgba(120,50,0,0.2);
+    border: 3px solid rgba(255,255,255,0.9);
+  }
+</style>
+</head>
+<body>
+  <div class="slide">
+    <div class="sun"></div>
+    <div class="cloud c1"></div>
+    <div class="cloud c2"></div>
+    <div class="grass"></div>
+
+    <div class="balloon b1"></div>
+    <div class="balloon b2"></div>
+    <div class="balloon b3"></div>
+    <div class="balloon b4"></div>
+
+    <div class="plane p1"></div>
+    <div class="plane p2"></div>
+
+    <div class="stage">
+      <div class="eyebrow">CHILDREN'S DAY</div>
+      <h1 class="title"><span class="green">童趣</span><span class="orange">世界</span></h1>
+      <div class="subtitle">把整个夏天的快乐，都装进这一天</div>
+    </div>
+
+    <div class="palette">
+      <div class="sw" style="background:#FF7F00"></div>
+      <div class="sw" style="background:#FEBB3E"></div>
+      <div class="sw" style="background:#70D422"></div>
+      <div class="sw" style="background:#FFADDD"></div>
+      <div class="sw" style="background:#A6B0FF"></div>
+    </div>
+  </div>
+</body>
+</html>

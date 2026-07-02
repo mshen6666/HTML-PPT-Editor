@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<title>多巴胺活力撞色</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html, body { width: 1600px; height: 900px; overflow: hidden; }
+  body { font-family: "PingFang SC", "Microsoft YaHei", sans-serif; }
+  .stage {
+    width: 1600px; height: 900px; position: relative; overflow: hidden;
+  }
+  .top {
+    position: absolute; top: 0; left: 0; width: 1600px; height: 560px;
+    background: #A299F4;
+  }
+  .bottom {
+    position: absolute; bottom: 0; left: 0; width: 1600px; height: 340px;
+    background: #CCEC6D;
+  }
+  /* center diamond */
+  .diamond {
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%) rotate(45deg);
+    width: 300px; height: 300px;
+    background: #F454AE;
+    border-radius: 32px;
+    box-shadow: 0 20px 60px rgba(244,84,174,0.45);
+  }
+  .title {
+    position: absolute;
+    top: 150px; left: 100px;
+    color: #FFFFFF;
+    z-index: 5;
+  }
+  .title .kicker {
+    font-size: 18px; font-weight: 700; letter-spacing: 6px;
+    background: #000000; color: #CCEC6D;
+    padding: 6px 16px; border-radius: 999px;
+    display: inline-block; margin-bottom: 22px;
+  }
+  .title h1 {
+    font-size: 110px; font-weight: 900; line-height: 0.95;
+    letter-spacing: -3px;
+  }
+  .title h1 .accent { color: #CCEC6D; }
+  .title .sub {
+    font-size: 24px; font-weight: 500; margin-top: 18px;
+    opacity: 0.95; max-width: 620px;
+  }
+  /* dots */
+  .dots {
+    position: absolute; top: 120px; right: 110px;
+    display: grid; grid-template-columns: repeat(6, 14px); gap: 18px;
+    z-index: 4;
+  }
+  .dots i {
+    width: 14px; height: 14px; border-radius: 50%; background: #FFFFFF; opacity: 0.55;
+  }
+  .bottom-content {
+    position: absolute; bottom: 70px; left: 100px; right: 100px;
+    display: flex; gap: 40px; z-index: 5;
+  }
+  .pill {
+    background: #000000; color: #FFFFFF;
+    padding: 26px 36px; border-radius: 28px;
+    flex: 1;
+  }
+  .pill .num { font-size: 56px; font-weight: 900; line-height: 1; color: #F454AE; }
+  .pill .lbl { font-size: 16px; font-weight: 600; margin-top: 10px; color: #CCEC6D; letter-spacing: 1px; }
+  .pill .desc { font-size: 14px; color: #FFFFFF; opacity: 0.8; margin-top: 8px; line-height: 1.5; }
+  .stamp {
+    position: absolute; top: 60px; right: 90px; z-index: 6;
+    background: #FFFFFF; color: #F454AE;
+    font-size: 16px; font-weight: 800;
+    padding: 12px 22px; border-radius: 999px;
+    transform: rotate(6deg);
+    box-shadow: 0 8px 24px rgba(0,0,0,0.15);
+  }
+  .wave {
+    position: absolute; bottom: 340px; left: 0; width: 1600px; height: 24px;
+    background:
+      radial-gradient(circle at 12px 0, #FFFFFF 12px, transparent 13px) repeat-x;
+    background-size: 24px 24px;
+    z-index: 3;
+  }
+</style>
+</head>
+<body>
+<div class="stage">
+  <div class="top"></div>
+  <div class="bottom"></div>
+  <div class="wave"></div>
+  <div class="diamond"></div>
+
+  <div class="stamp">✦ NEW DROP / SS26</div>
+
+  <div class="dots">
+    <i></i><i></i><i></i><i></i><i></i><i></i>
+    <i></i><i></i><i></i><i></i><i></i><i></i>
+    <i></i><i></i><i></i><i></i><i></i><i></i>
+    <i></i><i></i><i></i><i></i><i></i><i></i>
+  </div>
+
+  <div class="title">
+    <span class="kicker">YOUTH BRAND · 2026</span>
+    <h1>快乐<br><span class="accent">不要克制</span></h1>
+    <p class="sub">把多巴胺穿在身上，让每一次出街都自带 BGM。新品季全线上新，限量首发。</p>
+  </div>
+
+  <div class="bottom-content">
+    <div class="pill">
+      <div class="num">+218%</div>
+      <div class="lbl">SOCIAL BUZZ</div>
+      <div class="desc">话题阅读量同比翻倍</div>
+    </div>
+    <div class="pill">
+      <div class="num">36 SKU</div>
+      <div class="lbl">NEW ARRIVAL</div>
+      <div class="desc">本月上新色系 36 款</div>
+    </div>
+    <div class="pill">
+      <div class="num">5.2万</div>
+      <div class="lbl">WAITING LIST</div>
+      <div class="desc">首发预约已破五万</div>
+    </div>
+  </div>
+</div>
+</body>
+</html>

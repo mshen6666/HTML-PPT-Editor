@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>经典双色 · 米黄深蓝</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html, body { width: 1600px; height: 900px; overflow: hidden; font-family:"Songti SC","Noto Serif SC","SimSun",serif; }
+  .canvas {
+    width: 1600px; height: 900px; position: relative; color: #0D3D6E;
+    background: linear-gradient(135deg, #FBF5E6 0%, #F9F2E0 100%);
+  }
+
+  /* 右侧深蓝色块 */
+  .blue-block {
+    position: absolute; top: 0; right: 0; width: 560px; height: 900px;
+    background: linear-gradient(160deg, #1660AB 0%, #0D3D6E 100%);
+  }
+  /* 金线装饰 */
+  .gold-line {
+    position: absolute; top: 80px; right: 560px; width: 60px; height: 2px;
+    background: #B8860B;
+  }
+
+  /* 左上 */
+  .brand {
+    position: absolute; top: 80px; left: 140px;
+    font-size: 16px; color: #0D3D6E; letter-spacing: 6px;
+    font-family:"Helvetica Neue",sans-serif; font-weight: 600;
+  }
+  .brand::before { content:""; display:inline-block; width:28px; height:2px; background:#B8860B; vertical-align:middle; margin-right:14px; }
+
+  /* 标题 */
+  .title { position: absolute; top: 180px; left: 140px; }
+  .num {
+    font-size: 26px; color: #B8860B; letter-spacing: 4px;
+    font-family:"Playfair Display","Songti SC",serif; font-style: italic;
+    margin-bottom: 20px;
+  }
+  .main-title {
+    font-size: 116px; font-weight: 800; color: #0D3D6E;
+    letter-spacing: 12px; line-height: 1.1;
+  }
+  .main-title .gold { color: #B8860B; font-style: italic; }
+  .sub-title {
+    font-size: 26px; color: #2C2416; letter-spacing: 8px;
+    margin-top: 28px;
+  }
+
+  /* 左下正文 */
+  .body {
+    position: absolute; left: 140px; bottom: 200px;
+    width: 540px; font-size: 22px; line-height: 2.1;
+    color: #2C2416; letter-spacing: 1.5px;
+  }
+  .body strong { color: #1660AB; font-weight: 700; }
+
+  /* 左下数据 */
+  .data {
+    position: absolute; left: 140px; bottom: 90px;
+    display: flex; gap: 50px;
+  }
+  .data .item .n {
+    font-size: 52px; font-weight: 800; color: #1660AB; line-height: 1;
+    font-family:"Playfair Display",serif;
+  }
+  .data .item .l { font-size: 15px; color: #2C2416; letter-spacing: 3px; margin-top: 10px; }
+
+  /* 右侧白色卡 */
+  .card {
+    position: absolute; top: 200px; right: 100px;
+    width: 360px; padding: 44px 40px;
+    background: rgba(249,242,224,0.95);
+  }
+  .card h3 {
+    font-size: 30px; color: #0D3D6E; letter-spacing: 4px; margin-bottom: 24px;
+    border-bottom: 2px solid #B8860B; padding-bottom: 14px;
+  }
+  .card .row {
+    display: flex; justify-content: space-between; padding: 14px 0;
+    border-bottom: 1px solid rgba(13,61,110,0.15); font-size: 18px;
+  }
+  .card .row .k { color: #2C2416; letter-spacing: 2px; }
+  .card .row .v { color: #1660AB; font-weight: 600; }
+
+  /* 右下引文 */
+  .quote {
+    position: absolute; right: 100px; bottom: 110px; width: 360px;
+    color: #F9F2E0; font-size: 20px; line-height: 1.9; letter-spacing: 2px;
+  }
+  .quote .em { color: #B8860B; font-weight: 700; }
+
+  /* 底部 */
+  .footer {
+    position: absolute; left: 140px; bottom: 50px;
+    font-size: 14px; color: #2C2416; letter-spacing: 4px;
+    font-family:"Helvetica Neue",sans-serif;
+  }
+</style>
+</head>
+<body>
+<div class="canvas">
+  <div class="blue-block"></div>
+  <div class="gold-line"></div>
+
+  <div class="brand">CLASSIC DUO · 经典双色</div>
+
+  <div class="title">
+    <div class="num">— No. 01 / Duo Palette —</div>
+    <div class="main-title">米<span class="gold">黄</span><br>深<span class="gold">蓝</span></div>
+    <div class="sub-title">一暖一冷 · 沉淀岁月的高级感</div>
+  </div>
+
+  <div class="body">
+    暖米黄如<strong>典籍封面</strong>，<br>
+    深海蓝似<strong>知识深渊</strong>。<br>
+    双色对峙，不喧不闹，<br>
+    是经得起时间考验的优雅。
+  </div>
+
+  <div class="data">
+    <div class="item"><div class="n">02</div><div class="l">CORE COLORS</div></div>
+    <div class="item"><div class="n">100%</div><div class="l">TIMELESS</div></div>
+    <div class="item"><div class="n">∞</div><div class="l">ELEGANCE</div></div>
+  </div>
+
+  <div class="card">
+    <h3>配色档案</h3>
+    <div class="row"><span class="k">主色 A · 暖米黄</span><span class="v">#F9F2E0</span></div>
+    <div class="row"><span class="k">主色 B · 深海蓝</span><span class="v">#1660AB</span></div>
+    <div class="row"><span class="k">强调 · 金棕</span><span class="v">#B8860B</span></div>
+    <div class="row"><span class="k">气质</span><span class="v">沉稳 · 书卷</span></div>
+  </div>
+
+  <div class="quote">
+    越是<span class="em">简单</span>的配色，<br>
+    越需要<span class="em">克制</span>的品味。<br>
+    经典，从不过时。
+  </div>
+
+  <div class="footer">CLASSIC DUO BLUE · VOL. 11 · TIMELESS PALETTE</div>
+</div>
+</body>
+</html>

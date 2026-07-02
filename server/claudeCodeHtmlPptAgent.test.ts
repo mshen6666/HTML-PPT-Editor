@@ -4,7 +4,7 @@ import { mkdir, mkdtemp, readFile, rm, writeFile } from 'node:fs/promises'
 import os from 'node:os'
 import path from 'node:path'
 
-import { describe, expect, it } from 'vitest'
+import { afterEach, beforeEach, describe, expect, it } from 'vitest'
 
 import { blankDeckHtml } from '../src/blankDeck'
 import { createAiServer } from './createAiServer'
@@ -19,6 +19,26 @@ const defaultHtmlPptBrief = {
   preserveRuntime: true,
   slideCountHint: 5,
 } as const
+
+const originalAnthropicApiKey = process.env.ANTHROPIC_API_KEY
+const originalAnthropicAuthToken = process.env.ANTHROPIC_AUTH_TOKEN
+
+beforeEach(() => {
+  process.env.ANTHROPIC_AUTH_TOKEN = 'test-auth-token'
+})
+
+afterEach(() => {
+  if (originalAnthropicApiKey === undefined) {
+    delete process.env.ANTHROPIC_API_KEY
+  } else {
+    process.env.ANTHROPIC_API_KEY = originalAnthropicApiKey
+  }
+  if (originalAnthropicAuthToken === undefined) {
+    delete process.env.ANTHROPIC_AUTH_TOKEN
+  } else {
+    process.env.ANTHROPIC_AUTH_TOKEN = originalAnthropicAuthToken
+  }
+})
 
 describe('createSandboxedClaudeCodeDeckAgent', () => {
   it('runs Claude Code with html-ppt context and returns the generated presentation artifact', async () => {
@@ -161,6 +181,16 @@ describe('createSandboxedClaudeCodeDeckAgent', () => {
     expect(capturedPrompt).toContain('Examples such as course-module, tech-sharing, pitch-deck, xhs-post, tokyo-night, and editorial-serif are html-ppt resources, not separate skills.')
     expect(capturedPrompt).toContain('beautiful-html-templates')
     expect(capturedPrompt).toContain('When using beautiful-html-templates, preserve the chosen template visual system but output editor-compatible section.slide pages.')
+    expect(capturedPrompt).toContain('Auto style selection policy for short user prompts:')
+    expect(capturedPrompt).toContain('If the user only says to generate a PPT from uploaded documents or gives a very short generic request, do not default to a plain white/minimal deck.')
+    expect(capturedPrompt).toContain('Formal reports should use a visible blue/red-blue engineering, government, Party/state-owned-enterprise, or institute-report visual system')
+    expect(capturedPrompt).toContain('When using oh-my-ppt reference styles, recreate the visual direction inside the editor contract.')
+    expect(capturedPrompt).toContain('Do not ask the user for preferences before generating.')
+    expect(capturedPrompt).toContain('If theme, template, layout, animation, audience, format, or slide count details are missing, choose reasonable defaults from the embedded html-ppt resources and continue.')
+    expect(capturedPrompt).toContain('You must use Write, Edit, or Bash to write the final HTML file to the exact output path.')
+    expect(capturedPrompt).toContain('After writing, read the output file back and verify it is not empty before ending the turn.')
+    expect(capturedPrompt).toContain('Final visual direction guard:')
+    expect(capturedPrompt).toContain('No more than two consecutive slides may be mostly plain white/light unless explicitly requested by the user.')
     expect(capturedPrompt).toContain('Use the editor canvas contract: standard decks are fixed 16:9 at 1280x720.')
     expect(capturedPrompt).toContain('Keep audience-facing content inside a safe content budget of roughly 1120x600 pixels.')
     expect(capturedPrompt).toContain('Interact with the user in Chinese.')
@@ -168,6 +198,8 @@ describe('createSandboxedClaudeCodeDeckAgent', () => {
     expect(capturedPrompt).toContain('For uploaded .docx files, the original file has been pre-processed')
     expect(capturedPrompt).toContain('Always read the extracted .txt companion file')
     expect(capturedPrompt).toContain('Use the Safety AI positioning and cite the 42% pilot lift.')
+    expect(capturedPrompt).toContain('### 私有知识库参考')
+    expect(capturedPrompt).toContain('标题：测试规范')
     expect(events).toEqual(expect.arrayContaining([
       expect.objectContaining({
         type: 'html_candidate_ready',
@@ -550,6 +582,186 @@ describe('createSandboxedClaudeCodeDeckAgent', () => {
     await rm(tempDir, { recursive: true, force: true })
   })
 
+  it('retries when Claude Code completes without writing presentation.html', async () => {
+    const tempDir = await mkdtemp(path.join(os.tmpdir(), 'ppt-claude-retry-'))
+    const prompts: string[] = []
+    const agent = createSandboxedClaudeCodeDeckAgent({
+      runtimeConfig: createRuntimeConfigFixture(),
+      sandboxManager: {
+        async create() {
+          await writeFile(path.join(tempDir, 'current-deck.html'), blankDeckHtml, 'utf8')
+          await writeFile(path.join(tempDir, 'presentation.html'), '', 'utf8')
+          return createSandboxHandleFixture(tempDir)
+        },
+        async destroy() {},
+      },
+      artifactStore: {
+        async save(args) {
+          return {
+            artifactId: 'artifact-retry',
+            tenantId: args.tenantId,
+            userId: args.userId,
+            sessionId: args.sessionId,
+            jobId: args.jobId,
+            fileName: args.fileName,
+            contentType: args.contentType,
+            sizeBytes: args.buffer.byteLength,
+            relativePath: 'artifacts/presentation.html',
+            absolutePath: path.join(tempDir, 'artifact.html'),
+            createdAt: Date.now(),
+          }
+        },
+      },
+      uploadStore: {
+        async save() {
+          throw new Error('not used')
+        },
+        async materialize() {
+          return []
+        },
+      },
+      queryFactory: ({ prompt }) => {
+        prompts.push(prompt)
+        return (async function* () {
+          if (prompts.length === 2) {
+            await writeFile(
+              path.join(tempDir, 'presentation.html'),
+              '<!doctype html><html><head><title>Retry Deck</title></head><body><section class="slide"><h1>Retry Deck</h1></section></body></html>',
+              'utf8',
+            )
+          }
+          yield {
+            type: 'assistant',
+            message: {
+              content: [{ type: 'text', text: prompts.length === 1 ? '我已经完成。' : '重试后已写入。' }],
+            },
+          }
+          yield {
+            type: 'result',
+            subtype: 'success',
+            session_id: `retry-session-${prompts.length}`,
+            result: 'ok',
+          }
+        })()
+      },
+    })
+
+    const events = []
+    for await (const event of agent.runTurn(createSandboxedTurnRequest())) {
+      events.push(event)
+    }
+
+    expect(prompts).toHaveLength(2)
+    expect(prompts[1]).toContain('The previous agent run completed without writing presentation.html.')
+    expect(prompts[1]).toContain(path.join(tempDir, 'presentation.html'))
+    expect(events).toEqual(expect.arrayContaining([
+      expect.objectContaining({
+        type: 'status',
+        phase: 'drafting',
+        label: '正在重试生成 HTML 文件',
+      }),
+      expect.objectContaining({
+        type: 'html_candidate_ready',
+        previewMeta: expect.objectContaining({
+          title: 'Retry Deck',
+        }),
+      }),
+    ]))
+
+    await rm(tempDir, { recursive: true, force: true })
+  })
+
+  it('rewrites visually weak white decks before returning the HTML candidate', async () => {
+    const tempDir = await mkdtemp(path.join(os.tmpdir(), 'ppt-claude-visual-rewrite-'))
+    const prompts: string[] = []
+    const agent = createSandboxedClaudeCodeDeckAgent({
+      runtimeConfig: createRuntimeConfigFixture(),
+      sandboxManager: {
+        async create() {
+          await writeFile(path.join(tempDir, 'current-deck.html'), blankDeckHtml, 'utf8')
+          await writeFile(path.join(tempDir, 'presentation.html'), '', 'utf8')
+          return createSandboxHandleFixture(tempDir)
+        },
+        async destroy() {},
+      },
+      artifactStore: {
+        async save(args) {
+          return {
+            artifactId: 'artifact-visual-rewrite',
+            tenantId: args.tenantId,
+            userId: args.userId,
+            sessionId: args.sessionId,
+            jobId: args.jobId,
+            fileName: args.fileName,
+            contentType: args.contentType,
+            sizeBytes: args.buffer.byteLength,
+            relativePath: 'artifacts/presentation.html',
+            absolutePath: path.join(tempDir, 'artifact.html'),
+            createdAt: Date.now(),
+          }
+        },
+      },
+      uploadStore: {
+        async save() {
+          throw new Error('not used')
+        },
+        async materialize() {
+          return []
+        },
+      },
+      queryFactory: ({ prompt }) => {
+        prompts.push(prompt)
+        return (async function* () {
+          await writeFile(
+            path.join(tempDir, 'presentation.html'),
+            prompts.length === 1
+              ? '<!doctype html><html><head><title>Weak Deck</title><style>:root{--bg:#ffffff;--surface:#fff;--surface-2:#f8fafc}.slide{background:#ffffff}</style></head><body><section class="slide"><h1>Weak Deck</h1></section></body></html>'
+              : '<!doctype html><html><head><title>Strong Deck</title><style>:root{--bg:#07162f;--surface:#123b78;--surface-2:#7f1d1d}.slide{background:linear-gradient(135deg,#07162f,#123b78);color:#fff}</style></head><body><section class="slide"><h1>Strong Deck</h1></section></body></html>',
+            'utf8',
+          )
+          yield {
+            type: 'result',
+            subtype: 'success',
+            session_id: `visual-session-${prompts.length}`,
+            result: 'ok',
+          }
+        })()
+      },
+    })
+
+    const events = []
+    for await (const event of agent.runTurn({
+      ...createSandboxedTurnRequest(),
+      message: '根据上传材料生成一份部门工作汇报 PPT',
+      htmlPpt: {
+        ...defaultHtmlPptBrief,
+        themeName: undefined,
+        fullDeckName: undefined,
+      },
+    })) {
+      events.push(event)
+    }
+
+    expect(prompts).toHaveLength(2)
+    expect(prompts[1]).toContain('visual system is too close to a plain white/light fallback style')
+    expect(prompts[1]).toContain('Root background and surface are white-like')
+    expect(events).toEqual(expect.arrayContaining([
+      expect.objectContaining({
+        type: 'status',
+        phase: 'drafting',
+        label: '正在增强 HTML 候选的主题背景与视觉层次',
+      }),
+      expect.objectContaining({
+        type: 'html_candidate_ready',
+        previewMeta: expect.objectContaining({
+          title: 'Strong Deck',
+        }),
+      }),
+    ]))
+
+    await rm(tempDir, { recursive: true, force: true })
+  })
+
   it('aborts the Claude Code query when the turn abort signal fires', async () => {
     const tempDir = await mkdtemp(path.join(os.tmpdir(), 'ppt-claude-abort-'))
     const abortController = new AbortController()
@@ -707,8 +919,18 @@ function createSandboxedTurnRequest() {
     sessionId: 'session-a',
     documentId: 'document-1',
     conversationId: null,
-    message: '生成一份 AI 产品发布演示',
-    skillId: 'html_ppt',
+        message: '生成一份 AI 产品发布演示',
+        knowledgeReferences: [
+          {
+            id: 'knowledge-1',
+            title: '测试规范',
+            content: '部门汇报必须突出质量门禁、风险闭环和交付节奏。',
+            summary: '质量门禁与风险闭环',
+            sourceType: 'document',
+            categoryPath: ['制度', '测试'],
+          },
+        ],
+        skillId: 'html_ppt',
     currentDeckHtml: blankDeckHtml,
     currentDeckHash: 'hash-sandboxed',
     clientContext: {

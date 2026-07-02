@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>故宫墨红 · palace-ink-red</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body {
+    width: 100%; height: 100%; overflow: hidden;
+    background: #0f1117;
+    display: flex; align-items: center; justify-content: center;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
+  }
+  .slide {
+    width: min(100vw, calc(100vh * 16 / 9));
+    aspect-ratio: 16 / 9;
+    background: #CAD2C5;
+    position: relative;
+    overflow: hidden;
+  }
+  .ink-block {
+    position: absolute;
+    top: 0; left: 0; bottom: 0;
+    width: 38%;
+    background: #8C3232;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 8% 7%;
+  }
+  .ink-block::after {
+    content: "";
+    position: absolute;
+    right: -40px;
+    top: 15%;
+    width: 80px;
+    height: 80px;
+    border: 3px solid #8C323266;
+    border-radius: 50%;
+  }
+  .category {
+    font-size: clamp(7px, 0.8vw, 10px);
+    font-weight: 400;
+    letter-spacing: 0.35em;
+    text-transform: uppercase;
+    color: #DAD8CC88;
+    margin-bottom: 6%;
+  }
+  h1 {
+    font-size: clamp(32px, 5.5vw, 64px);
+    font-weight: 900;
+    color: #E6E1D3;
+    line-height: 1.1;
+    letter-spacing: 0.05em;
+  }
+  .sub {
+    font-size: clamp(10px, 1.2vw, 14px);
+    color: #DAD8CCaa;
+    margin-top: 5%;
+    font-weight: 300;
+    line-height: 1.6;
+    max-width: 85%;
+  }
+  .seal {
+    position: absolute;
+    bottom: 10%;
+    left: 7%;
+    width: clamp(28px, 3.5vw, 44px);
+    height: clamp(28px, 3.5vw, 44px);
+    border: 2px solid #DAD8CC55;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: clamp(10px, 1.2vw, 15px);
+    color: #DAD8CC88;
+    font-weight: 700;
+  }
+  .right-content {
+    position: absolute;
+    top: 0; right: 0; bottom: 0;
+    left: 38%;
+    padding: 7% 7%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+  .right-title {
+    font-size: clamp(11px, 1.3vw, 16px);
+    font-weight: 700;
+    color: #2F2F2F;
+    letter-spacing: 0.08em;
+    margin-bottom: 4%;
+  }
+  .right-desc {
+    font-size: clamp(9px, 1vw, 12px);
+    color: #5a5a5a;
+    line-height: 1.7;
+    max-width: 80%;
+    margin-bottom: 6%;
+  }
+  .card {
+    background: #363636;
+    border-radius: 20px;
+    padding: 5% 6%;
+    max-width: 85%;
+    color: #DAD8CC;
+  }
+  .card-label {
+    font-size: clamp(7px, 0.75vw, 9px);
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: #DAD8CC77;
+    margin-bottom: 3%;
+  }
+  .card-text {
+    font-size: clamp(9px, 1vw, 12px);
+    line-height: 1.6;
+    color: #DAD8CCcc;
+  }
+  .palette {
+    position: absolute;
+    bottom: 7%;
+    right: 7%;
+    display: flex;
+    gap: 8px;
+    align-items: center;
+  }
+  .dot {
+    width: clamp(12px, 1.5vw, 18px);
+    height: clamp(12px, 1.5vw, 18px);
+    border-radius: 50%;
+    background: var(--c);
+  }
+  .tags {
+    position: absolute;
+    top: 7%;
+    right: 7%;
+    display: flex;
+    gap: 8px;
+  }
+  .tag {
+    font-size: clamp(7px, 0.7vw, 9px);
+    border: 1px solid #CFC8BA;
+    border-radius: 100px;
+    padding: 3px 10px;
+    color: #5a5a5a;
+  }
+  .grid-line {
+    position: absolute;
+    background: #8C323215;
+  }
+  .gl-h { height: 1px; left: 38%; right: 0; }
+  .gl1 { top: 35%; }
+  .gl2 { top: 65%; }
+  @media (max-aspect-ratio: 16/9) {
+    .slide { width: min(100vw, calc(100vh * 16 / 9)); height: auto; }
+  }
+  @media (min-aspect-ratio: 16/9) {
+    .slide { height: min(100vh, calc(100vw * 9 / 16)); width: auto; }
+  }
+</style>
+</head>
+<body>
+  <main class="slide" aria-label="故宫墨红 style preview">
+    <div class="ink-block">
+      <div class="category">国风商务 / Palace Ink Red</div>
+      <h1>故宫<br/>墨红</h1>
+      <p class="sub">厚重墨红配宣纸米灰，新中式高级感的东方力量</p>
+      <div class="seal">墨</div>
+    </div>
+    <div class="grid-line gl-h gl1"></div>
+    <div class="grid-line gl-h gl2"></div>
+    <div class="tags">
+      <span class="tag">传统文化</span>
+      <span class="tag">品牌提案</span>
+      <span class="tag">高端汇报</span>
+    </div>
+    <div class="right-content">
+      <div class="right-title">东方审美里的力量感</div>
+      <p class="right-desc">宫墙墨红的沉淀感，宣纸米灰的温润底色，玄石灰的沉稳衬托——每一个色块都像展板缓缓落位。</p>
+      <div class="card">
+        <div class="card-label">配色体系</div>
+        <div class="card-text">墨红 #8C3232 · 玄石灰 #363636 · 宣纸米灰 #CAD2C5 · 米白 #DAD8CC</div>
+      </div>
+    </div>
+    <div class="palette">
+      <div class="dot" style="--c:#8C3232"></div>
+      <div class="dot" style="--c:#363636"></div>
+      <div class="dot" style="--c:#2F2F2F"></div>
+      <div class="dot" style="--c:#DAD8CC"></div>
+      <div class="dot" style="--c:#CAD2C5"></div>
+    </div>
+  </main>
+</body>
+</html>

@@ -2,6 +2,7 @@ import { type ChangeEvent, type FormEvent, type ReactElement, useRef, useState }
 
 import type { AgentTurnEvent, HtmlPptAsset, PendingInput } from '../agent/protocol'
 import type { PendingFormAnswer } from './useAgentSession'
+import type { PptQualityGateResult } from './pptQualityGate'
 
 type TranscriptEntry = {
   id: string
@@ -25,6 +26,7 @@ export type CandidatePreview = {
 type AiPanelProps = {
   candidate: CandidateEvent | null
   candidatePreviews: CandidatePreview[]
+  qualityGateResult: PptQualityGateResult | null
   composerText: string
   replyText: string
   pendingInput: PendingInput | null
@@ -96,6 +98,7 @@ const MODE_OPTIONS: Array<{
 export function AiPanel({
   candidate,
   candidatePreviews,
+  qualityGateResult,
   composerText,
   replyText,
   pendingInput,
@@ -587,6 +590,21 @@ export function AiPanel({
                         {candidate.previewMeta.layoutWarnings.slice(0, 4).map((warning, index) => (
                           <li key={`${warning.code}-${warning.slideId ?? 'deck'}-${index}`}>{warning.message}</li>
                         ))}
+                      </ul>
+                    </div>
+                  ) : null}
+                  {qualityGateResult ? (
+                    <div className="candidate-layout-warnings" role="status">
+                      <strong>质量门禁</strong>
+                      <span>{qualityGateResult.statusLabel}</span>
+                      <p>{qualityGateResult.summary}</p>
+                      <ul>
+                        {qualityGateResult.checks
+                          .filter((check) => check.status !== 'pass')
+                          .slice(0, 4)
+                          .map((check) => (
+                            <li key={check.id}>{check.detail}</li>
+                          ))}
                       </ul>
                     </div>
                   ) : null}

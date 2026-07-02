@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>梦幻分界 · 星河烟火</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html, body { width: 1600px; height: 900px; overflow: hidden; font-family:"PingFang SC","Noto Sans SC","Helvetica Neue",sans-serif; }
+  .canvas {
+    width: 1600px; height: 900px; position: relative; color: #F5F5F5;
+    background: linear-gradient(115deg, #000000 0%, #0D1240 35%, #1A237E 55%, #2A1A4A 70%, #4A2A0A 88%, #FF6D00 100%);
+    overflow: hidden;
+  }
+
+  /* 星空层 */
+  .stars-bg { position: absolute; top:0; left:0; width: 55%; height: 100%; }
+
+  /* 烟火层 */
+  .fireworks { position: absolute; right: 0; bottom: 0; width: 50%; height: 80%; }
+
+  /* 分界光带 */
+  .glow-line {
+    position: absolute; top: 0; left: 50%; width: 4px; height: 100%;
+    background: linear-gradient(180deg, transparent, #FFD700 40%, #FF9800 60%, transparent);
+    filter: blur(3px); opacity: 0.7;
+  }
+
+  /* 月亮 */
+  .moon {
+    position: absolute; top: 110px; left: 280px;
+    width: 110px; height: 110px; border-radius: 50%;
+    background: radial-gradient(circle at 35% 35%, #FFF3D6 0%, #FFD700 70%, #FF9800 100%);
+    box-shadow: 0 0 60px rgba(255,215,0,0.5);
+  }
+
+  /* 标签 */
+  .tag {
+    position: absolute; top: 80px; left: 140px; z-index:5;
+    font-size: 15px; letter-spacing: 6px; font-weight: 600;
+    color: #FFD700;
+  }
+  .tag::before { content:""; display:inline-block; width:24px; height:2px; background:#FFD700; vertical-align:middle; margin-right:12px; }
+
+  /* 标题 */
+  .title { position: absolute; top: 260px; left: 140px; z-index:5; }
+  .main-title {
+    font-size: 128px; font-weight: 800; line-height: 1.05;
+    letter-spacing: 8px; color: #F5F5F5;
+    text-shadow: 0 0 30px rgba(255,215,0,0.3);
+  }
+  .main-title .gold {
+    background: linear-gradient(120deg, #FFD700 0%, #FF9800 100%);
+    -webkit-background-clip: text; background-clip: text; color: transparent;
+  }
+  .sub-title {
+    font-size: 28px; color: #FFF3D6; letter-spacing: 10px;
+    margin-top: 28px; font-weight: 300; opacity: 0.9;
+  }
+  .sub-title .em { color: #FFD700; font-weight: 600; }
+
+  /* 正文 */
+  .body {
+    position: absolute; left: 140px; bottom: 200px; z-index:5;
+    width: 500px; font-size: 22px; line-height: 2.1;
+    color: #F5F5F5; letter-spacing: 1.5px; font-weight: 300; opacity: 0.95;
+  }
+  .body strong { color: #FFD700; font-weight: 600; }
+
+  /* 右侧引文卡 */
+  .quote-card {
+    position: absolute; top: 200px; right: 140px; z-index:5;
+    width: 340px; padding: 36px;
+    background: rgba(0,0,0,0.4);
+    border: 1px solid rgba(255,215,0,0.4);
+    backdrop-filter: blur(4px);
+  }
+  .quote-card .qm { font-size: 60px; color: #FFD700; line-height: 0.5; font-family: serif;}
+  .quote-card p { font-size: 22px; line-height: 1.9; color: #FFF3D6; letter-spacing: 2px; margin-top: 12px;}
+  .quote-card .em { color: #FF9800; font-weight: 600; }
+  .quote-card .sig { font-size: 15px; color: #FFD700; letter-spacing: 3px; margin-top: 20px; opacity: 0.8;}
+
+  /* 右下数据 */
+  .stats {
+    position: absolute; right: 140px; bottom: 90px; z-index:5;
+    display: flex; gap: 30px;
+  }
+  .stat .n {
+    font-size: 48px; font-weight: 800; line-height: 1;
+    background: linear-gradient(120deg, #FFD700, #FF9800);
+    -webkit-background-clip: text; background-clip: text; color: transparent;
+    font-family:"Helvetica Neue",sans-serif;
+  }
+  .stat .l { font-size: 14px; color: #FFF3D6; letter-spacing: 3px; margin-top: 8px; opacity: 0.8;}
+
+  /* 底部 */
+  .footer {
+    position: absolute; left: 140px; bottom: 50px; z-index:5;
+    font-size: 14px; color: #FFD700; letter-spacing: 4px; opacity: 0.7;
+  }
+</style>
+</head>
+<body>
+<div class="canvas">
+  <!-- 星空 -->
+  <svg class="stars-bg" viewBox="0 0 880 900" preserveAspectRatio="none">
+    <g fill="#F5F5F5">
+      <circle cx="80" cy="120" r="1.5" opacity="0.9"/>
+      <circle cx="200" cy="80" r="1" opacity="0.7"/>
+      <circle cx="340" cy="180" r="2" opacity="0.95"/>
+      <circle cx="120" cy="300" r="1" opacity="0.6"/>
+      <circle cx="280" cy="400" r="1.5" opacity="0.8"/>
+      <circle cx="420" cy="260" r="1" opacity="0.7"/>
+      <circle cx="180" cy="520" r="2" opacity="0.9"/>
+      <circle cx="380" cy="600" r="1" opacity="0.6"/>
+      <circle cx="80" cy="700" r="1.5" opacity="0.8"/>
+      <circle cx="500" cy="150" r="1" opacity="0.6"/>
+      <circle cx="600" cy="320" r="1.5" opacity="0.7"/>
+      <circle cx="240" cy="620" r="1" opacity="0.5"/>
+      <circle cx="460" cy="740" r="1.5" opacity="0.7"/>
+    </g>
+    <g fill="#FFD700">
+      <circle cx="160" cy="200" r="2.5" opacity="0.9"/>
+      <circle cx="320" cy="480" r="2" opacity="0.8"/>
+      <circle cx="540" cy="240" r="2.5" opacity="0.85"/>
+    </g>
+  </svg>
+
+  <!-- 烟火 -->
+  <svg class="fireworks" viewBox="0 0 800 720" preserveAspectRatio="none">
+    <g stroke="#FFD700" stroke-width="2" fill="none" opacity="0.85">
+      <line x1="500" y1="200" x2="500" y2="120"/>
+      <line x1="500" y1="200" x2="560" y2="140"/>
+      <line x1="500" y1="200" x2="600" y2="200"/>
+      <line x1="500" y1="200" x2="560" y2="260"/>
+      <line x1="500" y1="200" x2="500" y2="280"/>
+      <line x1="500" y1="200" x2="440" y2="260"/>
+      <line x1="500" y1="200" x2="400" y2="200"/>
+      <line x1="500" y1="200" x2="440" y2="140"/>
+    </g>
+    <g fill="#FF9800">
+      <circle cx="500" cy="120" r="4"/>
+      <circle cx="560" cy="140" r="4"/>
+      <circle cx="600" cy="200" r="4"/>
+      <circle cx="560" cy="260" r="4"/>
+      <circle cx="500" cy="280" r="4"/>
+      <circle cx="440" cy="260" r="4"/>
+      <circle cx="400" cy="200" r="4"/>
+      <circle cx="440" cy="140" r="4"/>
+      <circle cx="500" cy="200" r="6" fill="#FFD700"/>
+    </g>
+    <g stroke="#FF6D00" stroke-width="1.5" fill="none" opacity="0.7">
+      <line x1="680" y1="400" x2="680" y2="340"/>
+      <line x1="680" y1="400" x2="720" y2="360"/>
+      <line x1="680" y1="400" x2="740" y2="400"/>
+      <line x1="680" y1="400" x2="720" y2="440"/>
+      <line x1="680" y1="400" x2="680" y2="460"/>
+      <line x1="680" y1="400" x2="640" y2="440"/>
+      <line x1="680" y1="400" x2="620" y2="400"/>
+      <line x1="680" y1="400" x2="640" y2="360"/>
+    </g>
+    <g fill="#FFD700" opacity="0.8">
+      <circle cx="680" cy="340" r="3"/><circle cx="720" cy="360" r="3"/>
+      <circle cx="740" cy="400" r="3"/><circle cx="720" cy="440" r="3"/>
+      <circle cx="680" cy="460" r="3"/><circle cx="640" cy="440" r="3"/>
+      <circle cx="620" cy="400" r="3"/><circle cx="640" cy="360" r="3"/>
+      <circle cx="680" cy="400" r="5" fill="#FF9800"/>
+    </g>
+  </svg>
+
+  <div class="glow-line"></div>
+  <div class="moon"></div>
+
+  <div class="tag">★ COSMIC GRADIENT · 星河烟火</div>
+
+  <div class="title">
+    <div class="main-title">一半<span class="gold">星河</span><br>一半<span class="gold">烟火</span></div>
+    <div class="sub-title">永恒与绚烂 <span class="em">·</span> 各占半边天空</div>
+  </div>
+
+  <div class="body">
+    星河是<strong>永恒</strong>的寂静，<br>
+    烟火是<strong>瞬间</strong>的绚烂。<br>
+    一半仰望宇宙，一半拥抱人间，<br>
+    这便是完整的夜。
+  </div>
+
+  <div class="quote-card">
+    <div class="qm">"</div>
+    <p>星河滚烫，<br>人间<span class="em">值得</span>。<br>一半理想，一半烟火。</p>
+    <div class="sig">— 致每一个追梦人</div>
+  </div>
+
+  <div class="stats">
+    <div class="stat"><div class="n">∞</div><div class="l">STARS</div></div>
+    <div class="stat"><div class="n">1</div><div class="l">NIGHT</div></div>
+    <div class="stat"><div class="n">2</div><div class="l">HALVES</div></div>
+  </div>
+
+  <div class="footer">GRADIENT COSMIC · VOL. 13 · HALF STAR, HALF FIRE</div>
+</div>
+</body>
+</html>

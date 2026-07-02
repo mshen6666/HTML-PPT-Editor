@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<title>深色弥散 · 氛围拉满</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html, body { width: 1600px; height: 900px; overflow: hidden; }
+  body { font-family: "PingFang SC", "Microsoft YaHei", sans-serif; }
+  .stage {
+    width: 1600px; height: 900px; position: relative; overflow: hidden;
+    background: #150F2A;
+  }
+  .glow {
+    position: absolute; border-radius: 50%; filter: blur(80px);
+    mix-blend-mode: screen;
+  }
+  .g1 { width: 700px; height: 700px; top: -180px; left: -120px;
+        background: radial-gradient(circle, #B23A8C 0%, transparent 70%); opacity: 0.85; }
+  .g2 { width: 600px; height: 600px; top: 200px; right: -100px;
+        background: radial-gradient(circle, #4A6FE3 0%, transparent 70%); opacity: 0.8; }
+  .g3 { width: 480px; height: 480px; bottom: -140px; left: 380px;
+        background: radial-gradient(circle, #3DD9C0 0%, transparent 70%); opacity: 0.55; }
+  .g4 { width: 360px; height: 360px; top: 380px; left: 700px;
+        background: radial-gradient(circle, #E94C89 0%, transparent 70%); opacity: 0.6; }
+
+  .grid-bg {
+    position: absolute; inset: 0;
+    background-image:
+      linear-gradient(rgba(255,255,255,0.04) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,0.04) 1px, transparent 1px);
+    background-size: 60px 60px;
+  }
+  .noise {
+    position: absolute; inset: 0; opacity: 0.06;
+    background: radial-gradient(circle at 30% 30%, #FFF 0%, transparent 40%),
+                radial-gradient(circle at 70% 70%, #FFF 0%, transparent 40%);
+  }
+
+  .content {
+    position: absolute; top: 130px; left: 100px; right: 100px; z-index: 5;
+    color: #F5F0FF;
+  }
+  .kicker {
+    display: inline-flex; align-items: center; gap: 12px;
+    font-size: 14px; font-weight: 700; letter-spacing: 4px;
+    color: #3DD9C0; margin-bottom: 30px;
+    font-family: "JetBrains Mono", monospace;
+  }
+  .kicker::before { content: ""; width: 36px; height: 1px; background: #3DD9C0; }
+  h1 {
+    font-size: 130px; font-weight: 900; line-height: 0.92;
+    letter-spacing: -3px; margin-bottom: 18px;
+    text-shadow: 0 0 40px rgba(178,58,140,0.5);
+  }
+  h1 .grad {
+    background: linear-gradient(90deg, #E94C89 0%, #B23A8C 40%, #4A6FE3 100%);
+    -webkit-background-clip: text; background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  .sub {
+    font-size: 22px; font-weight: 300; line-height: 1.7;
+    color: #B0A4E0; max-width: 720px; margin-bottom: 50px;
+  }
+  .stats { display: flex; gap: 60px; }
+  .stat .v {
+    font-size: 52px; font-weight: 800; line-height: 1;
+    font-family: "JetBrains Mono", monospace;
+    background: linear-gradient(180deg, #F5F0FF 0%, #B0A4E0 100%);
+    -webkit-background-clip: text; background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  .stat .l { font-size: 13px; color: #8A7FB8; letter-spacing: 2px; margin-top: 10px; font-weight: 600; }
+
+  .corner {
+    position: absolute; top: 60px; right: 100px; z-index: 5;
+    color: #8A7FB8; font-size: 13px; letter-spacing: 3px;
+    font-family: "JetBrains Mono", monospace;
+    text-align: right;
+  }
+  .corner .b { color: #E94C89; font-weight: 700; }
+
+  .bottom-bar {
+    position: absolute; bottom: 60px; left: 100px; right: 100px; z-index: 5;
+    display: flex; justify-content: space-between; align-items: center;
+    padding-top: 24px; border-top: 1px solid rgba(245,240,255,0.15);
+  }
+  .bottom-bar .left { color: #8A7FB8; font-size: 13px; letter-spacing: 2px; font-family: "JetBrains Mono", monospace; }
+  .bottom-bar .cta {
+    background: linear-gradient(90deg, #E94C89 0%, #B23A8C 100%);
+    color: #FFFFFF; font-size: 15px; font-weight: 700; letter-spacing: 2px;
+    padding: 14px 32px; border-radius: 999px;
+    box-shadow: 0 0 30px rgba(233,76,137,0.5);
+  }
+  .bottom-bar .tags { display: flex; gap: 14px; }
+  .bottom-bar .tag {
+    border: 1px solid rgba(61,217,192,0.4); color: #3DD9C0;
+    font-size: 12px; font-weight: 600; letter-spacing: 1px;
+    padding: 6px 14px; border-radius: 999px;
+    font-family: "JetBrains Mono", monospace;
+  }
+</style>
+</head>
+<body>
+<div class="stage">
+  <div class="g1"></div><div class="g2"></div>
+  <div class="g3"></div><div class="g4"></div>
+  <div class="grid-bg"></div>
+  <div class="noise"></div>
+
+  <div class="corner">
+    <div>NIGHT MODE / v2.6</div>
+    <div class="b">● LIVE BROADCAST</div>
+  </div>
+
+  <div class="content">
+    <div class="kicker">AFTERGLOW · 2026</div>
+    <h1>把夜晚<br><span class="grad">调到最大</span></h1>
+    <p class="sub">深色是底，弥散光是情绪。霓虹不喧哗，只在暗里慢慢燃。<br>这是属于夜晚的氛围引擎。</p>
+    <div class="stats">
+      <div class="stat"><div class="v">128K</div><div class="l">STREAMS</div></div>
+      <div class="stat"><div class="v">60FPS</div><div class="l">SMOOTH</div></div>
+      <div class="stat"><div class="v">4D</div><div class="l">IMMERSIVE</div></div>
+    </div>
+  </div>
+
+  <div class="bottom-bar">
+    <div class="left">// SCENE_07 · NEON_DISTRICT</div>
+    <div class="tags">
+      <span class="tag">#CYBER</span>
+      <span class="tag">#AMBIENT</span>
+      <span class="tag">#GLOW</span>
+    </div>
+    <div class="cta">ENTER THE NIGHT →</div>
+  </div>
+</div>
+</body>
+</html>

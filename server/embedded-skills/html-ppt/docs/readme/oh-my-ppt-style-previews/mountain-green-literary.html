@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8" />
+<title>山野葱郁</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { width: 100%; height: 100%; overflow: hidden; }
+  body {
+    display: grid;
+    place-items: center;
+    font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei", "Songti SC", sans-serif;
+  }
+  .slide {
+    position: relative;
+    aspect-ratio: 16 / 9;
+    width: min(100vw, calc(100vh * 16 / 9));
+    overflow: hidden;
+    background: linear-gradient(180deg, #CFDFCC 0%, #B8D4C8 12%, #4A8B5A 20%, #3E7228 45%, #5C9A33 58%, #ECCB2D 78%, #EFE32C 100%);
+    color: #FFFFFF;
+  }
+  /* 远山层（深绿） */
+  .mtn-far {
+    position: absolute;
+    top: 14%;
+    left: -5%; right: -5%;
+    height: 30%;
+    background: #3E7228;
+    clip-path: polygon(0 100%, 8% 55%, 18% 72%, 28% 40%, 38% 65%, 48% 35%, 58% 60%, 68% 30%, 78% 58%, 88% 42%, 96% 62%, 100% 50%, 100% 100%);
+    opacity: 0.92;
+  }
+  /* 中山层（浅绿过渡） */
+  .mtn-mid {
+    position: absolute;
+    top: 26%;
+    left: -5%; right: -5%;
+    height: 28%;
+    background: #408F77;
+    clip-path: polygon(0 100%, 6% 60%, 15% 78%, 25% 50%, 36% 70%, 46% 45%, 56% 68%, 66% 40%, 76% 65%, 86% 52%, 94% 70%, 100% 58%, 100% 100%);
+    opacity: 0.85;
+  }
+  /* 草地亮部光晕 */
+  .grass-glow {
+    position: absolute;
+    bottom: 0;
+    left: 0; right: 0;
+    height: 35%;
+    background: radial-gradient(ellipse 60% 80% at 50% 100%, rgba(255,240,120,0.45) 0%, transparent 70%);
+  }
+  /* 草叶纹理 */
+  .blade {
+    position: absolute;
+    bottom: 8%;
+    width: 2px;
+    background: #5C9A33;
+    opacity: 0.4;
+  }
+
+  /* 奔跑小孩背影（两个） */
+  .kid {
+    position: absolute;
+    bottom: 16%;
+    width: clamp(20px, 2.4vw, 36px);
+  }
+  .kid .head {
+    width: 60%; aspect-ratio: 1;
+    background: #E8C9A0;
+    border-radius: 50%;
+    margin: 0 auto;
+  }
+  .kid .body {
+    width: 80%;
+    height: clamp(20px, 2.6vw, 40px);
+    background: #FFFFFF;
+    border-radius: 8px 8px 4px 4px;
+    margin: 2px auto 0;
+    position: relative;
+  }
+  .kid .body::before, .kid .body::after {
+    content: ""; position: absolute; bottom: -2px;
+    width: 4px; height: 14px;
+    background: #2C3E50;
+    border-radius: 2px;
+  }
+  .kid .body::before { left: 18%; transform: rotate(12deg); }
+  .kid .body::after  { right: 18%; transform: rotate(-12deg); }
+  .k1 { left: 42%; }
+  .k2 { left: 52%; transform: scale(0.88); }
+
+  /* 大标题"夏天" */
+  .title-wrap {
+    position: absolute;
+    top: 30%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    z-index: 3;
+  }
+  .title {
+    font-family: "Snell Roundhand", "Bradley Hand", "STKaiti", "KaiTi", cursive;
+    font-size: clamp(72px, 13vw, 180px);
+    font-weight: 800;
+    color: #FFFFFF;
+    letter-spacing: 0.08em;
+    line-height: 0.95;
+    text-shadow: 0 4px 18px rgba(0,0,0,0.28), 0 2px 0 rgba(0,0,0,0.12);
+  }
+  .title-en {
+    font-family: "Snell Roundhand", "Bradley Hand", cursive;
+    font-style: italic;
+    font-size: clamp(14px, 1.8vw, 28px);
+    color: #FFFFFF;
+    opacity: 0.85;
+    letter-spacing: 0.2em;
+    margin-top: 6px;
+  }
+
+  /* 竖排诗句（左） */
+  .poem-left {
+    position: absolute;
+    top: 16%;
+    left: 5%;
+    writing-mode: vertical-rl;
+    font-family: "Songti SC", "STSong", "KaiTi", serif;
+    font-size: clamp(11px, 1.25vw, 19px);
+    font-weight: 400;
+    color: #FFFFFF;
+    opacity: 0.82;
+    letter-spacing: 0.34em;
+    line-height: 2;
+    text-shadow: 0 1px 4px rgba(0,0,0,0.2);
+  }
+  /* 竖排诗句（右） */
+  .poem-right {
+    position: absolute;
+    top: 56%;
+    right: 6%;
+    writing-mode: vertical-rl;
+    font-family: "Songti SC", "STSong", "KaiTi", serif;
+    font-size: clamp(10px, 1.1vw, 17px);
+    font-weight: 300;
+    color: #3E7228;
+    opacity: 0.75;
+    letter-spacing: 0.3em;
+    line-height: 2;
+    max-height: 30%;
+  }
+
+  /* 底部色卡 */
+  .palette {
+    position: absolute;
+    left: 5%;
+    bottom: 5%;
+    display: flex;
+    gap: clamp(7px, 1vw, 14px);
+    z-index: 4;
+  }
+  .sw {
+    width: clamp(24px, 2.8vw, 42px);
+    aspect-ratio: 1;
+    border-radius: 50%;
+    box-shadow: 0 3px 8px rgba(40,60,30,0.22);
+    border: 2px solid rgba(255,255,255,0.75);
+  }
+  /* 签名 */
+  .sign {
+    position: absolute;
+    right: 5%;
+    bottom: 6%;
+    color: #3E7228;
+    font-size: clamp(10px, 1vw, 15px);
+    letter-spacing: 0.24em;
+    opacity: 0.75;
+    font-weight: 500;
+  }
+</style>
+</head>
+<body>
+  <div class="slide">
+    <div class="mtn-far"></div>
+    <div class="mtn-mid"></div>
+    <div class="grass-glow"></div>
+
+    <div class="kid k1"><div class="head"></div><div class="body"></div></div>
+    <div class="kid k2"><div class="head"></div><div class="body"></div></div>
+
+    <div class="poem-left">时夏方长　盛夏将至</div>
+    <div class="poem-right">把夏天的橘子汽水　卖给颜料用完的梵高</div>
+
+    <div class="title-wrap">
+      <h1 class="title">夏天</h1>
+      <div class="title-en">summer · wild &amp; free</div>
+    </div>
+
+    <div class="palette">
+      <div class="sw" style="background:#3E7228"></div>
+      <div class="sw" style="background:#408F77"></div>
+      <div class="sw" style="background:#ECCB2D"></div>
+      <div class="sw" style="background:#EFE32C"></div>
+      <div class="sw" style="background:#CFDFCC"></div>
+    </div>
+
+    <div class="sign">色彩沉溺 · 夏的另一种可能</div>
+  </div>
+</body>
+</html>

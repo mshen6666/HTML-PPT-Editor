@@ -13,10 +13,12 @@ export type GuideThemeCategory = 'business' | 'tech' | 'creator' | 'academic' | 
 
 export type GuideTheme = {
   name: string
+  label?: string
   category: GuideThemeCategory
   tone: string[]
   useCases: string
   promptHint: string
+  referenceOnly?: boolean
 }
 
 export type GuideFullDeck = {
@@ -721,7 +723,7 @@ const animationDemo = {
 const sections = [
   { id: 'quick-start', title: '如何开始', summary: '用最短路径解释第一次使用时应该如何选主题、选模板、补动效和整理 prompt。' },
   { id: 'platform-usage', title: '平台使用说明', summary: '按实际编辑流程说明顶部工具栏、页面、编辑、智能体、画布和资料库的每个功能。' },
-  { id: 'themes', title: '主题 Themes', summary: '36 个主题按风格分组，不只列名字，还说明适合的内容气质和提示词写法。' },
+  { id: 'themes', title: '主题 Themes', summary: '36 个内置主题 + 38 个 oh-my-ppt 参考风格，按风格分组并说明适合的内容气质和提示词写法。' },
   { id: 'full-decks', title: '完整模板', summary: '14 个完整演示模板，适合作为整套内容的起始骨架。' },
   { id: 'layouts', title: '单页布局 Layouts', summary: '31 个单页布局按用途整理，便于按页面目标快速选型。' },
   { id: 'animations', title: '动效 Animations', summary: '区分 CSS 入场动画和 FX 动效，说明什么时候该用、什么时候不该堆。' },
@@ -812,6 +814,49 @@ const themes: GuideTheme[] = [
   { name: 'magazine-bold', category: 'creator', tone: ['杂志封面', '大字号', '强图文'], useCases: '品牌海报、内容平台封面。', promptHint: '适合写“Magazine Bold、大字标题、封面感强图文”。' },
   { name: 'engineering-whiteprint', category: 'tech', tone: ['工程', '白底蓝线', '可读'], useCases: '技术白皮书、系统说明。', promptHint: '适合写“Engineering Whiteprint、工程白皮书、蓝线图解”。' },
 ]
+
+const ohMyPptReferenceThemes: GuideTheme[] = [
+  { name: 'amber-aurora', label: '扁豆紫蜜陀僧 · 国风治愈', category: 'creator', tone: ['自然', '有机', '国风治愈'], useCases: '国风生活方式、非遗文创、茶饮品牌、文旅宣传、传统文化活动、东方美学展览。', promptHint: '参考 oh-my-ppt“扁豆紫蜜陀僧 · 国风治愈”风格方向：暖紫橙渐变的黄昏国风治愈，适合文旅、国风生活方式和东方美学内容。', referenceOnly: true },
+  { name: 'blue-white-chart', label: '蓝白商务图表', category: 'business', tone: ['浅色', '沉静', '数据汇报'], useCases: '数据分析报告、财务汇报、商业计划书、市场研究、年度总结、投资路演。', promptHint: '参考 oh-my-ppt“蓝白商务图表”风格方向：冷静专业的蓝白数据汇报风，适合图表密集型商务内容。', referenceOnly: true },
+  { name: 'burgundy-premium', label: '勃艮第红高级感', category: 'business', tone: ['深色', '奢华', '红金黑'], useCases: '奢侈品发布、高端品牌介绍、红酒品鉴、艺术拍卖、VIP 客户活动、周年庆典。', promptHint: '参考 oh-my-ppt“勃艮第红高级感”风格方向：沉稳奢华的红金黑配色，适合高端品牌和重要发布。', referenceOnly: true },
+  { name: 'children-warm-orange', label: '童趣橙暖', category: 'creator', tone: ['暖色', '童趣', '活泼'], useCases: '儿童教育、亲子活动、绘本故事、幼儿园课件、儿童节活动、玩具品牌介绍。', promptHint: '参考 oh-my-ppt“童趣橙暖”风格方向：活泼可爱的儿童节橙暖风，适合儿童教育和亲子活动。', referenceOnly: true },
+  { name: 'chinese-cream-blossom', label: '中国传统色·米白樱粉', category: 'academic', tone: ['浅色', '沉静', '温柔国风'], useCases: '东方美学、国风品牌、文化讲座、传统节日、茶艺花艺、文创产品介绍。', promptHint: '参考 oh-my-ppt“中国传统色·米白樱粉”风格方向：宣纸米白配樱粉，适合温柔雅致的国风内容。', referenceOnly: true },
+  { name: 'chinese-fresh-trio', label: '中国传统色·青绿湖蓝', category: 'creator', tone: ['浅色', '沉静', '清朗国风'], useCases: '文旅宣传、传统文化现代化、生态农业、国风生活方式、城市宣传、文化创意。', promptHint: '参考 oh-my-ppt“中国传统色·青绿湖蓝”风格方向：翠绿湖蓝米白三色，适合清朗现代的国风表达。', referenceOnly: true },
+  { name: 'chinese-ink-landscape', label: '中式水墨意境·山水', category: 'academic', tone: ['自然', '有机', '山水意境'], useCases: '山水文旅、传统文化、诗词教学、书画展览、国风品牌、茶文化介绍。', promptHint: '参考 oh-my-ppt“中式水墨意境·山水”风格方向：青灰山色暖沙米，适合深远辽阔的山水意境。', referenceOnly: true },
+  { name: 'chinese-pastel-spring', label: '中国传统色·春日嫩柳', category: 'creator', tone: ['自然', '有机', '春日'], useCases: '春季活动、花艺园艺、国风美妆、传统节日、文旅宣传、生活方式品牌。', promptHint: '参考 oh-my-ppt“中国传统色·春日嫩柳”风格方向：嫩柳绿配桃花粉，适合初春国风温柔配色。', referenceOnly: true },
+  { name: 'chinese-porcelain-rose', label: '中国传统色·凝脂杨妃', category: 'academic', tone: ['浅色', '沉静', '瓷韵'], useCases: '陶瓷艺术、国风美妆、传统服饰、文化展览、高端文创、东方美学。', promptHint: '参考 oh-my-ppt“中国传统色·凝脂杨妃”风格方向：凝脂杨妃双主色，适合瓷韵典雅国风内容。', referenceOnly: true },
+  { name: 'classic-duo-blue', label: '经典双色·米黄深蓝', category: 'business', tone: ['浅色', '沉静', '书卷气'], useCases: '教育培训、读书分享、学术讲座、咨询报告、历史文化、知识付费课程。', promptHint: '参考 oh-my-ppt“经典双色·米黄深蓝”风格方向：暖米黄配深海蓝，适合高级沉稳的书卷气表达。', referenceOnly: true },
+  { name: 'cobalt-sunshine', label: '明黄钴蓝 · 活力专业', category: 'business', tone: ['大胆', '宣言', '高饱和'], useCases: '科技发布会、创新创业、品牌升级、活力团队展示、创意提案、营销活动。', promptHint: '参考 oh-my-ppt“明黄钴蓝 · 活力专业”风格方向：明黄与钴蓝高饱和互补撞色，适合活力专业型汇报。', referenceOnly: true },
+  { name: 'cream-pastel', label: '奶油温柔 · 高级感', category: 'creator', tone: ['浅色', '沉静', '奶油高级'], useCases: '生活方式、美妆护肤、甜品烘焙、母婴品牌、情感分享、治愈系内容。', promptHint: '参考 oh-my-ppt“奶油温柔 · 高级感”风格方向：奶油白、豆沙粉、抹茶绿，适合温柔高级风。', referenceOnly: true },
+  { name: 'dopamine-clash', label: '多巴胺活力撞色', category: 'creator', tone: ['活力', '创意', '撞色'], useCases: 'Z 世代品牌发布、潮牌营销、社交媒体活动、节日促销、青年文化论坛、新消费产品发布。', promptHint: '参考 oh-my-ppt“多巴胺活力撞色”风格方向：淡紫亮绿玫粉高饱和年轻撞色，适合年轻化内容。', referenceOnly: true },
+  { name: 'dreamy-pink-gradient', label: '渐变美学·樱粉雾蓝', category: 'creator', tone: ['活力', '创意', '梦幻渐变'], useCases: '婚礼策划、情感分享、美妆品牌、女性成长、艺术展览、梦幻主题活动。', promptHint: '参考 oh-my-ppt“渐变美学·樱粉雾蓝”风格方向：樱粉雾紫深靛渐变，适合梦幻浪漫诗意表达。', referenceOnly: true },
+  { name: 'dreamy-romance', label: '梦幻浪漫 · 治愈系', category: 'creator', tone: ['活力', '创意', '浪漫治愈'], useCases: '情感主题、婚礼策划、女性成长、心理疗愈、美妆品牌、艺术创作分享。', promptHint: '参考 oh-my-ppt“梦幻浪漫 · 治愈系”风格方向：雾紫樱花粉星空蓝，适合梦幻浪漫治愈内容。', referenceOnly: true },
+  { name: 'gold-ivory', label: '鎏金象牙 · 高级质感', category: 'business', tone: ['浅色', '沉静', '古典奢华'], useCases: '高端品牌、珠宝奢侈品、艺术展览、精品酒店、商务邀请函、周年庆典。', promptHint: '参考 oh-my-ppt“鎏金象牙 · 高级质感”风格方向：鎏金棕与象牙白，适合古典奢华风。', referenceOnly: true },
+  { name: 'gradient-cosmic', label: '梦幻分界·星河烟火', category: 'experimental', tone: ['深色', '沉稳', '史诗梦幻'], useCases: '科技发布会、年度盛典、品牌庆典、未来趋势、宇宙主题、艺术展览开幕。', promptHint: '参考 oh-my-ppt“梦幻分界·星河烟火”风格方向：深靛暗夜金橙，适合史诗梦幻强对比。', referenceOnly: true },
+  { name: 'hand-drawn-autumn', label: '手绘秋日旅行手账', category: 'creator', tone: ['插画手账', '旅行', '秋日'], useCases: '旅行游记、亲子绘本、秋季活动、手账分享、文创产品、生活方式内容。', promptHint: '参考 oh-my-ppt“手绘秋日旅行手账”风格方向：温暖秋日色调的手绘插画风，适合童趣与旅行感表达。', referenceOnly: true },
+  { name: 'handdrawn-watercolor', label: '治愈手绘水彩', category: 'creator', tone: ['自然', '有机', '水彩'], useCases: '心理疗愈、生活方式、亲子教育、公益活动、旅行日记、温暖品牌故事。', promptHint: '参考 oh-my-ppt“治愈手绘水彩”风格方向：低饱和暖色与海洋蓝交织，适合治愈感内容。', referenceOnly: true },
+  { name: 'healing-color-card', label: '情绪疗愈色卡', category: 'creator', tone: ['浅色', '沉静', '疗愈色卡'], useCases: '心理健康、情绪管理、生活方式、美妆护肤、瑜伽冥想、女性成长。', promptHint: '参考 oh-my-ppt“情绪疗愈色卡”风格方向：薰衣草、暖桃、薄荷的柔软治愈情绪色。', referenceOnly: true },
+  { name: 'indigo-lotus', label: '青莲碧蓝 · 梦幻国风', category: 'creator', tone: ['自然', '有机', '梦幻国风'], useCases: '国风文旅、东方美学、文化展览、茶艺香道、汉服品牌、诗词朗诵。', promptHint: '参考 oh-my-ppt“青莲碧蓝 · 梦幻国风”风格方向：紫蓝渐变的黄昏海天国风，适合梦幻东方表达。', referenceOnly: true },
+  { name: 'industrial-kaizen', label: '表格 · 现代周报', category: 'business', tone: ['浅色', '沉静', '表格驱动'], useCases: '周报月报、生产管理、质量改善、运营复盘、项目进度、管理看板。', promptHint: '参考 oh-my-ppt“表格 · 现代周报”风格方向：克制的中性色表格驱动商务风，适合运营管理汇报。', referenceOnly: true },
+  { name: 'ink-wash-jiangnan', label: '水墨江南', category: 'academic', tone: ['浅色', '沉静', '江南烟雨'], useCases: '江南文旅、传统文化、诗词鉴赏、国风品牌、茶文化、文化遗产介绍。', promptHint: '参考 oh-my-ppt“水墨江南”风格方向：水墨意境与江南烟雨的东方诗意。', referenceOnly: true },
+  { name: 'macaron-mist', label: '柔雾甜梦', category: 'creator', tone: ['活力', '创意', '马卡龙'], useCases: '甜品烘焙、美妆护肤、生活方式、女性社群、轻品牌介绍、梦幻活动。', promptHint: '参考 oh-my-ppt“柔雾甜梦”风格方向：薄荷粉、珊瑚、薰衣草紫的柔雾甜点风。', referenceOnly: true },
+  { name: 'mint-fresh', label: '薄荷清新 · 高级绿', category: 'creator', tone: ['自然', '有机', '高级绿'], useCases: '健康医疗、环保公益、生活方式、植物品牌、清新产品发布、教育培训。', promptHint: '参考 oh-my-ppt“薄荷清新 · 高级绿”风格方向：低饱和高明度的高级感绿色系。', referenceOnly: true },
+  { name: 'mountain-green-literary', label: '山野葱郁', category: 'creator', tone: ['自然', '文艺', '山野'], useCases: '自然教育、露营旅行、户外品牌、环保主题、乡村文旅、文学分享。', promptHint: '参考 oh-my-ppt“山野葱郁”风格方向：深绿山峦与黄草地的文艺夏日。', referenceOnly: true },
+  { name: 'neon-haze', label: '深色弥散 · 氛围拉满', category: 'experimental', tone: ['深色', '沉稳', '霓虹弥散'], useCases: '音乐节、潮流品牌、夜经济、科技发布、游戏电竞、创意派对。', promptHint: '参考 oh-my-ppt“深色弥散 · 氛围拉满”风格方向：深蓝紫底叠加霓虹弥散光。', referenceOnly: true },
+  { name: 'olive-elegant', label: '橄榄奶白 · 高级稳重', category: 'business', tone: ['浅色', '沉静', '橄榄奶白'], useCases: '高端地产、精品酒店、咨询报告、奢华生活方式、文化艺术、品牌手册。', promptHint: '参考 oh-my-ppt“橄榄奶白 · 高级稳重”风格方向：深橄榄绿与奶白绿的古典奢华风。', referenceOnly: true },
+  { name: 'orange-sea', label: '晴橙落日海', category: 'creator', tone: ['自然', '有机', '落日海'], useCases: '旅行文旅、海岛度假、生活方式、夏日活动、治愈品牌、摄影分享。', promptHint: '参考 oh-my-ppt“晴橙落日海”风格方向：晴空蓝、柔杏白、落日橙的治愈渐变。', referenceOnly: true },
+  { name: 'oriental-poetic-illustration', label: '东方意境插画', category: 'creator', tone: ['自然', '有机', '禅意插画'], useCases: '东方美学、传统节日、文旅宣传、茶文化、诗词鉴赏、国风品牌。', promptHint: '参考 oh-my-ppt“东方意境插画”风格方向：竹影月色与禅意诗画的东方插画。', referenceOnly: true },
+  { name: 'palace-ink-red', label: '故宫墨红', category: 'business', tone: ['国风商务', '墨红', '东方力量'], useCases: '党政国企汇报、文化遗产、博物馆展陈、国风品牌、正式发布、年度报告。', promptHint: '参考 oh-my-ppt“故宫墨红”风格方向：厚重墨红配宣纸米灰，适合新中式高级感和正式东方力量表达。', referenceOnly: true },
+  { name: 'premium-color-blocking', label: '高级撞色', category: 'business', tone: ['大胆', '杂志', '时尚编辑'], useCases: '时尚品牌、创意提案、品牌升级、营销策划、杂志专题、产品发布。', promptHint: '参考 oh-my-ppt“高级撞色”风格方向：暖橙撞墨蓝的时尚编辑大片气质。', referenceOnly: true },
+  { name: 'sakura-soft-healing', label: '樱花治愈', category: 'creator', tone: ['粉彩', '治愈', '莫兰迪'], useCases: '慢生活、美妆护肤、心理疗愈、女性成长、春季活动、情感分享。', promptHint: '参考 oh-my-ppt“樱花治愈”风格方向：莫兰迪低饱和樱花慢生活。', referenceOnly: true },
+  { name: 'song-rain-poetic', label: '宋人生活·听雨', category: 'academic', tone: ['浅色', '沉静', '新中式'], useCases: '宋韵文化、传统生活美学、诗词讲座、茶文化、文旅宣传、国风课程。', promptHint: '参考 oh-my-ppt“宋人生活·听雨”风格方向：雾蓝嫩绿暖黄，适合宋人听雨新中式。', referenceOnly: true },
+  { name: 'splash-abstract', label: '泼彩抽象·多巴胺', category: 'creator', tone: ['活力', '创意', '泼彩'], useCases: '创意工作坊、艺术展览、品牌活动、潮流发布、青年文化、设计提案。', promptHint: '参考 oh-my-ppt“泼彩抽象·多巴胺”风格方向：五色泼墨多巴胺，适合张扬活力创意。', referenceOnly: true },
+  { name: 'starlight-fireworks', label: '一半星河一半烟火', category: 'experimental', tone: ['深色', '沉稳', '二元诗意'], useCases: '年度盛典、城市宣传、节庆活动、品牌周年、演讲开场、未来愿景。', promptHint: '参考 oh-my-ppt“一半星河一半烟火”风格方向：海军蓝暖焰橙对角，适合梦幻诗意二元表达。', referenceOnly: true },
+  { name: 'starry-dust', label: '星屑柔光 · 童话感', category: 'creator', tone: ['活力', '创意', '童话柔光'], useCases: '童话故事、儿童教育、梦幻活动、情感主题、插画分享、轻品牌内容。', promptHint: '参考 oh-my-ppt“星屑柔光 · 童话感”风格方向：雾紫香槟粉星空蓝的柔光童话风。', referenceOnly: true },
+  { name: 'summer-warm-color', label: '夏日暖色', category: 'creator', tone: ['暖色', '治愈', '夏日绘本'], useCases: '夏日活动、旅行露营、亲子教育、生活方式、文创宣传、治愈系内容。', promptHint: '参考 oh-my-ppt“夏日暖色”风格方向：清新治愈的夏日绘本风。', referenceOnly: true },
+]
+
+const guideThemes: GuideTheme[] = [...themes, ...ohMyPptReferenceThemes]
 
 const embeddedFullDecks: GuideFullDeck[] = [
   { name: 'course-module', scenario: '课程与教学模块', visualKeywords: ['分段教学', '讲义感', '结构清楚'], fit: '适合课程单元、培训讲义、入门教学。', promptStarter: '请基于 course-module 模板，做一套面向初学者的课程模块型 HTML 演示。' },
@@ -1131,7 +1176,7 @@ export const htmlPptSkillGuideData: GuideCatalog = {
   usageOrder,
   platformModules,
   sections: [...sections],
-  themes,
+  themes: guideThemes,
   fullDecks,
   layouts,
   animations,

@@ -1,0 +1,572 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=1600, height=900">
+<title>秋日旅行手账</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html, body {
+    width: 1600px; height: 900px;
+    overflow: hidden;
+    font-family: "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Noto Sans SC", sans-serif;
+    background: #F5E6C8;
+  }
+  .canvas {
+    position: relative;
+    width: 1600px; height: 900px;
+    background: #F5E6C8;
+    overflow: hidden;
+  }
+
+  /* ── 手绘装饰元素 ── */
+
+  /* 枫叶 (左上) */
+  .leaf-1 {
+    position: absolute; top: 38px; left: 52px;
+    width: 60px; height: 60px;
+  }
+  .leaf-1::before {
+    content: "";
+    display: block;
+    width: 60px; height: 60px;
+    background: #E87D3E;
+    border-radius: 0 50% 50% 50%;
+    transform: rotate(-15deg);
+    opacity: 0.7;
+  }
+  .leaf-1::after {
+    content: "";
+    position: absolute; top: 28px; left: 28px;
+    width: 4px; height: 24px;
+    background: #8B5E3C;
+    border-radius: 2px;
+    transform: rotate(-15deg);
+  }
+
+  /* 枫叶 (右上) */
+  .leaf-2 {
+    position: absolute; top: 50px; right: 80px;
+    width: 48px; height: 48px;
+  }
+  .leaf-2::before {
+    content: "";
+    display: block;
+    width: 48px; height: 48px;
+    background: #C04851;
+    border-radius: 0 50% 50% 50%;
+    transform: rotate(25deg);
+    opacity: 0.6;
+  }
+  .leaf-2::after {
+    content: "";
+    position: absolute; top: 22px; left: 22px;
+    width: 3px; height: 20px;
+    background: #8B5E3C;
+    border-radius: 2px;
+    transform: rotate(25deg);
+  }
+
+  /* 小星星装饰 */
+  .star {
+    position: absolute;
+    width: 18px; height: 18px;
+  }
+  .star::before {
+    content: "★";
+    font-size: 18px;
+    color: #E87D3E;
+    opacity: 0.5;
+  }
+  .star-1 { top: 120px; left: 300px; }
+  .star-2 { top: 200px; right: 260px; }
+  .star-3 { bottom: 130px; left: 480px; }
+  .star-4 { bottom: 80px; right: 180px; }
+
+  /* 爱心装饰 */
+  .heart {
+    position: absolute;
+    width: 22px; height: 20px;
+  }
+  .heart::before {
+    content: "♥";
+    font-size: 20px;
+    color: #C04851;
+    opacity: 0.4;
+  }
+  .heart-1 { top: 85px; left: 160px; }
+  .heart-2 { bottom: 160px; right: 340px; }
+  .heart-3 { top: 260px; left: 520px; }
+
+  /* ── 虚线路径 ── */
+  .dotted-path {
+    position: absolute;
+    border: 0;
+    border-top: 3px dashed #8B5E3C;
+    opacity: 0.35;
+  }
+  .path-1 {
+    top: 310px; left: 130px;
+    width: 340px; height: 0;
+    transform: rotate(-5deg);
+  }
+  .path-2 {
+    top: 310px; left: 470px;
+    width: 280px; height: 0;
+    transform: rotate(3deg);
+  }
+  .path-3 {
+    top: 480px; left: 100px;
+    width: 400px; height: 0;
+    transform: rotate(-2deg);
+  }
+  .path-4 {
+    top: 480px; left: 500px;
+    width: 350px; height: 0;
+    transform: rotate(4deg);
+  }
+
+  /* 路径上的小圆点 (连接点) */
+  .dot {
+    position: absolute;
+    width: 10px; height: 10px;
+    background: #8B5E3C;
+    border-radius: 50%;
+    opacity: 0.4;
+  }
+  .dot-1 { top: 306px; left: 130px; }
+  .dot-2 { top: 306px; left: 470px; }
+  .dot-3 { top: 476px; left: 100px; }
+  .dot-4 { top: 476px; left: 500px; }
+
+  /* ── 标题区域 (手绘标签) ── */
+  .title-tag {
+    position: absolute;
+    top: 60px; left: 120px;
+    background: #C04851;
+    padding: 10px 28px 10px 24px;
+    border-radius: 0 20px 20px 0;
+  }
+  .title-tag::before {
+    content: "";
+    position: absolute;
+    left: -12px; top: 50%;
+    transform: translateY(-50%);
+    width: 0; height: 0;
+    border-top: 18px solid transparent;
+    border-bottom: 18px solid transparent;
+    border-right: 12px solid #C04851;
+  }
+  .title-tag h1 {
+    font-size: 36px; font-weight: 700;
+    color: #FFF; letter-spacing: 4px;
+  }
+
+  /* ── 副标题 ── */
+  .subtitle {
+    position: absolute;
+    top: 130px; left: 140px;
+    font-size: 18px;
+    color: #8B5E3C;
+    font-weight: 500;
+    letter-spacing: 2px;
+    background: rgba(255,255,255,0.45);
+    padding: 6px 18px;
+    border-radius: 30px;
+    border: 2px dashed #8B5E3C;
+  }
+
+  /* ── 主卡片 ── */
+  .card-main {
+    position: absolute;
+    top: 190px; left: 110px;
+    width: 460px;
+    background: rgba(255,255,255,0.55);
+    border-radius: 24px;
+    padding: 28px 30px 30px 30px;
+    border: 2.5px solid #8B5E3C;
+  }
+  .card-main .note-mark {
+    position: absolute;
+    top: -14px; right: 20px;
+    font-size: 22px; color: #E87D3E;
+    background: #F5E6C8;
+    padding: 0 8px;
+  }
+  .card-main p {
+    font-size: 15px; line-height: 1.8;
+    color: #4A3728;
+  }
+  .card-main .hl-orange {
+    display: inline-block;
+    background: #E87D3E; color: #FFF;
+    font-weight: 700; padding: 0 8px;
+    border-radius: 6px;
+  }
+  .card-main .hl-blue {
+    display: inline-block;
+    background: #6BA3BE; color: #FFF;
+    font-weight: 700; padding: 0 8px;
+    border-radius: 6px;
+  }
+
+  /* ── 对话框 (第二天) ── */
+  .speech-bubble {
+    position: absolute;
+    top: 200px; right: 120px;
+    width: 300px;
+    background: #FFF;
+    border: 2.5px solid #8B5E3C;
+    border-radius: 24px;
+    padding: 22px 24px;
+  }
+  .speech-bubble::after {
+    content: "";
+    position: absolute;
+    bottom: -16px; left: 40px;
+    width: 0; height: 0;
+    border-left: 14px solid transparent;
+    border-right: 14px solid transparent;
+    border-top: 16px solid #FFF;
+  }
+  .speech-bubble::before {
+    content: "";
+    position: absolute;
+    bottom: -20px; left: 37px;
+    width: 0; height: 0;
+    border-left: 17px solid transparent;
+    border-right: 17px solid transparent;
+    border-top: 19px solid #8B5E3C;
+  }
+  .bubble-label {
+    display: inline-block;
+    background: #6BA3BE;
+    color: #FFF;
+    font-weight: 700;
+    font-size: 14px;
+    padding: 3px 14px;
+    border-radius: 30px;
+    margin-bottom: 10px;
+    letter-spacing: 1px;
+  }
+  .speech-bubble p {
+    font-size: 14px;
+    line-height: 1.8;
+    color: #4A3728;
+  }
+  .speech-bubble .exclaim {
+    display: inline-block;
+    background: #C04851;
+    color: #FFF;
+    font-weight: 700;
+    padding: 1px 10px;
+    border-radius: 30px;
+    font-size: 14px;
+  }
+
+  /* ── 底部信息卡片 ── */
+  .card-bottom {
+    position: absolute;
+    bottom: 60px; left: 120px;
+    width: 380px;
+    background: rgba(255,255,255,0.5);
+    border-radius: 20px;
+    padding: 18px 22px;
+    border: 2px dashed #8B5E3C;
+  }
+  .card-bottom .tag-row {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 10px;
+  }
+  .card-bottom .tag {
+    color: #FFF; font-size: 12px;
+    font-weight: 700; padding: 2px 14px;
+    border-radius: 30px;
+    background: #E87D3E;
+  }
+  .card-bottom .tag-b { background: #6BA3BE; }
+  .card-bottom .tag-r { background: #C04851; }
+  .card-bottom p {
+    font-size: 13px;
+    color: #4A3728;
+    line-height: 1.7;
+  }
+
+  /* ── 右侧插图 (手绘小房子) ── */
+  .illustration {
+    position: absolute;
+    bottom: 50px; right: 100px;
+    width: 200px; height: 160px;
+  }
+  /* 房子主体 */
+  .house-body {
+    position: absolute;
+    bottom: 0; left: 40px;
+    width: 120px; height: 90px;
+    background: #E87D3E;
+    border-radius: 6px;
+    border: 3px solid #8B5E3C;
+  }
+  /* 屋顶 */
+  .house-roof {
+    position: absolute;
+    bottom: 90px; left: 30px;
+    width: 0; height: 0;
+    border-left: 70px solid transparent;
+    border-right: 70px solid transparent;
+    border-bottom: 50px solid #C04851;
+    filter: drop-shadow(0 2px 0 #8B5E3C);
+  }
+  /* 烟囱 */
+  .house-chimney {
+    position: absolute;
+    bottom: 110px; left: 120px;
+    width: 20px; height: 40px;
+    background: #8B5E3C;
+    border-radius: 4px 4px 0 0;
+  }
+  /* 烟 */
+  .smoke {
+    position: absolute;
+    bottom: 148px; left: 124px;
+    width: 12px; height: 12px;
+    background: rgba(139,94,60,0.25);
+    border-radius: 50%;
+  }
+  .smoke-2 {
+    bottom: 158px; left: 132px;
+    width: 10px; height: 10px;
+  }
+  /* 门 */
+  .house-door {
+    position: absolute;
+    bottom: 0; left: 80px;
+    width: 30px; height: 50px;
+    background: #8B5E3C;
+    border-radius: 4px 4px 0 0;
+    border: 2px solid #4A3728;
+  }
+  /* 窗户 */
+  .house-window {
+    position: absolute;
+    bottom: 45px; left: 55px;
+    width: 22px; height: 22px;
+    background: #6BA3BE;
+    border: 2.5px solid #8B5E3C;
+    border-radius: 4px;
+  }
+  .house-window2 {
+    left: 115px;
+  }
+  /* 窗框十字 */
+  .window-cross {
+    position: absolute;
+    bottom: 45px; left: 55px;
+    width: 22px; height: 22px;
+  }
+  .window-cross2 { left: 115px; }
+  .window-cross::before {
+    content: "";
+    position: absolute;
+    left: 50%; top: 0;
+    width: 2px; height: 100%;
+    background: #8B5E3C;
+    transform: translateX(-50%);
+  }
+  .window-cross::after {
+    content: "";
+    position: absolute;
+    top: 50%; left: 0;
+    width: 100%; height: 2px;
+    background: #8B5E3C;
+    transform: translateY(-50%);
+  }
+
+  /* ── 地面线 ── */
+  .ground {
+    position: absolute;
+    bottom: 42px; right: 60px;
+    width: 220px;
+    border-top: 3px dashed #8B5E3C;
+    opacity: 0.3;
+  }
+
+  /* ── 小树 ── */
+  .tree {
+    position: absolute;
+    bottom: 50px; right: 280px;
+  }
+  .tree-trunk {
+    width: 10px; height: 30px;
+    background: #8B5E3C;
+    border-radius: 3px;
+    margin: 0 auto;
+  }
+  .tree-top {
+    width: 40px; height: 40px;
+    background: #E87D3E;
+    border-radius: 50%;
+    margin: 0 auto -6px auto;
+    border: 2px solid #8B5E3C;
+    opacity: 0.7;
+  }
+
+  /* ── 小云朵 ── */
+  .cloud {
+    position: absolute;
+    width: 60px; height: 24px;
+    background: rgba(107,163,190,0.2);
+    border-radius: 30px;
+  }
+  .cloud::before {
+    content: "";
+    position: absolute;
+    top: -12px; left: 12px;
+    width: 30px; height: 30px;
+    background: rgba(107,163,190,0.2);
+    border-radius: 50%;
+  }
+  .cloud::after {
+    content: "";
+    position: absolute;
+    top: -8px; left: 28px;
+    width: 20px; height: 20px;
+    background: rgba(107,163,190,0.2);
+    border-radius: 50%;
+  }
+  .cloud-1 { top: 160px; right: 360px; }
+  .cloud-2 { top: 100px; left: 600px; width: 50px; height: 20px; }
+
+  /* ── 虚线小箭头 ── */
+  .arrow {
+    position: absolute;
+    width: 0; height: 0;
+    border-left: 8px solid transparent;
+    border-right: 8px solid transparent;
+    border-top: 10px solid #8B5E3C;
+    opacity: 0.35;
+  }
+  .arrow-1 { top: 310px; left: 470px; transform: translateX(-50%); }
+  .arrow-2 { top: 480px; left: 500px; transform: translateX(-50%); }
+
+  /* ── 手绘圆圈 ── */
+  .doodle-circle {
+    position: absolute;
+    border-radius: 50%;
+    border: 2.5px dashed #8B5E3C;
+    opacity: 0.2;
+  }
+  .dc-1 { top: 340px; right: 480px; width: 80px; height: 80px; }
+  .dc-2 { bottom: 200px; left: 560px; width: 50px; height: 50px; }
+</style>
+</head>
+<body>
+<div class="canvas">
+
+  <!-- 装饰：枫叶 -->
+  <div class="leaf-1"></div>
+  <div class="leaf-2"></div>
+
+  <!-- 装饰：星星 -->
+  <div class="star star-1"></div>
+  <div class="star star-2"></div>
+  <div class="star star-3"></div>
+  <div class="star star-4"></div>
+
+  <!-- 装饰：爱心 -->
+  <div class="heart heart-1"></div>
+  <div class="heart heart-2"></div>
+  <div class="heart heart-3"></div>
+
+  <!-- 虚线路径 -->
+  <div class="dotted-path path-1"></div>
+  <div class="dotted-path path-2"></div>
+  <div class="dotted-path path-3"></div>
+  <div class="dotted-path path-4"></div>
+
+  <div class="dot dot-1"></div>
+  <div class="dot dot-2"></div>
+  <div class="dot dot-3"></div>
+  <div class="dot dot-4"></div>
+
+  <div class="arrow arrow-1"></div>
+  <div class="arrow arrow-2"></div>
+
+  <!-- 手绘圆圈 -->
+  <div class="doodle-circle dc-1"></div>
+  <div class="doodle-circle dc-2"></div>
+
+  <!-- 云朵 -->
+  <div class="cloud cloud-1"></div>
+  <div class="cloud cloud-2"></div>
+
+  <!-- ===== 标题 ===== -->
+  <div class="title-tag">
+    <h1>秋日漫游记</h1>
+  </div>
+  <div class="subtitle">用画笔记录每一片落叶的故事</div>
+
+  <!-- ===== 主卡片 ===== -->
+  <div class="card-main">
+    <div class="note-mark">&#x270E;</div>
+    <p>
+      背上背包，踏上开往山野的列车。<br>
+      第一站是 <span class="hl-orange">枫叶谷</span>，漫山遍野的暖橙色铺成一片柔软的海洋。<br>
+      沿着溪流走了整整一个下午，捡到了 <span class="hl-blue">七种不同形状</span> 的叶子。<br>
+      傍晚时分，山间小屋的烟囱升起袅袅炊烟——<br>
+      旅店阿姨端来热腾腾的南瓜汤，<span class="hl-orange">超暖！</span>
+    </p>
+  </div>
+
+  <!-- ===== 对话框 ===== -->
+  <div class="speech-bubble">
+    <div class="bubble-label">&#x2605; 第二天</div>
+    <p>
+      清晨被鸟鸣叫醒，推开窗就看到<br>
+      湖面飘着一层薄雾。<br>
+      坐小木船划过对岸，<br>
+      偶遇一片 <span class="exclaim">超美！</span> 的红杉林。<br>
+      在树下野餐时，一只小松鼠<br>
+      悄悄叼走了我的饼干～
+    </p>
+  </div>
+
+  <!-- ===== 底部信息卡片 ===== -->
+  <div class="card-bottom">
+    <div class="tag-row">
+      <span class="tag">&#x1F342; 赏枫</span>
+      <span class="tag tag-b">&#x2601; 徒步</span>
+      <span class="tag tag-r">&#x2665; 美食</span>
+    </div>
+    <p>
+      最佳季节：10 月中旬至 11 月初<br>
+      推荐路线：枫叶谷 → 镜湖 → 红杉秘境<br>
+      随身好物：手账本 &amp; 水彩笔
+    </p>
+  </div>
+
+  <!-- ===== 小房子插图 ===== -->
+  <div class="illustration">
+    <div class="house-chimney"></div>
+    <div class="smoke smoke-1"></div>
+    <div class="smoke smoke-2"></div>
+    <div class="house-roof"></div>
+    <div class="house-body"></div>
+    <div class="house-door"></div>
+    <div class="house-window"></div>
+    <div class="house-window house-window2"></div>
+    <div class="window-cross"></div>
+    <div class="window-cross window-cross2"></div>
+    <div class="ground"></div>
+  </div>
+
+  <!-- 小树 -->
+  <div class="tree">
+    <div class="tree-top"></div>
+    <div class="tree-trunk"></div>
+  </div>
+
+</div>
+</body>
+</html>

@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<title>柔雾马卡龙</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html, body { width: 1600px; height: 900px; overflow: hidden; }
+  body { font-family: "PingFang SC", "Microsoft YaHei", sans-serif; }
+  .stage {
+    width: 1600px; height: 900px; position: relative; overflow: hidden;
+    background:
+      radial-gradient(ellipse at 15% 25%, #8FD9D5 0%, transparent 50%),
+      radial-gradient(ellipse at 85% 15%, #C0B0E8 0%, transparent 50%),
+      radial-gradient(ellipse at 75% 85%, #FFC2B0 0%, transparent 50%),
+      linear-gradient(135deg, #FBF5F0 0%, #F5EEF5 100%);
+  }
+  /* mist overlay */
+  .stage::before {
+    content: ""; position: absolute; inset: 0;
+    background: radial-gradient(circle at 50% 50%, transparent 30%, rgba(251,245,240,0.4) 100%);
+  }
+
+  .nav {
+    position: absolute; top: 50px; left: 80px; right: 80px;
+    display: flex; justify-content: space-between; align-items: center;
+    z-index: 5;
+  }
+  .nav .logo {
+    font-size: 24px; font-weight: 800; letter-spacing: 3px; color: #6B5A8A;
+  }
+  .nav .logo::before { content: "●"; color: #FFC2B0; margin-right: 10px; }
+  .nav .menu { display: flex; gap: 32px; font-size: 13px; color: #8A8090; letter-spacing: 2px; }
+  .nav .menu .active { color: #6B5A8A; font-weight: 700; }
+
+  .hero {
+    position: absolute; top: 150px; left: 80px; z-index: 5;
+    max-width: 720px;
+  }
+  .hero .kicker {
+    display: inline-block;
+    background: #C0B0E8; color: #FFFFFF;
+    font-size: 13px; font-weight: 700; letter-spacing: 4px;
+    padding: 8px 18px; border-radius: 999px; margin-bottom: 26px;
+    box-shadow: 0 6px 18px rgba(192,176,232,0.4);
+  }
+  .hero h1 {
+    font-size: 96px; font-weight: 800; line-height: 1.02;
+    letter-spacing: 2px; color: #6B5A8A;
+  }
+  .hero h1 .mint { color: #5BB8B4; }
+  .hero h1 .coral { color: #E89A86; }
+  .hero .sub {
+    font-size: 20px; line-height: 1.8; color: #8A8090;
+    margin-top: 28px; max-width: 560px;
+  }
+  .hero .actions { display: flex; gap: 16px; margin-top: 40px; }
+  .btn1 {
+    background: #8FD9D5; color: #FFFFFF;
+    padding: 16px 34px; border-radius: 999px;
+    font-size: 15px; font-weight: 700; letter-spacing: 2px;
+    box-shadow: 0 8px 22px rgba(143,217,213,0.5);
+  }
+  .btn2 {
+    background: rgba(255,255,255,0.7); color: #6B5A8A;
+    border: 1px solid rgba(192,176,232,0.4);
+    padding: 16px 34px; border-radius: 999px;
+    font-size: 15px; font-weight: 700; letter-spacing: 2px;
+  }
+
+  /* macaron cards on the right */
+  .macarons {
+    position: absolute; top: 150px; right: 80px; z-index: 5;
+    width: 560px; height: 600px;
+  }
+  .mac {
+    position: absolute; border-radius: 50%;
+    box-shadow: 0 16px 36px rgba(0,0,0,0.1);
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    color: #FFFFFF; text-align: center;
+  }
+  .mac::before {
+    content: ""; position: absolute; top: 50%; left: 8%; right: 8%; height: 8px;
+    background: rgba(255,255,255,0.5); border-radius: 4px;
+    transform: translateY(-50%);
+  }
+  .mac .name { font-size: 22px; font-weight: 800; letter-spacing: 2px; z-index: 2; }
+  .mac .hex { font-size: 12px; opacity: 0.85; margin-top: 4px; letter-spacing: 1px; z-index: 2; font-family: monospace; }
+
+  .m1 { width: 240px; height: 240px; top: 0; right: 0; background: #8FD9D5; }
+  .m2 { width: 200px; height: 200px; top: 60px; left: 0; background: #FFC2B0; }
+  .m3 { width: 220px; height: 220px; bottom: 60px; right: 60px; background: #C0B0E8; }
+  .m4 { width: 170px; height: 170px; bottom: 0; left: 30px; background: #F0D8E0; }
+  .m1 .name, .m1 .hex { color: #FFFFFF; }
+  .m2 .name, .m2 .hex { color: #C26A52; }
+  .m3 .name, .m3 .hex { color: #FFFFFF; }
+  .m4 .name, .m4 .hex { color: #A05870; }
+
+  /* sparkles */
+  .spark { position: absolute; color: #FFFFFF; font-size: 18px; opacity: 0.8; }
+  .s1{top:120px;left:380px}.s2{top:300px;right:30px}.s3{bottom:200px;left:250px;font-size:14px}
+  .s4{top:450px;right:200px;font-size:14px}.s5{bottom:120px;right:340px;font-size:20px}
+
+  .bottom-bar {
+    position: absolute; bottom: 50px; left: 80px; right: 80px; z-index: 5;
+    display: flex; justify-content: space-between; align-items: flex-end;
+    padding-top: 24px; border-top: 1px dashed rgba(143,217,213,0.5);
+  }
+  .stats { display: flex; gap: 50px; }
+  .stats .s .v { font-size: 32px; font-weight: 800; color: #6B5A8A; line-height: 1; }
+  .stats .s .l { font-size: 11px; color: #8A8090; letter-spacing: 2px; margin-top: 6px; }
+  .badge { font-size: 12px; color: #8A8090; letter-spacing: 3px; text-align: right; }
+  .badge .b { color: #6B5A8A; font-weight: 700; font-size: 14px; }
+</style>
+</head>
+<body>
+<div class="stage">
+  <div class="spark s1">✦</div>
+  <div class="spark s2">✧</div>
+  <div class="spark s3">✦</div>
+  <div class="spark s4">✧</div>
+  <div class="spark s5">✦</div>
+
+  <div class="nav">
+    <div class="logo">DOUCEUR</div>
+    <div class="menu">
+      <span class="active">HOME</span>
+      <span>SHOP</span>
+      <span>FLAVORS</span>
+      <span>ABOUT</span>
+    </div>
+  </div>
+
+  <div class="hero">
+    <span class="kicker">DREAMY · 柔雾甜品</span>
+    <h1>云朵般<br><span class="coral">软糯</span>的<span class="mint">甜</span></h1>
+    <p class="sub">薄荷、珊瑚、薰衣草——三色柔雾，<br>像把一口云朵含在嘴里，慢慢化开。</p>
+    <div class="actions">
+      <div class="btn1">选购礼盒 →</div>
+      <div class="btn2">查看口味</div>
+    </div>
+  </div>
+
+  <div class="macarons">
+    <div class="mac m1"><div class="name">薄荷</div><div class="hex">#8FD9D5</div></div>
+    <div class="mac m2"><div class="name">珊瑚</div><div class="hex">#FFC2B0</div></div>
+    <div class="mac m3"><div class="name">薰衣草</div><div class="hex">#C0B0E8</div></div>
+    <div class="mac m4"><div class="name">樱花</div><div class="hex">#F0D8E0</div></div>
+  </div>
+
+  <div class="bottom-bar">
+    <div class="stats">
+      <div class="s"><div class="v">12</div><div class="l">FLAVORS</div></div>
+      <div class="s"><div class="v">100%</div><div class="l">HANDMADE</div></div>
+      <div class="s"><div class="v">4.9★</div><div class="l">RATING</div></div>
+    </div>
+    <div class="badge">
+      <div>SS26 · PASTEL EDITION</div>
+      <div class="b">DOUCEUR STUDIO · 2026</div>
+    </div>
+  </div>
+</div>
+</body>
+</html>

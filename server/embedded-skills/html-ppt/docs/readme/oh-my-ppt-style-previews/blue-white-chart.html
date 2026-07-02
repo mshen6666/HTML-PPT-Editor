@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>蓝白商务图表 · Blue White Chart</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{width:100%;height:100%;overflow:hidden;background:#0f1117}
+body{display:grid;place-items:center;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC",Roboto,"Microsoft YaHei",sans-serif}
+.slide{position:relative;width:min(100vw,calc(100vh*16/9));aspect-ratio:16/9;overflow:hidden;background:#fff;box-shadow:0 0 0 1px rgba(255,255,255,.08)}
+/* decorative circles */
+.deco-1{position:absolute;right:clamp(-60px,-8vw,-100px);top:clamp(-50px,-7vw,-90px);width:clamp(180px,26vw,340px);height:clamp(180px,26vw,340px);border-radius:50%;background:rgba(208,219,239,.4)}
+.deco-2{position:absolute;left:clamp(-45px,-6vw,-70px);bottom:clamp(-40px,-5vw,-80px);width:clamp(140px,20vw,260px);height:clamp(140px,20vw,260px);border-radius:50%;border:clamp(10px,1.8vw,24px) solid #F1F5F9}
+.root{position:relative;display:flex;flex-direction:column;gap:clamp(8px,1.6vw,22px);height:100%;padding:clamp(14px,2.8vw,38px)}
+
+/* Header */
+.header{display:flex;align-items:flex-end;justify-content:space-between;padding-bottom:clamp(5px,1vw,14px);border-bottom:2px solid #305598}
+.header-l{min-width:0}
+.pill{display:inline-block;background:#F1F5F9;color:#4472C4;font-size:clamp(7px,.9vw,11px);font-weight:600;padding:clamp(2px,.4vw,5px) clamp(6px,1.2vw,16px);border-radius:clamp(8px,1.2vw,16px);margin-bottom:clamp(4px,.6vw,8px)}
+h1{font-size:clamp(13px,2.4vw,30px);font-weight:700;color:#305598;letter-spacing:-.01em;line-height:1.2}
+.header-r{font-size:clamp(7px,.9vw,11px);font-weight:500;color:#404040;text-align:right;white-space:nowrap}
+
+/* Main grid */
+.main-grid{display:grid;grid-template-columns:0.88fr 1.12fr;gap:clamp(8px,1.6vw,22px);flex:1;min-height:0}
+
+/* Left dark card */
+.dark-card{background:#305598;border-radius:clamp(6px,1vw,12px);padding:clamp(10px,2vw,28px);color:#fff;display:flex;flex-direction:column;gap:clamp(8px,1.4vw,20px)}
+.dc-head{display:flex;align-items:center;justify-content:space-between}
+.dc-title{font-size:clamp(10px,1.6vw,20px);font-weight:700}
+.dc-badge{font-size:clamp(7px,.9vw,11px);border:1px solid rgba(255,255,255,.35);padding:clamp(2px,.3vw,4px) clamp(6px,1vw,14px);border-radius:clamp(8px,1.2vw,16px);white-space:nowrap}
+.kpi-grid{display:grid;grid-template-columns:1fr 1fr;gap:clamp(6px,1.2vw,16px)}
+.kpi-box{background:rgba(255,255,255,.1);border-radius:clamp(4px,.8vw,10px);padding:clamp(6px,1.2vw,18px)}
+.kpi-label{font-size:clamp(7px,.85vw,11px);color:rgba(255,255,255,.7)}
+.kpi-num{font-size:clamp(16px,2.8vw,36px);font-weight:700;margin-top:clamp(4px,.6vw,8px);line-height:1;font-family:Roboto,sans-serif}
+.kpi-num small{font-size:.4em;font-weight:400;margin-left:clamp(2px,.3vw,4px)}
+.kpi-meta{display:flex;justify-content:space-between;font-size:clamp(6px,.75vw,9px);margin-top:clamp(5px,.8vw,12px)}
+.kpi-delta{color:#B4C6E7;font-weight:700}
+.prog{height:clamp(4px,.6vw,8px);background:rgba(255,255,255,.2);border-radius:clamp(2px,.4vw,6px);margin-top:clamp(5px,.8vw,10px);overflow:hidden}
+.prog-fill{height:100%;background:#fff;border-radius:clamp(2px,.4vw,6px)}
+/* signal mini cards */
+.signal-box{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);border-radius:clamp(4px,.8vw,10px);padding:clamp(6px,1.2vw,16px)}
+.signal-title{font-size:clamp(9px,1.4vw,17px);font-weight:700;margin-bottom:clamp(4px,.6vw,10px)}
+.signal-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:clamp(4px,.8vw,10px);text-align:center}
+.sig-mini{background:rgba(255,255,255,.1);border-radius:clamp(3px,.5vw,6px);padding:clamp(4px,.8vw,10px) clamp(3px,.5vw,6px)}
+.sig-val{font-size:clamp(11px,1.8vw,22px);font-weight:700;font-family:Roboto,sans-serif}
+.sig-desc{font-size:clamp(5px,.6vw,8px);color:rgba(255,255,255,.7);margin-top:clamp(1px,.2vw,3px)}
+
+/* Right light card */
+.light-card{background:#F3F6FC;border:1px solid #D0DBEF;border-radius:clamp(6px,1vw,12px);padding:clamp(8px,1.6vw,20px);display:flex;flex-direction:column}
+.lc-head{display:flex;justify-content:space-between;align-items:flex-start;gap:clamp(6px,1vw,14px);margin-bottom:clamp(5px,.8vw,10px)}
+.lc-title{font-size:clamp(10px,1.5vw,18px);font-weight:700;color:#305598}
+.lc-sub{font-size:clamp(6px,.75vw,9px);color:#404040;margin-top:clamp(2px,.3vw,4px)}
+.lc-pill{font-size:clamp(6px,.75vw,9px);font-weight:700;color:#305598;background:#fff;padding:clamp(3px,.4vw,5px) clamp(5px,.8vw,10px);border-radius:clamp(3px,.4vw,5px);white-space:nowrap;flex-shrink:0}
+/* horizontal bar chart */
+.hbar-chart{display:flex;flex-direction:column;gap:clamp(3px,.5vw,8px);flex:1;justify-content:center}
+.hbar-row{display:grid;grid-template-columns:clamp(48px,8vw,110px) 1fr clamp(34px,5vw,64px);align-items:center;gap:clamp(5px,.8vw,12px)}
+.hbar-label{font-size:clamp(6px,.75vw,9px);color:#262626;font-weight:600;text-align:right;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.hbar-track{height:clamp(10px,1.5vw,20px);background:rgba(208,219,239,.3);border-radius:clamp(2px,.3vw,4px);overflow:visible;position:relative}
+.hbar-fill{height:100%;border-radius:clamp(2px,.3vw,4px);min-width:clamp(4px,.5vw,6px)}
+.hbar-fill.pos{background:linear-gradient(90deg,#305598,#4472C4)}
+.hbar-fill.pos2{background:linear-gradient(90deg,#5B80D1,#A0B8E2)}
+.hbar-fill.neg{background:linear-gradient(90deg,#16A34A,#4ade80)}
+.hbar-val{font-size:clamp(6px,.75vw,9px);font-weight:700;color:#305598;font-family:Roboto,sans-serif;text-align:right}
+.hbar-val.neg{color:#16A34A}
+
+/* Bottom table */
+.bottom-card{background:#fff;border:1px solid #D0DBEF;border-radius:clamp(6px,1vw,12px);padding:clamp(8px,1.4vw,18px)}
+.bc-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:clamp(5px,.8vw,10px)}
+.bc-title{font-size:clamp(9px,1.4vw,17px);font-weight:700;color:#305598}
+.bc-source{font-size:clamp(6px,.7vw,8px);color:#404040}
+.tbl-grid{display:grid;grid-template-columns:1fr 1fr;gap:clamp(8px,1.4vw,18px)}
+.dtable{width:100%;border-collapse:collapse;border:1px solid #D0DBEF;border-radius:clamp(4px,.6vw,8px);overflow:hidden}
+.dtable th{background:#305598;color:#fff;font-size:clamp(6px,.7vw,8px);font-weight:700;padding:clamp(3px,.5vw,7px) clamp(3px,.5vw,7px);text-align:left}
+.dtable th:nth-child(n+2){text-align:center}
+.dtable td{font-size:clamp(6px,.7vw,9px);padding:clamp(2px,.4vw,5px) clamp(3px,.5vw,7px);border-top:1px solid #D0DBEF;color:#262626}
+.dtable td:nth-child(2),.dtable td:nth-child(3){text-align:center;font-family:Roboto,sans-serif}
+.dtable td:nth-child(3){font-weight:700;color:#305598}
+.dtable td:nth-child(4){text-align:center;font-weight:700}
+.dtable td.up{color:#4472C4}
+.dtable td.down{color:#16A34A}
+
+/* palette */
+.palette{position:absolute;bottom:clamp(6px,1.2vw,16px);right:clamp(14px,2.8vw,38px);display:flex;gap:clamp(2px,.3vw,4px);align-items:center}
+.palette-lbl{font-size:clamp(5px,.6vw,7px);color:#94a3b8;margin-right:clamp(3px,.5vw,6px);font-family:Roboto,sans-serif}
+.sw{width:clamp(7px,.9vw,12px);height:clamp(7px,.9vw,12px);border-radius:2px;background:var(--c);border:1px solid rgba(0,0,0,.06)}
+</style>
+</head>
+<body>
+<div class="slide">
+  <div class="deco-1"></div>
+  <div class="deco-2"></div>
+  <div class="root">
+    <!-- Header -->
+    <div class="header">
+      <div class="header-l">
+        <span class="pill">2026 预测 · 行业推演</span>
+        <h1>全球AI动漫产业关键数据（预测/推演）</h1>
+      </div>
+      <div class="header-r">数据口径：2023实际值对比2026预估值</div>
+    </div>
+
+    <!-- Main grid -->
+    <div class="main-grid">
+      <!-- Left dark card -->
+      <div class="dark-card">
+        <div class="dc-head">
+          <div class="dc-title">核心市场锚点</div>
+          <div class="dc-badge">2026E</div>
+        </div>
+        <div class="kpi-grid">
+          <div class="kpi-box">
+            <div class="kpi-label">全球动漫市场规模</div>
+            <div class="kpi-num">528<small>亿美元</small></div>
+            <div class="kpi-meta"><span>2023：342亿</span><span class="kpi-delta">+54.4%</span></div>
+            <div class="prog"><div class="prog-fill" style="width:68%"></div></div>
+          </div>
+          <div class="kpi-box">
+            <div class="kpi-label">AI参与制作占比</div>
+            <div class="kpi-num">63<small>%</small></div>
+            <div class="kpi-meta"><span>2023：7%</span><span class="kpi-delta">+800%</span></div>
+            <div class="prog"><div class="prog-fill" style="width:63%"></div></div>
+          </div>
+        </div>
+        <div class="signal-box">
+          <div class="signal-title">产业信号</div>
+          <div class="signal-grid">
+            <div class="sig-mini"><div class="sig-val">12%</div><div class="sig-desc">完全AI生成短片</div></div>
+            <div class="sig-mini"><div class="sig-val">2.8集</div><div class="sig-desc">中型工作室月产能</div></div>
+            <div class="sig-mini"><div class="sig-val">31亿</div><div class="sig-desc">AI工具年收入/$</div></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right light card with bar chart -->
+      <div class="light-card">
+        <div class="lc-head">
+          <div>
+            <div class="lc-title">变化幅度：创作者与工具市场最陡峭</div>
+            <div class="lc-sub">单位：%（2026预估 vs 2023实际）；负值表示手工绘制量或成本下降</div>
+          </div>
+          <span class="lc-pill">7项量化变化</span>
+        </div>
+        <div class="hbar-chart">
+          <div class="hbar-row"><span class="hbar-label">独立创作者</span><div class="hbar-track"><div class="hbar-fill pos" style="width:97%"></div></div><span class="hbar-val">+1943%</span></div>
+          <div class="hbar-row"><span class="hbar-label">AI作品占比</span><div class="hbar-track"><div class="hbar-fill pos" style="width:40%"></div></div><span class="hbar-val">+800%</span></div>
+          <div class="hbar-row"><span class="hbar-label">AI工具收入</span><div class="hbar-track"><div class="hbar-fill pos2" style="width:32%"></div></div><span class="hbar-val">+638%</span></div>
+          <div class="hbar-row"><span class="hbar-label">工作室产能</span><div class="hbar-track"><div class="hbar-fill pos2" style="width:18%"></div></div><span class="hbar-val">+367%</span></div>
+          <div class="hbar-row"><span class="hbar-label">市场规模</span><div class="hbar-track"><div class="hbar-fill pos2" style="width:6%"></div></div><span class="hbar-val">+54%</span></div>
+          <div class="hbar-row"><span class="hbar-label">手绘张数</span><div class="hbar-track"><div class="hbar-fill neg" style="width:10%"></div></div><span class="hbar-val neg">-76%</span></div>
+          <div class="hbar-row"><span class="hbar-label">制作成本</span><div class="hbar-track"><div class="hbar-fill neg" style="width:8%"></div></div><span class="hbar-val neg">-64%</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Bottom data table -->
+    <div class="bottom-card">
+      <div class="bc-head">
+        <div class="bc-title">关键指标全景：2023实际 → 2026预估</div>
+        <div class="bc-source">数据来源：Digital Creation Report 2025 · Industry Data Bank 2026Q1</div>
+      </div>
+      <div class="tbl-grid">
+        <table class="dtable">
+          <thead><tr><th>指标</th><th>2023</th><th>2026E</th><th>变化</th></tr></thead>
+          <tbody>
+            <tr><td>全球动漫市场规模</td><td>342亿美元</td><td>528亿美元</td><td class="up">+54.4%</td></tr>
+            <tr><td>AI参与制作作品占比</td><td>7%</td><td>63%</td><td class="up">+800%</td></tr>
+            <tr><td>完全AI生成短片占比</td><td>&lt;0.1%</td><td>12%</td><td class="up">激增</td></tr>
+            <tr><td>单集手工绘制张数</td><td>3800张</td><td>900张</td><td class="down">-76.3%</td></tr>
+          </tbody>
+        </table>
+        <table class="dtable">
+          <thead><tr><th>指标</th><th>2023</th><th>2026E</th><th>变化</th></tr></thead>
+          <tbody>
+            <tr><td>中型工作室月产能</td><td>0.6集</td><td>2.8集</td><td class="up">+367%</td></tr>
+            <tr><td>每分钟2D制作成本</td><td>$8,200</td><td>$2,950</td><td class="down">-64%</td></tr>
+            <tr><td>AI动漫工具年收入</td><td>4.2亿美元</td><td>31亿美元</td><td class="up">+638%</td></tr>
+            <tr><td>使用AI的独立创作者</td><td>2.3万人</td><td>47万人</td><td class="up">+1943%</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+  <div class="palette">
+    <span class="palette-lbl">PALETTE</span>
+    <i class="sw" style="--c:#00329D"></i>
+    <i class="sw" style="--c:#305598"></i>
+    <i class="sw" style="--c:#4472C4"></i>
+    <i class="sw" style="--c:#A0B8E2"></i>
+    <i class="sw" style="--c:#D0DBEF"></i>
+    <i class="sw" style="--c:#FFFFFF"></i>
+  </div>
+</div>
+</body>
+</html>

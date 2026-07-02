@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>宋人生活 · 听雨</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html, body { width: 1600px; height: 900px; overflow: hidden; font-family:"Songti SC","STSong","SimSun",serif; }
+  .canvas {
+    width: 1600px; height: 900px; position: relative; color: #2E3A3B;
+    background:
+      radial-gradient(ellipse at 20% 30%, rgba(232,244,248,0.7) 0%, transparent 55%),
+      radial-gradient(ellipse at 80% 70%, rgba(197,232,213,0.5) 0%, transparent 55%),
+      linear-gradient(180deg, #FBFAF5 0%, #F2F4F3 100%);
+  }
+
+  /* 雨丝 */
+  .rain { position: absolute; top: 0; left: 0; width: 100%; height: 100%; opacity: 0.4; pointer-events:none;}
+
+  /* 屋檐 */
+  .eaves { position: absolute; top: 0; right: 0; width: 600px; height: 280px; }
+
+  /* 芭蕉叶 */
+  .banana { position: absolute; bottom: 0; left: 0; width: 480px; height: 360px; }
+
+  /* 印章 */
+  .seal {
+    position: absolute; top: 80px; left: 140px;
+    width: 70px; height: 70px; background: #C0392B;
+    display:flex; align-items:center; justify-content:center;
+    color:#FBFAF5; font-size:18px; font-weight:bold;
+    text-align:center; line-height:1.1; letter-spacing:1px;
+    font-family:"STKaiti",serif;
+  }
+
+  /* 标签 */
+  .tag {
+    position: absolute; top: 95px; left: 240px;
+    font-size: 16px; color: #5A6E70; letter-spacing: 6px;
+    font-family:"Helvetica Neue",sans-serif;
+  }
+
+  /* 标题 */
+  .title { position: absolute; top: 230px; left: 140px; z-index:5; }
+  .en-tag {
+    font-size: 18px; color: #3A6B6E; letter-spacing: 6px;
+    margin-bottom: 20px; font-family:"Helvetica Neue",sans-serif;
+  }
+  .main-title {
+    font-size: 140px; font-weight: 800; color: #2E3A3B;
+    letter-spacing: 20px; line-height: 1.05;
+  }
+  .main-title .green { color: #6FAE8B; }
+  .sub-title {
+    font-size: 28px; color: #5A6E70; letter-spacing: 12px;
+    margin-top: 30px; font-family:"STKaiti",serif;
+  }
+  .sub-title .em { color: #C0392B; }
+
+  /* 正文 */
+  .body {
+    position: absolute; left: 140px; bottom: 160px;
+    width: 500px; font-size: 22px; line-height: 2.1;
+    color: #2E3A3B; letter-spacing: 2px; z-index:5;
+  }
+  .body strong { color: #6FAE8B; font-weight: 600; }
+
+  /* 右侧诗句竖排 */
+  .vert {
+    position: absolute; right: 200px; top: 200px;
+    writing-mode: vertical-rl; font-family:"STKaiti",serif;
+    font-size: 30px; color: #5A6E70; letter-spacing: 14px;
+    line-height: 2.2; z-index:5;
+  }
+  .vert .red { color: #C0392B; }
+
+  /* 茶盏卡 */
+  .tea-card {
+    position: absolute; right: 140px; bottom: 130px; z-index:5;
+    width: 260px; padding: 30px; background: rgba(251,250,245,0.8);
+    border-left: 4px solid #F5E6A3;
+  }
+  .tea-card .label { font-size: 16px; color: #5A6E70; letter-spacing: 4px; }
+  .tea-card .val { font-size: 24px; color: #2E3A3B; letter-spacing: 3px; margin-top: 8px; font-weight: 600;}
+  .tea-card .row { margin-bottom: 16px; }
+  .tea-card .row:last-child { margin-bottom: 0; }
+
+  /* 底部 */
+  .footer {
+    position: absolute; left: 140px; bottom: 60px; z-index:5;
+    font-size: 16px; color: #5A6E70; letter-spacing: 4px;
+    font-family:"Helvetica Neue",sans-serif;
+  }
+</style>
+</head>
+<body>
+<div class="canvas">
+  <!-- 雨丝 -->
+  <svg class="rain" viewBox="0 0 1600 900" preserveAspectRatio="none">
+    <g stroke="#3A6B6E" stroke-width="1" opacity="0.5">
+      <line x1="200" y1="0" x2="190" y2="120"/>
+      <line x1="350" y1="0" x2="340" y2="150"/>
+      <line x1="500" y1="0" x2="490" y2="100"/>
+      <line x1="650" y1="0" x2="640" y2="130"/>
+      <line x1="800" y1="0" x2="790" y2="110"/>
+      <line x1="950" y1="0" x2="940" y2="140"/>
+      <line x1="1100" y1="0" x2="1090" y2="100"/>
+      <line x1="1250" y1="0" x2="1240" y2="130"/>
+      <line x1="1400" y1="0" x2="1390" y2="120"/>
+      <line x1="280" y1="200" x2="270" y2="320"/>
+      <line x1="720" y1="180" x2="710" y2="300"/>
+      <line x1="1180" y1="220" x2="1170" y2="340"/>
+    </g>
+  </svg>
+
+  <!-- 屋檐 -->
+  <svg class="eaves" viewBox="0 0 600 280" preserveAspectRatio="none">
+    <path d="M0,0 L0,120 Q300,180 600,120 L600,0 Z" fill="#2E3A3B" opacity="0.15"/>
+    <path d="M0,100 Q300,160 600,100 L600,80 Q300,140 0,80 Z" fill="#3A6B6E" opacity="0.5"/>
+    <path d="M0,150 Q300,200 600,150" stroke="#5A6E70" stroke-width="2" fill="none" opacity="0.4"/>
+  </svg>
+
+  <!-- 芭蕉叶 -->
+  <svg class="banana" viewBox="0 0 480 360" preserveAspectRatio="none">
+    <path d="M0,360 Q50,200 180,120 Q280,80 400,40 Q350,180 280,240 Q200,300 100,340 Z"
+          fill="#C5E8D5" opacity="0.7"/>
+    <path d="M40,340 Q120,240 220,180" stroke="#6FAE8B" stroke-width="2" fill="none" opacity="0.6"/>
+    <path d="M60,330 Q140,260 240,200" stroke="#6FAE8B" stroke-width="1.5" fill="none" opacity="0.5"/>
+    <path d="M0,360 Q80,280 180,220 Q260,180 360,150" stroke="#6FAE8B" stroke-width="1.5" fill="none" opacity="0.4"/>
+  </svg>
+
+  <div class="seal">听雨<br>闲坐</div>
+  <div class="tag">SONG LIFE · 听雨</div>
+
+  <div class="title">
+    <div class="en-tag">A SONG DYNASTY AFTERNOON</div>
+    <div class="main-title">听<span class="green">雨</span></div>
+    <div class="sub-title">闲坐庭院 <span class="em">·</span> 一盏茶的光阴</div>
+  </div>
+
+  <div class="body">
+    雨打<strong>芭蕉</strong>，风过青瓦。<br>
+    一盏清茶，半卷诗书，<br>
+    宋人的生活，<br>
+    不过是把这些<strong>寻常</strong>，过成了诗。
+  </div>
+
+  <div class="vert">少年听雨歌楼上<br><span class="red">壮年听雨客舟中</span></div>
+
+  <div class="tea-card">
+    <div class="row"><div class="label">茶</div><div class="val">龙井 · 明前</div></div>
+    <div class="row"><div class="label">时</div><div class="val">午后 · 微雨</div></div>
+    <div class="row"><div class="label">境</div><div class="val">闲坐 · 听雨</div></div>
+  </div>
+
+  <div class="footer">宋人生活图鉴 · VOL. 10 · LISTENING TO RAIN</div>
+</div>
+</body>
+</html>

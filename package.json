@@ -28,6 +28,7 @@
   },
   "dependencies": {
     "@anthropic-ai/claude-agent-sdk": "^0.2.119",
+    "@anthropic-ai/sdk": "^0.96.0",
     "@tiptap/extension-color": "^3.23.1",
     "@tiptap/extension-text-style": "^3.23.1",
     "@tiptap/pm": "^3.23.1",

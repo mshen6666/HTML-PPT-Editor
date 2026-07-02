@@ -17,10 +17,10 @@ export const htmlPptAudienceSchema = z.enum(['engineers', 'executives', 'student
 export const htmlPptFormatSchema = z.enum(['live', 'pdf', 'xhs', 'standalone'])
 
 export const htmlPptConfigSchema = z.object({
-  audience: htmlPptAudienceSchema,
-  format: htmlPptFormatSchema,
-  themeName: z.string().min(1),
-  fullDeckName: z.string().min(1),
+  audience: htmlPptAudienceSchema.optional(),
+  format: htmlPptFormatSchema.optional(),
+  themeName: z.string().min(1).optional(),
+  fullDeckName: z.string().min(1).optional(),
   slideCountHint: z.number().int().positive().optional(),
   layoutNames: z.array(z.string().min(1)).optional(),
   animationNames: z.array(z.string().min(1)).optional(),
@@ -53,6 +53,17 @@ export const htmlPptAssetSchema = z.object({
     reason: z.string().optional(),
   }).optional(),
   extractedAssets: z.array(extractedAssetSchema).optional(),
+})
+
+export const knowledgeReferenceSchema = z.object({
+  id: z.string().min(1),
+  title: z.string().min(1),
+  sourceType: z.enum(['dataset', 'document']),
+  categoryPath: z.array(z.string().min(1)),
+  datasets: z.array(z.string().min(1)).optional(),
+  aiId: z.string().min(1).optional(),
+  summary: z.string().optional(),
+  content: z.string().optional(),
 })
 
 export const artifactRefSchema = z.object({
@@ -135,6 +146,7 @@ export const aiTurnRequestSchema = z.object({
     elementText: z.string().optional(),
   }).optional(),
   messageAssetIds: z.array(z.string().min(1)).optional(),
+  knowledgeReferences: z.array(knowledgeReferenceSchema).optional(),
   inputReply: inputReplySchema.optional(),
 }).superRefine((value, context) => {
   if (value.message.trim().length === 0 && !value.inputReply) {
@@ -236,6 +248,7 @@ export const htmlPptStateSchema = z.object({
   imageFolderPath: z.string().min(1).optional(),
   scannedAssets: z.array(htmlPptAssetSchema).optional(),
   uploadedAssets: z.array(htmlPptAssetSchema).optional(),
+  knowledgeReferences: z.array(knowledgeReferenceSchema).optional(),
 })
 
 export const sessionSnapshotSchema = z.object({
@@ -312,6 +325,7 @@ export const optimizePromptRequestSchema = z.object({
   context: z.object({
     generationMode: z.enum(['from-scratch', 'from-current']).optional(),
     hasUploadedAssets: z.boolean().optional(),
+    knowledgeCount: z.number().int().nonnegative().optional(),
   }).optional(),
 })
 
@@ -333,6 +347,7 @@ export type HtmlCandidateLayoutWarning = z.infer<typeof htmlCandidateLayoutWarni
 export type ExtractedAsset = z.infer<typeof extractedAssetSchema>
 export type HtmlPptAsset = z.infer<typeof htmlPptAssetSchema>
 export type HtmlPptState = z.infer<typeof htmlPptStateSchema>
+export type KnowledgeReference = z.infer<typeof knowledgeReferenceSchema>
 export type PendingInput = z.infer<typeof pendingInputSchema>
 export type InputReply = z.infer<typeof inputReplySchema>
 export type OptimizePromptRequest = z.infer<typeof optimizePromptRequestSchema>

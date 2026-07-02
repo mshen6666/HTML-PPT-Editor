@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<title>薄荷清新 · 高级绿</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html, body { width: 1600px; height: 900px; overflow: hidden; }
+  body { font-family: "PingFang SC", "Microsoft YaHei", sans-serif; color: #2F4A3A; }
+  .stage {
+    width: 1600px; height: 900px; position: relative; overflow: hidden;
+    background: linear-gradient(135deg, #E8F0E5 0%, #DDEBDD 50%, #D0E4D2 100%);
+  }
+  /* big soft circles */
+  .blob {
+    position: absolute; border-radius: 50%; filter: blur(60px); opacity: 0.5;
+  }
+  .b1 { width: 500px; height: 500px; top: -120px; right: -80px;
+        background: radial-gradient(circle, #B5D7C3 0%, transparent 70%); }
+  .b2 { width: 420px; height: 420px; bottom: -100px; left: -80px;
+        background: radial-gradient(circle, #A3C4A9 0%, transparent 70%); opacity: 0.55; }
+
+  /* leaf line art */
+  .leaf {
+    position: absolute; opacity: 0.35;
+  }
+  .leaf svg { display: block; }
+
+  .nav {
+    position: absolute; top: 50px; left: 80px; right: 80px;
+    display: flex; justify-content: space-between; align-items: center;
+    z-index: 5;
+  }
+  .nav .logo {
+    font-size: 22px; font-weight: 700; letter-spacing: 2px;
+    color: #2F4A3A;
+  }
+  .nav .logo::before { content: "❀"; color: #8FA89A; margin-right: 10px; }
+  .nav .menu { display: flex; gap: 36px; font-size: 14px; color: #6B7268; letter-spacing: 1px; }
+  .nav .menu span { cursor: pointer; }
+  .nav .menu .active { color: #2F4A3A; font-weight: 600; border-bottom: 2px solid #8FA89A; padding-bottom: 4px; }
+
+  .hero {
+    position: absolute; top: 200px; left: 80px; max-width: 720px; z-index: 5;
+  }
+  .hero .kicker {
+    display: inline-block; background: #B5D7C3; color: #2F4A3A;
+    font-size: 13px; font-weight: 700; letter-spacing: 3px;
+    padding: 7px 16px; border-radius: 999px; margin-bottom: 28px;
+  }
+  .hero h1 {
+    font-size: 84px; font-weight: 800; line-height: 1.05;
+    letter-spacing: -1px; color: #2F4A3A;
+  }
+  .hero h1 .light { font-weight: 300; color: #6B7268; font-family: "Songti SC", serif; }
+  .hero .sub {
+    font-size: 20px; line-height: 1.8; color: #6B7268;
+    margin-top: 28px; max-width: 580px;
+  }
+  .hero .actions { display: flex; gap: 16px; margin-top: 40px; }
+  .btn-primary {
+    background: #2F4A3A; color: #E8F0E5;
+    padding: 16px 34px; border-radius: 999px;
+    font-size: 15px; font-weight: 600; letter-spacing: 1px;
+  }
+  .btn-ghost {
+    border: 1px solid #8FA89A; color: #2F4A3A;
+    padding: 16px 34px; border-radius: 999px;
+    font-size: 15px; font-weight: 600; letter-spacing: 1px;
+  }
+
+  /* right palette card */
+  .palette {
+    position: absolute; top: 200px; right: 80px; z-index: 5;
+    background: rgba(255,255,255,0.6);
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(47,74,58,0.1);
+    border-radius: 24px;
+    padding: 32px 30px;
+    width: 360px;
+  }
+  .palette .t { font-size: 14px; letter-spacing: 3px; color: #6B7268; font-weight: 600; margin-bottom: 20px; }
+  .palette .row {
+    display: flex; align-items: center; gap: 16px; padding: 14px 0;
+    border-bottom: 1px dashed rgba(47,74,58,0.12);
+  }
+  .palette .row:last-child { border-bottom: none; }
+  .palette .sw { width: 44px; height: 44px; border-radius: 12px; box-shadow: 0 4px 12px rgba(47,74,58,0.1); }
+  .palette .name { font-size: 15px; font-weight: 600; color: #2F4A3A; }
+  .palette .hex { font-size: 12px; color: #8FA89A; font-family: monospace; margin-top: 2px; letter-spacing: 1px; }
+
+  .footer-strip {
+    position: absolute; bottom: 50px; left: 80px; right: 80px; z-index: 5;
+    display: flex; justify-content: space-between; align-items: flex-end;
+  }
+  .stats { display: flex; gap: 60px; }
+  .stats .s .v { font-size: 38px; font-weight: 800; color: #2F4A3A; line-height: 1; }
+  .stats .s .l { font-size: 12px; color: #6B7268; letter-spacing: 2px; margin-top: 6px; }
+  .badge {
+    font-size: 12px; color: #6B7268; letter-spacing: 2px;
+    border-top: 1px solid rgba(47,74,58,0.15);
+    padding-top: 12px; text-align: right;
+  }
+  .badge .b { color: #2F4A3A; font-weight: 700; }
+</style>
+</head>
+<body>
+<div class="stage">
+  <div class="blob b1"></div>
+  <div class="blob b2"></div>
+
+  <div class="leaf" style="top:120px; right:480px;">
+    <svg width="120" height="160" viewBox="0 0 120 160" fill="none">
+      <path d="M60 10 C30 50, 20 100, 60 150 C100 100, 90 50, 60 10 Z" stroke="#2F4A3A" stroke-width="1.5" fill="none"/>
+      <line x1="60" y1="20" x2="60" y2="145" stroke="#2F4A3A" stroke-width="1"/>
+    </svg>
+  </div>
+  <div class="leaf" style="bottom:140px; right:520px; transform:rotate(35deg);">
+    <svg width="80" height="110" viewBox="0 0 80 110" fill="none">
+      <path d="M40 8 C18 38, 12 70, 40 102 C68 70, 62 38, 40 8 Z" stroke="#2F4A3A" stroke-width="1.2" fill="none"/>
+      <line x1="40" y1="15" x2="40" y2="98" stroke="#2F4A3A" stroke-width="1"/>
+    </svg>
+  </div>
+
+  <div class="nav">
+    <div class="logo">FEUILLE</div>
+    <div class="menu">
+      <span class="active">HOME</span>
+      <span>SHOP</span>
+      <span>JOURNAL</span>
+      <span>ABOUT</span>
+    </div>
+  </div>
+
+  <div class="hero">
+    <span class="kicker">FRESH · 自然系</span>
+    <h1>低饱和<br>的<span class="light">呼吸感</span></h1>
+    <p class="sub">像清晨第一缕光落在叶尖上。<br>不喧哗，不张扬，自有安静的高级感。</p>
+    <div class="actions">
+      <div class="btn-primary">探索系列 →</div>
+      <div class="btn-ghost">查看色卡</div>
+    </div>
+  </div>
+
+  <div class="palette">
+    <div class="t">COLOR · 色卡</div>
+    <div class="row"><div class="sw" style="background:#B5D7C3"></div><div><div class="name">浅薄荷青</div><div class="hex">#B5D7C3</div></div></div>
+    <div class="row"><div class="sw" style="background:#A3C4A9"></div><div><div class="name">豆沙绿</div><div class="hex">#A3C4A9</div></div></div>
+    <div class="row"><div class="sw" style="background:#8FA89A"></div><div><div class="name">灰绿</div><div class="hex">#8FA89A</div></div></div>
+    <div class="row"><div class="sw" style="background:#2F4A3A"></div><div><div class="name">墨绿</div><div class="hex">#2F4A3A</div></div></div>
+  </div>
+
+  <div class="footer-strip">
+    <div class="stats">
+      <div class="s"><div class="v">36</div><div class="l">SKU</div></div>
+      <div class="s"><div class="v">100%</div><div class="l">ORGANIC</div></div>
+      <div class="s"><div class="v">4.8★</div><div class="l">RATING</div></div>
+    </div>
+    <div class="badge">
+      <div>SS26 · BOTANICAL EDITION</div>
+      <div class="b">FEUILLE STUDIO · 2026</div>
+    </div>
+  </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>凝脂杨妃 · 瓷韵国风</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html, body { width: 1600px; height: 900px; overflow: hidden; font-family:"Songti SC","STSong","SimSun",serif; }
+  .canvas {
+    width: 1600px; height: 900px; position: relative; color: #333333;
+    background:
+      radial-gradient(ellipse at 70% 30%, rgba(245,191,200,0.28) 0%, transparent 55%),
+      radial-gradient(ellipse at 25% 75%, rgba(232,220,200,0.3) 0%, transparent 55%),
+      linear-gradient(135deg, #FAF7F0 0%, #F5F2E9 100%);
+  }
+
+  /* 顶栏 */
+  .topbar {
+    position: absolute; top: 0; left: 0; width: 100%; height: 8px;
+    background: linear-gradient(90deg, #F5F2E9 0%, #F5BFC8 50%, #F091A0 100%);
+  }
+
+  /* 品牌 */
+  .brand {
+    position: absolute; top: 70px; left: 140px;
+    font-size: 18px; color: #666666; letter-spacing: 6px;
+    font-family:"Helvetica Neue",sans-serif;
+  }
+  .brand::before { content:""; display:inline-block; width:24px; height:2px; background:#B23A48; vertical-align:middle; margin-right:12px; }
+
+  /* 主标题居中 */
+  .title-wrap {
+    position: absolute; top: 150px; left: 140px;
+  }
+  .main-title {
+    font-size: 96px; font-weight: 800; color: #333333;
+    letter-spacing: 14px; line-height: 1.15;
+  }
+  .main-title .rose { color: #F091A0; }
+  .sub-title {
+    font-size: 26px; color: #666666; letter-spacing: 10px;
+    margin-top: 24px;
+  }
+  .sub-title .pipe { color: #B23A48; margin: 0 10px; }
+
+  /* 色名双卡 */
+  .duo {
+    position: absolute; top: 410px; left: 140px;
+    display: flex; gap: 36px;
+  }
+  .duo-card {
+    width: 280px; padding: 36px 32px; text-align: center;
+  }
+  .dc1 { background: #F5F2E9; border: 1px solid #E8DCC8; }
+  .dc2 { background: #F091A0; color: #FAF7F0; }
+  .duo-card .swatch-name {
+    font-size: 56px; font-weight: 800; letter-spacing: 8px;
+    font-family:"STKaiti","KaiTi",serif; line-height: 1.1;
+  }
+  .duo-card .pinyin {
+    font-size: 16px; letter-spacing: 4px; margin-top: 10px;
+    font-family:"Helvetica Neue",sans-serif; opacity: 0.7;
+  }
+  .duo-card .meaning {
+    font-size: 16px; margin-top: 18px; line-height: 1.7; letter-spacing: 1px;
+  }
+  .duo-card .hex {
+    font-size: 18px; margin-top: 22px; padding-top: 16px;
+    border-top: 1px solid currentColor; opacity: 0.6;
+    font-family:"Helvetica Neue",sans-serif; letter-spacing: 2px;
+  }
+
+  /* 右侧瓷器 */
+  .vase { position: absolute; right: 140px; top: 180px; }
+
+  /* 印章 */
+  .seal {
+    position: absolute; bottom: 180px; right: 200px;
+    width: 64px; height: 64px; background: #B23A48;
+    display:flex; align-items:center; justify-content:center;
+    color:#FAF7F0; font-size:16px; font-weight:bold;
+    text-align:center; line-height:1.1; letter-spacing:1px;
+    font-family:"STKaiti",serif;
+  }
+
+  /* 底部 */
+  .footer {
+    position: absolute; left: 140px; right: 140px; bottom: 60px;
+    display:flex; justify-content:space-between; align-items:center;
+    padding-top: 22px; border-top: 1px solid rgba(102,102,102,0.2);
+  }
+  .footer .l { font-size: 18px; color: #666666; letter-spacing: 4px; }
+  .footer .r { font-size: 16px; color: #666666; letter-spacing: 3px; font-family:"Helvetica Neue",sans-serif; }
+</style>
+</head>
+<body>
+<div class="canvas">
+  <div class="topbar"></div>
+
+  <div class="brand">ACD · CHINESE TRADITIONAL COLOR</div>
+
+  <div class="title-wrap">
+    <div class="main-title">凝脂<span class="rose">杨妃</span></div>
+    <div class="sub-title">中国传统色 <span class="pipe">·</span> 瓷韵典雅</div>
+  </div>
+
+  <div class="duo">
+    <div class="duo-card dc1">
+      <div class="swatch-name">凝脂</div>
+      <div class="pinyin">NÍNG ZHĪ</div>
+      <div class="meaning">温润如玉<br>凝结的脂膏之白</div>
+      <div class="hex">#F5F2E9</div>
+    </div>
+    <div class="duo-card dc2">
+      <div class="swatch-name">杨妃</div>
+      <div class="pinyin">YÁNG FĒI</div>
+      <div class="meaning">沉静玫瑰<br>取自盛唐贵妃之色</div>
+      <div class="hex">#F091A0</div>
+    </div>
+  </div>
+
+  <!-- 瓷器 SVG -->
+  <svg class="vase" width="280" height="420" viewBox="0 0 280 420">
+    <defs>
+      <linearGradient id="vaseG" x1="0" y1="0" x2="1" y2="0">
+        <stop offset="0%" stop-color="#F5F2E9"/>
+        <stop offset="40%" stop-color="#FAF7F0"/>
+        <stop offset="100%" stop-color="#E8DCC8"/>
+      </linearGradient>
+      <linearGradient id="vaseRose" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0%" stop-color="#F5BFC8"/>
+        <stop offset="100%" stop-color="#F091A0"/>
+      </linearGradient>
+    </defs>
+    <!-- 瓶身 -->
+    <path d="M100,40 Q120,40 120,70 Q120,90 140,110 Q200,150 210,240 Q220,330 180,380 Q140,400 100,380 Q60,330 70,240 Q80,150 140,110 Q160,90 160,70 Q160,40 180,40 Z"
+          fill="url(#vaseG)" stroke="#B23A48" stroke-width="1.5"/>
+    <!-- 缠枝纹 -->
+    <path d="M90,250 Q120,230 140,260 Q160,290 190,270" stroke="#F091A0" stroke-width="2.5" fill="none" opacity="0.8"/>
+    <circle cx="115" cy="245" r="6" fill="#F091A0" opacity="0.85"/>
+    <circle cx="165" cy="275" r="6" fill="#F091A0" opacity="0.85"/>
+    <ellipse cx="140" cy="258" rx="8" ry="5" fill="#F5BFC8" opacity="0.8"/>
+    <!-- 底部花纹 -->
+    <path d="M85,340 L195,340" stroke="#B23A48" stroke-width="1.5" opacity="0.6"/>
+    <path d="M85,355 L195,355" stroke="#B23A48" stroke-width="1" opacity="0.5"/>
+    <!-- 瓶口 -->
+    <ellipse cx="140" cy="40" rx="40" ry="8" fill="#E8DCC8" stroke="#B23A48" stroke-width="1.5"/>
+  </svg>
+
+  <div class="seal">瓷韵<br>典雅</div>
+
+  <div class="footer">
+    <div class="l">凝脂 · 杨妃 <span style="color:#B23A48">●</span> 双色协奏</div>
+    <div class="r">PORCELAIN ROSE · VOL. 06</div>
+  </div>
+</div>
+</body>
+</html>

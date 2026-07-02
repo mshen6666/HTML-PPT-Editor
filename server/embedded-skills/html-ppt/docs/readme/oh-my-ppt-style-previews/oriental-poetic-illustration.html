@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>竹影漫步 · 东方意境</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html, body { width: 1600px; height: 900px; overflow: hidden; font-family: "Songti SC", "STSong", "SimSun", serif; }
+  .canvas {
+    width: 1600px; height: 900px; position: relative; color: #1B1B1B;
+    background:
+      radial-gradient(ellipse at 75% 35%, rgba(227,242,253,0.7) 0%, transparent 55%),
+      radial-gradient(ellipse at 20% 80%, rgba(232,245,233,0.6) 0%, transparent 50%),
+      linear-gradient(180deg, #F5F5F5 0%, #FAFAFA 100%);
+  }
+
+  /* 月亮 */
+  .moon {
+    position: absolute; top: 130px; right: 280px;
+    width: 200px; height: 200px; border-radius: 50%;
+    background: radial-gradient(circle at 35% 35%, #FFFFFF 0%, #E3F2FD 60%, #B2DFDB 100%);
+    box-shadow: 0 0 60px rgba(178,223,219,0.6), 0 0 120px rgba(227,242,253,0.5);
+    opacity: 0.85;
+  }
+
+  /* 竹林 */
+  .bamboo { position: absolute; right: 60px; top: 0; height: 900px; opacity: 0.5; }
+
+  /* 飘落竹叶 */
+  .leaf {
+    position: absolute; width: 14px; height: 36px;
+    background: #4A7C59; border-radius: 50% 50% 50% 50% / 80% 80% 20% 20%;
+    opacity: 0.7;
+  }
+  .l1 { top: 180px; left: 480px; transform: rotate(35deg); }
+  .l2 { top: 540px; left: 380px; transform: rotate(-20deg); background: #2E7D32; }
+  .l3 { top: 720px; left: 900px; transform: rotate(60deg); background: #6B8E6B; }
+
+  /* 印章 */
+  .seal {
+    position: absolute; top: 90px; left: 130px;
+    width: 70px; height: 70px; background: #D32F2F;
+    display: flex; align-items: center; justify-content: center;
+    color: #FAFAFA; font-size: 20px; font-weight: bold;
+    line-height: 1.1; letter-spacing: 1px; text-align: center;
+    font-family: "STKaiti","KaiTi",serif;
+  }
+
+  /* 标题区 */
+  .title {
+    position: absolute; top: 260px; left: 200px; z-index: 5;
+  }
+  .en-tag {
+    font-size: 18px; color: #5D6D7E; letter-spacing: 6px;
+    text-transform: uppercase; margin-bottom: 24px;
+    font-family: "Helvetica Neue", sans-serif;
+  }
+  .main-title {
+    font-family: "STKaiti","KaiTi","Songti SC",serif;
+    font-size: 110px; color: #1B1B1B; font-weight: 800;
+    letter-spacing: 18px; line-height: 1.1;
+  }
+  .main-title .accent { color: #2E7D32; }
+  .poem {
+    font-size: 26px; color: #5D6D7E; letter-spacing: 10px;
+    margin-top: 30px; line-height: 1.8;
+  }
+  .ink-dot {
+    display: inline-block; width: 10px; height: 10px;
+    background: #D32F2F; border-radius: 50%;
+    margin: 0 12px; vertical-align: middle;
+  }
+
+  /* 左下正文 */
+  .body {
+    position: absolute; left: 200px; bottom: 110px;
+    width: 440px; font-size: 20px; line-height: 2.1;
+    color: #1B1B1B; letter-spacing: 2px;
+  }
+  .body strong { color: #2E7D32; font-weight: 600; }
+
+  /* 右侧竖排诗 */
+  .vert-poem {
+    position: absolute; right: 200px; top: 200px;
+    writing-mode: vertical-rl; font-family: "STKaiti",serif;
+    font-size: 30px; color: #5D6D7E; letter-spacing: 14px;
+    line-height: 2.2; z-index: 4;
+  }
+  .vert-poem .red { color: #D32F2F; }
+
+  /* 底部细线 */
+  .baseline {
+    position: absolute; left: 200px; right: 200px; bottom: 80px;
+    height: 1px; background: linear-gradient(90deg, transparent, #5D6D7E 30%, #5D6D7E 70%, transparent);
+    opacity: 0.4;
+  }
+  .meta {
+    position: absolute; left: 200px; bottom: 45px;
+    font-size: 16px; color: #5D6D7E; letter-spacing: 4px;
+    font-family: "Helvetica Neue",sans-serif;
+  }
+  .meta-r {
+    position: absolute; right: 200px; bottom: 45px;
+    font-size: 16px; color: #5D6D7E; letter-spacing: 4px;
+    font-family: "Helvetica Neue",sans-serif;
+  }
+</style>
+</head>
+<body>
+<div class="canvas">
+  <!-- 月 -->
+  <div class="moon"></div>
+
+  <!-- 竹林剪影 -->
+  <svg class="bamboo" viewBox="0 0 400 900" preserveAspectRatio="none">
+    <line x1="60" y1="0" x2="80" y2="900" stroke="#4A7C59" stroke-width="6" opacity="0.5"/>
+    <line x1="160" y1="0" x2="150" y2="900" stroke="#2E7D32" stroke-width="5" opacity="0.55"/>
+    <line x1="260" y1="0" x2="280" y2="900" stroke="#4A7C59" stroke-width="7" opacity="0.45"/>
+    <line x1="350" y1="0" x2="340" y2="900" stroke="#6B8E6B" stroke-width="4" opacity="0.5"/>
+    <!-- 竹节 -->
+    <ellipse cx="70" cy="180" rx="6" ry="3" fill="#2E7D32" opacity="0.6"/>
+    <ellipse cx="75" cy="400" rx="6" ry="3" fill="#2E7D32" opacity="0.6"/>
+    <ellipse cx="80" cy="620" rx="6" ry="3" fill="#2E7D32" opacity="0.6"/>
+    <ellipse cx="155" cy="250" rx="5" ry="3" fill="#2E7D32" opacity="0.6"/>
+    <ellipse cx="152" cy="500" rx="5" ry="3" fill="#2E7D32" opacity="0.6"/>
+    <!-- 竹叶 -->
+    <ellipse cx="55" cy="220" rx="22" ry="6" fill="#4A7C59" opacity="0.5" transform="rotate(30 55 220)"/>
+    <ellipse cx="95" cy="340" rx="20" ry="5" fill="#2E7D32" opacity="0.55" transform="rotate(-25 95 340)"/>
+    <ellipse cx="245" cy="280" rx="24" ry="6" fill="#6B8E6B" opacity="0.5" transform="rotate(40 245 280)"/>
+    <ellipse cx="295" cy="450" rx="22" ry="5" fill="#4A7C59" opacity="0.55" transform="rotate(-30 295 450)"/>
+    <ellipse cx="335" cy="600" rx="20" ry="5" fill="#2E7D32" opacity="0.5" transform="rotate(20 335 600)"/>
+  </svg>
+
+  <!-- 飘落叶 -->
+  <div class="leaf l1"></div>
+  <div class="leaf l2"></div>
+  <div class="leaf l3"></div>
+
+  <!-- 印章 -->
+  <div class="seal">竹影<br>漫步</div>
+
+  <!-- 标题 -->
+  <div class="title">
+    <div class="en-tag">ORIENTAL · ZEN · POETRY</div>
+    <div class="main-title">竹<span class="accent">影</span>漫步</div>
+    <div class="poem">月色入户 <span class="ink-dot"></span> 竹影满庭</div>
+  </div>
+
+  <!-- 正文 -->
+  <div class="body">
+    于<strong>留白</strong>处见禅意，于<strong>竹影</strong>间听风声。<br>
+    一片叶落，一缕月光，皆是东方的诗。<br>
+    让设计回归本真，让画面自己呼吸。
+  </div>
+
+  <!-- 右侧竖排诗 -->
+  <div class="vert-poem">独坐幽篁里<br><span class="red">弹琴复长啸</span></div>
+
+  <!-- 底部 -->
+  <div class="baseline"></div>
+  <div class="meta">VOL. 07 · ORIENTAL POETIC</div>
+  <div class="meta-r">禅 · 静 · 诗 · 画</div>
+</div>
+</body>
+</html>

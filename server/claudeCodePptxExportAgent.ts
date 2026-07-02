@@ -14,6 +14,7 @@ import type { SandboxManager } from './sandboxManager'
 import { FileSystemUploadStore, type UploadedAssetRef, type UploadStore } from './uploadStore'
 import { createWorkerRuntimeConfig, type WorkerRuntimeConfig } from './workerRuntimeConfig'
 import { FileSystemSandboxManager } from './sandboxManager'
+import { buildClaudeCodeEnv as buildBaseClaudeCodeEnv } from './agentAuthConfig'
 
 const require = createRequire(import.meta.url)
 const serverDir = path.dirname(fileURLToPath(import.meta.url))
@@ -421,17 +422,9 @@ function resolveClaudeCodeModel(): string {
 }
 
 function buildClaudeCodeEnv(): Record<string, string | undefined> {
-  const env = {
-    ...process.env,
-    CLAUDE_CODE_DISABLE_NONESSENTIAL_TRAFFIC:
-      process.env.CLAUDE_CODE_DISABLE_NONESSENTIAL_TRAFFIC ?? '1',
-  }
+  const env = buildBaseClaudeCodeEnv()
   env.NODE_PATH = appendPathList(env.NODE_PATH, projectNodeModulesPath)
   env.PPTX_EXPORT_PREINSTALLED_TOOLS = PREINSTALLED_PPTX_EXPORT_TOOLS
-
-  if (!env.ANTHROPIC_API_KEY && env.ANTHROPIC_AUTH_TOKEN) {
-    env.ANTHROPIC_API_KEY = env.ANTHROPIC_AUTH_TOKEN
-  }
 
   return env
 }
